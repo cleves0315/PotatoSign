@@ -137,6 +137,7 @@
   .menu-list {
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 80px;
     // background: #eee;
 
@@ -147,7 +148,7 @@
       justify-content: center;
       width: 80px;
       height: 80px;
-      padding: 8px;
+      padding: 14px;
       color: #fff;
       cursor: pointer;
       margin-right: 20px;
@@ -155,6 +156,14 @@
       // background: #eee;
       background-color: #0abde3;
       box-shadow: 1px 3px 5px #eee;
+      transition: transform .2s ease;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+      &:active {
+        transform: scale(1.1);
+      }
     }
   }
 }

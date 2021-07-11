@@ -8,7 +8,8 @@ var extractTags = (value) => {
     title: "",
     description: "",
     favIconUrl: "",
-    url: document.location.href
+    url: document.location.href,
+    type: 'page'
   }
 
   var ogTitle = document.querySelector("meta[property='og:title']");
@@ -49,6 +50,7 @@ function injectCustomJs(jsPath) {
 
   document.head.appendChild(temp)
 }
+
 injectCustomJs()
 
 ext.runtime.onMessage.addListener(onRequest);

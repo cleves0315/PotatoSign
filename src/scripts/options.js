@@ -8,22 +8,35 @@ const template = (data) => (`
     <div class="sign-item">
       <div class="del-wrap" data-id="${data.id}"><div class="del-btn" data-id="${data.id}"></div></div>
       <div class="icon"><img src="${data.favIconUrl}" /></div>
-      <div class="title" data-type="text"><p>${data.title}</p></div>
+      <div class="title" data-type="text"><p title="${data.title}">${data.title}</p></div>
       <div class="title" data-type="input" style="display: none;"><input data-id="${data.id}" value="${data.title}" /></div>
     </div>
   </a>
 `)
 
-function getSign() {
-  storage.get('sign', function(result) {
-    console.log('get sign: ', (result.sign))
-    if (result && result.sign) {
-      const sign = (typeof result.sign === 'string') ? JSON.parse(result.sign) : result.sign
-      const tmpl = sign.map(m => template(m))
+function getSign(id = '001') {
+  storage.get(['sign', 'signMap'], function(result) {
+    console.log('get sign: ', (result))
+    const { sign: signJson, signMap: signMapJson } = result
+    const sign = (typeof signJson === 'string') ? JSON.parse(signJson) : signJson
+    const signMap = (typeof signMapJson === 'string') ? JSON.parse(signMapJson) : signMapJson
+
+    if (Array.isArray(sign) && signMap
+      && (sign.length > 0) && (JSON.stringify(signMap) !== '{}')) {
+      const index = signMap[id]
+      const tmpl = sign[index].list.map(m => template(m))
       
       options.innerHTML = tmpl.join('')
       addElementEvents()
     }
+
+    // if (result && result.sign) {
+    //   const sign = (typeof result.sign === 'string') ? JSON.parse(result.sign) : result.sign
+    //   const tmpl = sign.map(m => template(m))
+      
+    //   options.innerHTML = tmpl.join('')
+    //   addElementEvents()
+    // }
   })
 }
 
