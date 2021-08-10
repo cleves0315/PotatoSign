@@ -37,6 +37,7 @@ function getSign(id = '001') {
     //   options.innerHTML = tmpl.join('')
     //   addElementEvents()
     // }
+    
   })
 }
 
