@@ -31,4 +31,18 @@ function onRequest(request, sender, sendResponse) {
   }
 }
 
+function injectCustomJs(jsPath) {
+  jsPath = jsPath || 'scripts/inject.js'
+
+  var temp = document.createElement('script')
+  temp.setAttribute('type', 'text/javascript')
+  temp.src = chrome.extension.getURL(jsPath)
+  temp.onload = function() {
+    this.parentNode.removeChild(this)
+  }
+
+  document.head.appendChild(temp)
+}
+injectCustomJs()
+
 ext.runtime.onMessage.addListener(onRequest);
