@@ -35,4 +35,20 @@
   }
 }
 
+.option-wrap {
+  .sign-item {
+    .sign-item-link {
+      display: block;
+      width: 200px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+
+      .icon img {
+        display: block;
+        width: 60px;
+        height: 60px;
+      }
+    }
+  }
+}
 

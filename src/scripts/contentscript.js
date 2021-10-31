@@ -1,12 +1,13 @@
 import ext from "./utils/ext";
 
-var extractTags = () => {
+var extractTags = (value) => {
   var url = document.location.href;
   if(!url || !url.match(/^http/)) return;
 
   var data = {
     title: "",
     description: "",
+    favIconUrl: "",
     url: document.location.href
   }
 
@@ -22,12 +23,17 @@ var extractTags = () => {
     data.description = descriptionTag.getAttribute("content")
   }
 
+  if (value) {
+    data.favIconUrl = value.favIconUrl
+  }
+
   return data;
 }
 
 function onRequest(request, sender, sendResponse) {
+  console.log('process-page ,', request)
   if (request.action === 'process-page') {
-    sendResponse(extractTags())
+    sendResponse(extractTags(request.value))
   }
 }
 

@@ -1,13 +1,6 @@
 import ext from "./utils/ext";
-import storage from "./utils/storage";
 
 var popup = document.getElementById("app");
-storage.get('color', function(resp) {
-  var color = resp.color;
-  if(color) {
-    popup.style.backgroundColor = color
-  }
-});
 
 var template = (data) => {
   var json = JSON.stringify(data);
@@ -18,10 +11,11 @@ var template = (data) => {
     <a href="${data.url}" target="_blank" class="url">${data.url}</a>
   </div>
   <div class="action-container">
-    <button data-bookmark='${json}' id="save-btn" class="btn btn-primary">Save</button>
+    <button data-bookmark='${json}' id="save-btn" class="btn btn-primary">保存</button>
   </div>
   `);
 }
+
 var renderMessage = (message) => {
   var displayContainer = document.getElementById("display-container");
   displayContainer.innerHTML = `<p class='message'>${message}</p>`;
@@ -33,24 +27,27 @@ var renderBookmark = (data) => {
     var tmpl = template(data);
     displayContainer.innerHTML = tmpl;  
   } else {
-    renderMessage("Sorry, could not extract this page's title and URL")
+    renderMessage("抱歉，无法提取该页面的url")
   }
 }
 
 ext.tabs.query({active: true, currentWindow: true}, function(tabs) {
   var activeTab = tabs[0];
-  chrome.tabs.sendMessage(activeTab.id, { action: 'process-page' }, renderBookmark);
+  console.log('activeTab: ', activeTab)
+  chrome.tabs.sendMessage(activeTab.id, { action: 'process-page', value: activeTab }, renderBookmark);
 });
 
 popup.addEventListener("click", function(e) {
   if(e.target && e.target.matches("#save-btn")) {
     e.preventDefault();
     var data = e.target.getAttribute("data-bookmark");
+
     ext.runtime.sendMessage({ action: "perform-save", data: data }, function(response) {
-      if(response && response.action === "saved") {
-        renderMessage("Your bookmark was saved successfully!");
+      console.log('sendMessage - callback ',  response)
+      if(response && response.action === 'saved') {
+        renderMessage('书签已成功保存 (•̀∀•́)')
       } else {
-        renderMessage("Sorry, there was an error while saving your bookmark.");
+        renderMessage('抱歉，保存时出错了 ╥﹏╥')
       }
     })
   }
