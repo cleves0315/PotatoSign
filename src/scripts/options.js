@@ -11,10 +11,9 @@ var setColor = (color) => {
 
 const template = (data) => (`
   <div class="sign-item">
-    <a class="sign-item-link" href="${data.url}" target="_blank">
+    <a class="sign-item-link" href="${data.url}" title="${data.description}" target="_blank">
       <div class="icon"><img src="${data.favIconUrl}" /></div>
       <div class="title">${data.title}</div>
-      <div class="description">${data.description}</div>
     </a>
   </div>
 `)
@@ -35,11 +34,10 @@ storage.get('color', function(resp) {
 storage.get('sign', function(result) {
   console.log('get sign: ', JSON.parse(result.sign))
   if (result && result.sign) {
-    debugger
     const sign = (typeof result.sign === 'string') ? JSON.parse(result.sign) : result.sign
     const tmpl = sign.map(m => template(m))
     
-    options.innerHTML = tmpl
+    options.innerHTML = tmpl.join('')
   }
 })
 

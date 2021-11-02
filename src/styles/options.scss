@@ -15,7 +15,7 @@
 }
 
 .content {
-  min-height: 300px;
+  min-height: 70vh;
 }
 
 .option {
@@ -37,16 +37,19 @@
 
 .option-wrap {
   .sign-item {
+    margin-bottom: 20px;
     .sign-item-link {
-      display: block;
-      width: 200px;
-      border: 1px solid #eee;
+      display: flex;
+      align-items: center;
       border-radius: 6px;
+      padding: 6px;
+      border: 1px solid #eee;
 
       .icon img {
         display: block;
-        width: 60px;
-        height: 60px;
+        width: 35px;
+        height: 35px;
+        margin-right: 10px;
       }
     }
   }
