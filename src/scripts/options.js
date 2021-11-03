@@ -10,12 +10,12 @@ var setColor = (color) => {
 };
 
 const template = (data) => (`
-  <div class="sign-item">
-    <a class="sign-item-link" href="${data.url}" title="${data.description}" target="_blank">
+  <a class="sign-item-link" href="${data.url}" title="${data.description}" target="_blank">
+    <div class="sign-item">
       <div class="icon"><img src="${data.favIconUrl}" /></div>
-      <div class="title">${data.title}</div>
-    </a>
-  </div>
+      <div class="title"><p>${data.title}</p></div>
+    </div>
+  </a>
 `)
 
 storage.get('color', function(resp) {
