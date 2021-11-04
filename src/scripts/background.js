@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import ext from "./utils/ext";
 import storage from "./utils/storage";
 
@@ -32,11 +33,13 @@ ext.runtime.onMessage.addListener(
 
             if (isRepeat) return
 
-            sign.push(reqData)
+            sign.push(Object.assign({ id: nanoid() }, reqData))
             storage.set({ sign: JSON.stringify(sign) })
           } else {
             const reqData = (typeof request.data === 'string') ? JSON.parse(request.data) : request.data
-            storage.set({ sign: JSON.stringify(Array(reqData)) })
+            const setData = Object.assign({ id: nanoid() }, reqData)
+
+            storage.set({ sign: JSON.stringify(Array(setData)) })
           }
         })
 
