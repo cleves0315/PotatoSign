@@ -12,6 +12,7 @@ var setColor = (color) => {
 const template = (data) => (`
   <a class="sign-item-link" href="${data.url}" title="${data.description}" target="_blank">
     <div class="sign-item">
+      <div class="del-wrap" data-data="${JSON.stringify(data)}"><div class="del-btn"></div></div>
       <div class="icon"><img src="${data.favIconUrl}" /></div>
       <div class="title"><p>${data.title}</p></div>
     </div>
@@ -38,6 +39,7 @@ storage.get('sign', function(result) {
     const tmpl = sign.map(m => template(m))
     
     options.innerHTML = tmpl.join('')
+    addElementEvents()
   }
 })
 
@@ -49,3 +51,16 @@ colorSelectors.forEach(function(el) {
     });
   })
 })
+
+
+function handleToDelSign(e) {
+  console.log('handleToDelSign: ', e)
+  // e.stopPropagation();
+}
+
+function addElementEvents() {
+  document.querySelectorAll('.del-wrap')
+    .forEach(elm => {
+      elm.addEventListener('click', handleToDelSign)
+    })
+}

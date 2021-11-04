@@ -51,21 +51,46 @@
     &:hover {
       transform: translateY(-8px);
       background: rgba(37, 38, 43, .05);
+
+      .del-wrap {
+        opacity: 1;
+        transition: opacity;
+        transition-delay: .76s;
+      }
     }
   }
   
   .sign-item {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     width: 140px;
     height: 140px;
     padding: 6px;
+    
+    .del-wrap {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      padding: 3px;
+      border-radius: 6px;
+      opacity: 0;
+      &:hover {
+        background: #ddd;
+      }
 
+      .del-btn {
+        width: 17px;
+        height: 17px;
+        background-image: url(../icons/del.png);
+        background-size: 100% 100%;
+      }
+    }
     .icon img {
       display: block;
-      width: 60px;
-      height: 60px;
+      width: 40px;
+      height: 40px;
       margin: 0 auto;
     }
 
