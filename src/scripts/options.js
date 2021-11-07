@@ -33,11 +33,10 @@ function getSign(id = '001') {
     // if (result && result.sign) {
     //   const sign = (typeof result.sign === 'string') ? JSON.parse(result.sign) : result.sign
     //   const tmpl = sign.map(m => template(m))
-      
     //   options.innerHTML = tmpl.join('')
     //   addElementEvents()
     // }
-    
+
   })
 }
 
