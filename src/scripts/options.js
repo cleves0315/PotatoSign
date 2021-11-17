@@ -1,5 +1,4 @@
-import ext from "./utils/ext";
-import { JSONToParse } from "./utils/utils";
+import { getSignAndMapSync, setSignSync, getFIdAsync, setFIdAsync } from "./utils/utils";
 import storage from "./utils/storage";
 
 var options = document.querySelector("#options");
@@ -15,54 +14,42 @@ const template = (data) => (`
   </a>
 `)
 
-function getSign(id = '001') {
-  storage.get(['sign', 'signMap'], function(result) {
-    const { sign: signJson, signMap: signMapJson } = result
-    const sign = JSONToParse(signJson)
-    const signMap = JSONToParse(signMapJson)
+/**
+ * 
+ * @param {string} folderId
+ */
+async function renderSigns(folderId = '001') {
+  const { sign, signMap } = await getSignAndMapSync()
+  setFIdAsync(folderId)
 
-    console.log('getSign: ', sign)
-    console.log('getSign: ', signMap)
-
-    if (Array.isArray(sign) && signMap && (sign.length > 0) && (JSON.stringify(signMap) !== '{}')) {
-      const index = signMap[id]
-      const tmpl = sign[index].list.map(template)
-      
-      options.innerHTML = tmpl.join('')
-      addElementEvents()
-    }
-  })
+  try {
+    const index = signMap[folderId]
+    const tmpl = sign[index].list.map(template)
+    options.innerHTML = tmpl.join('')
+    addElementEvents()
+  } catch (error) {
+    console.error('renderSigns to innerHTML \n', error)
+  }
 }
 
-function handleToDelSign(e) {
+async function handleToDelSign(e) {
   e.preventDefault()
   const id = e.target.getAttribute('data-id')
+  const folderId = await getFIdAsync()
+  const { sign, signMap } = await getSignAndMapSync()
 
-  storage.get(['sign', 'signMap'], function(result) {
-    const { sign: signJson, signMap: signMapJson } = result
-    const sign = JSONToParse(signJson)
-    const signMap = JSONToParse(signMapJson)
+  try {
+    const index = signMap[folderId]
+    const signList = sign[index].list
+    const findIndex = signList.findIndex(m => m.id === id)
 
-    console.log('sign: ', sign)
-    console.log('signMap: ', signMap)
+    signList.splice(findIndex, 1)
 
-    if (Array.isArray(sign) && signMap && (sign.length > 0) && (JSON.stringify(signMap) !== '{}')) {
-      const index = signMap[id]
-      const tmpl = sign[index].list.map(template)
-      
-      options.innerHTML = tmpl.join('')
-      addElementEvents()
-    }
-
-    if (result && result.sign) {
-      const sign = (typeof result.sign === 'string') ? JSON.parse(result.sign) : result.sign
-      const findIndex = sign.findIndex(m => m.id === id)
-      sign.splice(findIndex, 1)
-      storage.set({ sign: sign }, function() {
-        getSign()
-      })
-    }
-  })
+    await setSignSync(sign)
+    renderSigns()
+  } catch (error) {
+    console.error('handleToDelSign: \n', error)
+  }
 }
 
 function handleToEdit(e) {
@@ -89,7 +76,7 @@ function handleToCancelEdit(e) {
       const findIndex = sign.findIndex(m => m.id === id)
       sign[findIndex].title = value
       storage.set({ sign: sign }, function() {
-        getSign()
+        renderSigns()
       })
     }
   })
@@ -106,4 +93,4 @@ function addElementEvents() {
     })
 }
 
-getSign()
+renderSigns()

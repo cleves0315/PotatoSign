@@ -1,95 +1,62 @@
 import { nanoid } from "nanoid";
 import ext from "./utils/ext";
 import storage from "./utils/storage";
+import { JSONToParse, setSignSync, setSignMapSync, getSignSync, getSignAndMapSync, judgeToRepeat } from "./utils/utils";
 
 // storage.clear()
 
-function initSign() {
+async function initSign() {
   console.log('storage: ', storage)
-  storage.get(['sign', 'signMap'], function(data) {
-    console.log('init-sign: ', data)
-    const { sign, signMap } = data
-    const signValue = [
-      {
-        id: '001',
-        name: '默认书签',
-        list: [],
-        type: 'folder'
-      }
-    ]
-    const signMapValue = {
-      '001': 0
+  const signValue = [
+    {
+      id: '001',
+      name: '默认书签',
+      list: [],
+      type: 'folder'
     }
-
-    if (!sign || (Array.isArray(sign) && sign.length === 0)) {
-      storage.set({
-        sign: JSON.stringify(signValue)
-      })
-    }
-    
-    if (!signMap || (JSON.stringify(signMap) === '{}')) {
-      storage.set({
-        signMap: JSON.stringify(signMapValue)
-      })
-    }
-  })
-}
-
-function judgeToRepeat(list, data) {
-  let isRepeat = false
-
-  for (let i = 0; i < list.length; i++) {
-    const s = list[i];
-    if (s.url === data.url) {
-      isRepeat = true
-      break
-    }
+  ]
+  const signMapValue = { '001': 0 }
+  const { sign, signMap } = await getSignAndMapSync()
+  
+  if (!sign || (Array.isArray(sign) && sign.length === 0)) {
+    await setSignSync(signValue)
   }
-
-  return isRepeat
+  
+  if (!signMap || (JSON.stringify(signMap) === '{}')) {
+    await setSignMapSync(signMapValue)
+  }
 }
 
 ext.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
+  async function(request, sender, sendResponse) {
     if(request.action === "perform-save") {
       console.log("Extension Type: ", "/* @echo extension */");
       console.log("PERFORM AJAX", JSON.parse(request.data));
 
       if (request.data) {
-        storage.get(['sign'], function (data) {
-          const { sign: signJson } = data
-          const sign = (typeof signJson === 'string') ? JSON.parse(signJson) : signJson
-          const reqData = (typeof request.data === 'string') ? JSON.parse(request.data) : request.data
+        const reqData = JSONToParse(request.data)
 
-          if (Array.isArray(sign) && sign.length > 0) {
+        // const sign = await getSignSync()
+        getSignSync().then(sign => {
+          try {
             const isRepeat = judgeToRepeat(sign[0].list, reqData)
+            
+            // 得知有重复数据
             if (isRepeat) return
-
+  
             reqData.id = nanoid()
-            sign[0].list.push(reqData)
-
-            storage.set({
-              sign: JSON.stringify(sign)
+            sign[0].list.push(reqData) // 0 => 目前默认往默认文件夹放数据
+  
+            setSignSync(sign)
+          } catch (error) {
+            // await initSign()
+            initSign().then(() => {
+              reqData.id = nanoid()
+              sign[0].list.push(reqData) // 0 => 目前默认往默认文件夹放数据
+    
+              setSignSync(sign)
             })
-          } else {
-            initSign()
           }
-
-          // if (data && JSON.stringify(data) !== '{}') {
-          //   const sign = (typeof data.sign === 'string') ? JSON.parse(data.sign) : data.sign
-          //   const reqData = (typeof request.data === 'string') ? JSON.parse(request.data) : request.data
-          //   const isRepeat = judgeToRepeat(sign, reqData)
-
-          //   if (isRepeat) return
-
-          //   sign.push(Object.assign({ id: nanoid() }, reqData))
-          //   storage.set({ sign: JSON.stringify(sign) })
-          // } else {
-          //   const reqData = (typeof request.data === 'string') ? JSON.parse(request.data) : request.data
-          //   const setData = Object.assign({ id: nanoid() }, reqData)
-
-          //   storage.set({ sign: JSON.stringify(Array(setData)) })
-          // }
         })
 
         sendResponse({ action: "saved" });
