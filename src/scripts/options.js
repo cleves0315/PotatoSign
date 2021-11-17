@@ -1,4 +1,5 @@
 import ext from "./utils/ext";
+import { JSONToParse } from "./utils/utils";
 import storage from "./utils/storage";
 
 var options = document.querySelector("#options");
@@ -16,27 +17,20 @@ const template = (data) => (`
 
 function getSign(id = '001') {
   storage.get(['sign', 'signMap'], function(result) {
-    console.log('get sign: ', (result))
     const { sign: signJson, signMap: signMapJson } = result
-    const sign = (typeof signJson === 'string') ? JSON.parse(signJson) : signJson
-    const signMap = (typeof signMapJson === 'string') ? JSON.parse(signMapJson) : signMapJson
+    const sign = JSONToParse(signJson)
+    const signMap = JSONToParse(signMapJson)
 
-    if (Array.isArray(sign) && signMap
-      && (sign.length > 0) && (JSON.stringify(signMap) !== '{}')) {
+    console.log('getSign: ', sign)
+    console.log('getSign: ', signMap)
+
+    if (Array.isArray(sign) && signMap && (sign.length > 0) && (JSON.stringify(signMap) !== '{}')) {
       const index = signMap[id]
-      const tmpl = sign[index].list.map(m => template(m))
+      const tmpl = sign[index].list.map(template)
       
       options.innerHTML = tmpl.join('')
       addElementEvents()
     }
-
-    // if (result && result.sign) {
-    //   const sign = (typeof result.sign === 'string') ? JSON.parse(result.sign) : result.sign
-    //   const tmpl = sign.map(m => template(m))
-    //   options.innerHTML = tmpl.join('')
-    //   addElementEvents()
-    // }
-
   })
 }
 
@@ -44,7 +38,22 @@ function handleToDelSign(e) {
   e.preventDefault()
   const id = e.target.getAttribute('data-id')
 
-  storage.get('sign', function(result) {
+  storage.get(['sign', 'signMap'], function(result) {
+    const { sign: signJson, signMap: signMapJson } = result
+    const sign = JSONToParse(signJson)
+    const signMap = JSONToParse(signMapJson)
+
+    console.log('sign: ', sign)
+    console.log('signMap: ', signMap)
+
+    if (Array.isArray(sign) && signMap && (sign.length > 0) && (JSON.stringify(signMap) !== '{}')) {
+      const index = signMap[id]
+      const tmpl = sign[index].list.map(template)
+      
+      options.innerHTML = tmpl.join('')
+      addElementEvents()
+    }
+
     if (result && result.sign) {
       const sign = (typeof result.sign === 'string') ? JSON.parse(result.sign) : result.sign
       const findIndex = sign.findIndex(m => m.id === id)
