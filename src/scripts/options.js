@@ -61,25 +61,31 @@ function handleToEdit(e) {
 }
 
 function handleToEnterInput(e) {
-  if (e.keyCode === 13) {
+  const cancelKeys = [13, 27]
+  if (cancelKeys.includes(e.keyCode)) {
     handleToCancelEdit(e)
   }
 }
 
-function handleToCancelEdit(e) {
+async function handleToCancelEdit(e) {
   const value = e.target.value
   const id = e.target.getAttribute('data-id')
+  
+  const folderId = await getFIdAsync()
+  const { sign, signMap } = await getSignAndMapSync()
 
-  storage.get('sign', function(result) {
-    if (result && result.sign) {
-      const sign = (typeof result.sign === 'string') ? JSON.parse(result.sign) : result.sign
-      const findIndex = sign.findIndex(m => m.id === id)
-      sign[findIndex].title = value
-      storage.set({ sign: sign }, function() {
-        renderSigns()
-      })
-    }
-  })
+  try {
+    const index = signMap[folderId]
+    const signList = sign[index].list
+    const findIndex = signList.findIndex(m => m.id === id)
+
+    signList[findIndex].title = value
+    
+    await setSignSync(sign)
+    renderSigns()
+  } catch (error) {
+    console.error('CancelEdit: \n', error)
+  }
 }
 
 function addElementEvents() {
@@ -87,7 +93,7 @@ function addElementEvents() {
     .forEach(elm => {
       elm.querySelector('.del-wrap').addEventListener('click', handleToDelSign)
       elm.querySelector('.title[data-type="text"]').querySelector('p').addEventListener('click', handleToEdit)
-      elm.querySelector('.title[data-type="input"]').addEventListener('click', function(e) { e.preventDefault() })
+      elm.querySelector('.title[data-type="input"]').addEventListener('click', (e) => e.preventDefault())
       elm.querySelector('.title[data-type="input"]').querySelector('input').addEventListener('blur', handleToCancelEdit)
       elm.querySelector('.title[data-type="input"]').querySelector('input').addEventListener('keydown', handleToEnterInput)
     })
