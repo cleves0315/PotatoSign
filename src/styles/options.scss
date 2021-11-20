@@ -133,6 +133,25 @@
 .menu-container {
   padding: 30px 60px;
 
+  .menu-area {
+    position: relative;
+    border-radius: 25px;
+    border: 1px solid #cecece;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+      filter: blur(10px);
+      background: #fff;
+      box-shadow: inset 0 0 0 200px rgba(255,255,255,0.3);
+    }
+  }
+
   .menu-list {
     display: flex;
     align-items: center;
