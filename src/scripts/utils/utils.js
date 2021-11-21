@@ -36,6 +36,42 @@ function judgeToRepeat(list, data) {
   return isRepeat
 }
 
+/**
+ * 
+ * @param {string | string[]} params 
+ */
+async function getStorageAsync(params) {
+  return new Promise((resolve) => {
+    storage.get(params, function(result) {
+      const resultData = {}
+      const payload = (typeof params === 'string') ? [params] : params
+
+      payload.forEach(key => {
+        resultData[key] = JSONToParse(result[key])
+      })
+
+      resolve(resultData)
+    })
+  })
+}
+
+/**
+ * 
+ * @param {object} params 
+ */
+async function setStorageSync(params) {
+  return new Promise((resolve) => {
+    const payload = {}
+    const keys = Object.getOwnPropertyNames(params)
+
+    keys.forEach(key => {
+      payload[key] = JSONToStringify(params[key])
+    })
+
+    storage.set(payload, resolve)
+  })
+}
+
 async function getSignSync() {
   return new Promise((resolve) => {
     storage.get('sign', function(result) {
@@ -124,6 +160,8 @@ export {
   JSONToParse,
   JSONToStringify,
   judgeToRepeat,
+  getStorageAsync,
+  setStorageSync,
   getSignSync,
   getSignMapSync,
   getSignAndMapSync,

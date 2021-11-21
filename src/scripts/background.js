@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { defaultSign, defaultSignMap } from "./utils/mixin";
 import ext from "./utils/ext";
 import storage from "./utils/storage";
 import { JSONToParse, setSignSync, setSignMapSync, getSignSync, getSignAndMapSync, judgeToRepeat } from "./utils/utils";
@@ -7,23 +8,14 @@ import { JSONToParse, setSignSync, setSignMapSync, getSignSync, getSignAndMapSyn
 
 async function initSign() {
   console.log('storage: ', storage)
-  const signValue = [
-    {
-      id: '001',
-      name: '默认书签',
-      list: [],
-      type: 'folder'
-    }
-  ]
-  const signMapValue = { '001': 0 }
   const { sign, signMap } = await getSignAndMapSync()
   
   if (!sign || (Array.isArray(sign) && sign.length === 0)) {
-    await setSignSync(signValue)
+    await setSignSync(defaultSign)
   }
   
   if (!signMap || (JSON.stringify(signMap) === '{}')) {
-    await setSignMapSync(signMapValue)
+    await setSignMapSync(defaultSignMap)
   }
 }
 

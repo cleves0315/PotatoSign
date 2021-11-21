@@ -136,8 +136,8 @@
   .menu-area {
     position: relative;
     border-radius: 25px;
-    border: 1px solid #cecece;
-    
+    background: #f4f4f4;
+
     &::after {
       content: '';
       position: absolute;
@@ -159,7 +159,7 @@
     height: 80px;
     // background: #eee;
 
-    .memu-item,
+    .menu-item,
     .memu-add-item {
       display: flex;
       align-items: center;
@@ -174,12 +174,16 @@
       background-color: #0abde3;
       box-shadow: 1px 3px 5px #eee;
       transition: transform .2s ease;
+      transform: scale(.6);
 
+      &.menu-active-item {
+        transform: scale(.8);
+      }
       &:hover {
-        transform: scale(1.2);
+        transform: scale(.8);
       }
       &:active {
-        transform: scale(1.1);
+        transform: scale(.7);
       }
     }
   }

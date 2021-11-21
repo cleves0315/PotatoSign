@@ -1,7 +1,9 @@
-import { getSignAndMapSync, setSignSync, getFIdAsync, setFIdAsync } from "./utils/utils";
-import storage from "./utils/storage";
+import { nanoid } from "nanoid";
+import { signTmpl } from "./utils/mixin";
+import { getSignAndMapSync, setSignSync, getFIdAsync, setFIdAsync, getStorageAsync, setStorageSync } from "./utils/utils";
 
 var options = document.querySelector("#options");
+var menuList = document.querySelector("#menu-list");
 
 const template = (data) => (`
   <a class="sign-item-link" href="${data.url}" title="${data.description}" target="_blank">
@@ -14,16 +16,33 @@ const template = (data) => (`
   </a>
 `)
 
+const footItemTemplate = (data, folderId) => (`
+  <div class="menu-item ${data.id === folderId ? 'menu-active-item':''}">${data.id === '001' ? '默认收藏夹' : data.name}</div>
+`)
+
+const footAddItemTmpl = `
+  <div class="menu-item" data-type="add">
+    <svg t="1636131075814" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2410" width="64" height="64"><path d="M874.666667 469.333333H554.666667V149.333333c0-23.466667-19.2-42.666667-42.666667-42.666666s-42.666667 19.2-42.666667 42.666666v320H149.333333c-23.466667 0-42.666667 19.2-42.666666 42.666667s19.2 42.666667 42.666666 42.666667h320v320c0 23.466667 19.2 42.666667 42.666667 42.666666s42.666667-19.2 42.666667-42.666666V554.666667h320c23.466667 0 42.666667-19.2 42.666666-42.666667s-19.2-42.666667-42.666666-42.666667z" p-id="2411" fill="#ffffff"></path></svg>
+  </div>
+`
+
+const footItemEmptyTmpl = `
+  <div class="menu-item menu-active-item"><input id="addItem" type="text"></div>
+`
+
 /**
  * 
  * @param {string} folderId
  */
 async function renderSigns(folderId = '001') {
-  const { sign, signMap } = await getSignAndMapSync()
+  const { sign, signMap } = await getStorageAsync(['sign', 'signMap'])
   setFIdAsync(folderId)
 
   try {
     const index = signMap[folderId]
+    const footItemTmpl = sign.map((m) => footItemTemplate(m, folderId))
+    menuList.innerHTML = footItemTmpl.join('') + footAddItemTmpl
+
     const tmpl = sign[index].list.map(template)
     options.innerHTML = tmpl.join('')
     addElementEvents()
@@ -88,6 +107,49 @@ async function handleToCancelEdit(e) {
   }
 }
 
+function menuItemInputFocus() {
+  menuList.querySelector('#addItem').focus()
+}
+function handleToAddItemCancelEdit() {
+  menuList.querySelector('#addItem').addEventListener('blur', async function(e) {
+    const value = e.target.value.trim()
+
+    if (value) {
+      const { sign } = await getStorageAsync('sign')
+      const addData = JSON.parse(JSON.stringify(signTmpl))
+      addData.id = nanoid()
+      addData.name = value
+      // const addData = {
+      //   ...signTmpl,
+      //   id: nanoid(),
+      //   name: value
+      // }
+
+      sign.push(addData)
+      setStorageSync({ sign, folderId: addData.id })
+
+      const menuTmpl = menuList.innerHTML.replace('menu-active-item', '')
+      menuList.innerHTML = menuTmpl.replace(footItemEmptyTmpl, footItemTemplate(addData, addData.id))
+    } else {
+      menuList.innerHTML = menuList.innerHTML.replace(footItemEmptyTmpl, '')
+      addFootMenuListEvents()
+    }
+  })
+}
+
+async function handleToAddFolder() {
+  menuList.innerHTML = menuList.innerHTML.replace(footAddItemTmpl, footItemEmptyTmpl + footAddItemTmpl)
+  menuItemInputFocus()
+  handleToAddItemCancelEdit()
+  addFootMenuListEvents()
+}
+
+
+function addFootMenuListEvents() {
+  menuList.querySelector('.menu-item[data-type="add"]')
+    .addEventListener('click', handleToAddFolder)
+}
+
 function addElementEvents() {
   document.querySelectorAll('.sign-item')
     .forEach(elm => {
@@ -97,6 +159,8 @@ function addElementEvents() {
       elm.querySelector('.title[data-type="input"]').querySelector('input').addEventListener('blur', handleToCancelEdit)
       elm.querySelector('.title[data-type="input"]').querySelector('input').addEventListener('keydown', handleToEnterInput)
     })
+
+  addFootMenuListEvents()
 }
 
 renderSigns()
