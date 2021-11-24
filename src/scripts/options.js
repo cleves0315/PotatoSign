@@ -17,12 +17,14 @@ const template = (data) => (`
 `)
 
 const footItemTemplate = (data, folderId) => (`
-  <div class="menu-item ${data.id === folderId ? 'menu-active-item':''}">${data.id === '001' ? '默认收藏夹' : data.name}</div>
+  <div class="menu-item ${data.id === folderId ? 'menu-active-item':''}" data-type="folder" data-id="${data.id}">
+    ${data.id === '001' ? '默认收藏夹' : data.name}
+  </div>
 `)
 
 const footAddItemTmpl = `
   <div class="menu-item" data-type="add">
-    <svg t="1636131075814" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2410" width="64" height="64"><path d="M874.666667 469.333333H554.666667V149.333333c0-23.466667-19.2-42.666667-42.666667-42.666666s-42.666667 19.2-42.666667 42.666666v320H149.333333c-23.466667 0-42.666667 19.2-42.666666 42.666667s19.2 42.666667 42.666666 42.666667h320v320c0 23.466667 19.2 42.666667 42.666667 42.666666s42.666667-19.2 42.666667-42.666666V554.666667h320c23.466667 0 42.666667-19.2 42.666666-42.666667s-19.2-42.666667-42.666666-42.666667z" p-id="2411" fill="#ffffff"></path></svg>
+    <svg t="1636131075814" class="icon" data-type="add" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2410" width="64" height="64"><path d="M874.666667 469.333333H554.666667V149.333333c0-23.466667-19.2-42.666667-42.666667-42.666666s-42.666667 19.2-42.666667 42.666666v320H149.333333c-23.466667 0-42.666667 19.2-42.666666 42.666667s19.2 42.666667 42.666666 42.666667h320v320c0 23.466667 19.2 42.666667 42.666667 42.666666s42.666667-19.2 42.666667-42.666666V554.666667h320c23.466667 0 42.666667-19.2 42.666666-42.666667s-19.2-42.666667-42.666666-42.666667z" p-id="2411" fill="#ffffff"></path></svg>
   </div>
 `
 
@@ -115,7 +117,7 @@ function handleToAddItemCancelEdit() {
     const value = e.target.value.trim()
 
     if (value) {
-      const { sign } = await getStorageAsync('sign')
+      const { sign, signMap } = await getStorageAsync(['sign', 'signMap'])
       const addData = JSON.parse(JSON.stringify(signTmpl))
       addData.id = nanoid()
       addData.name = value
@@ -126,7 +128,8 @@ function handleToAddItemCancelEdit() {
       // }
 
       sign.push(addData)
-      setStorageSync({ sign, folderId: addData.id })
+      signMap[addData.id] = sign.length - 1
+      setStorageSync({ sign, signMap, folderId: addData.id })
 
       const menuTmpl = menuList.innerHTML.replace('menu-active-item', '')
       menuList.innerHTML = menuTmpl.replace(footItemEmptyTmpl, footItemTemplate(addData, addData.id))
@@ -144,10 +147,28 @@ async function handleToAddFolder() {
   addFootMenuListEvents()
 }
 
+function handleToChoicefolder(e) {
+  const { id } = e.target.dataset
+
+  if (!id) return
+  // setStorageSync({ folderId: id })
+
+  renderSigns(id)
+  // addElementEvents()
+}
+
 
 function addFootMenuListEvents() {
-  menuList.querySelector('.menu-item[data-type="add"]')
-    .addEventListener('click', handleToAddFolder)
+  menuList.querySelectorAll('.menu-item').forEach(elm => {
+    const type = elm.getAttribute('data-type')
+
+    if (type === 'folder') {
+      elm.addEventListener('click', handleToChoicefolder)
+    } else if (type === 'add') {
+      elm.addEventListener('click', handleToAddFolder)
+    }
+  })
+
 }
 
 function addElementEvents() {

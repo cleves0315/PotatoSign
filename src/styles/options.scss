@@ -60,7 +60,7 @@
       transition: transform .3s ease;
       
       &:hover {
-        // transform: translateY(-8px);
+        transform: translateY(-8px);
         background: rgba(37, 38, 43, .05);
   
         .del-wrap {
@@ -177,6 +177,8 @@
       transform: scale(.6);
 
       &.menu-active-item {
+        color: #0abde3;
+        background: #fff;
         transform: scale(.8);
       }
       &:hover {
