@@ -113,31 +113,47 @@ function menuItemInputFocus() {
   menuList.querySelector('#addItem').focus()
 }
 function handleToAddItemCancelEdit() {
-  menuList.querySelector('#addItem').addEventListener('blur', async function(e) {
-    const value = e.target.value.trim()
-
-    if (value) {
-      const { sign, signMap } = await getStorageAsync(['sign', 'signMap'])
-      const addData = JSON.parse(JSON.stringify(signTmpl))
-      addData.id = nanoid()
-      addData.name = value
-      // const addData = {
-      //   ...signTmpl,
-      //   id: nanoid(),
-      //   name: value
-      // }
-
-      sign.push(addData)
-      signMap[addData.id] = sign.length - 1
-      setStorageSync({ sign, signMap, folderId: addData.id })
-
-      const menuTmpl = menuList.innerHTML.replace('menu-active-item', '')
-      menuList.innerHTML = menuTmpl.replace(footItemEmptyTmpl, footItemTemplate(addData, addData.id))
-    } else {
-      menuList.innerHTML = menuList.innerHTML.replace(footItemEmptyTmpl, '')
-      addFootMenuListEvents()
+  const addFolderElm = menuList.querySelector('#addItem')
+  
+  addFolderElm.addEventListener('keydown', (e) => {
+    const { keyCode, target: {value} } = e
+    if (keyCode === 13) {
+      addFolder(value)
     }
   })
+  addFolderElm.addEventListener('blur', (e) => addFolder(e.target.value))
+}
+
+async function addFolder(val) {
+  console.log('addFolder')
+  const value = val.trim()
+
+  if (window.delayRunFunt) return
+  window.delayRunFunt = true
+  setTimeout(() => window.delayRunFunt = false, 300)
+
+  if (value) {
+    const { sign, signMap } = await getStorageAsync(['sign', 'signMap'])
+    const addData = JSON.parse(JSON.stringify(signTmpl))
+    addData.id = nanoid()
+    addData.name = value
+    // const addData = {
+    //   ...signTmpl,
+    //   id: nanoid(),
+    //   name: value
+    // }
+
+    sign.push(addData)
+    signMap[addData.id] = sign.length - 1
+    setStorageSync({ sign, signMap, folderId: addData.id })
+
+    const menuTmpl = menuList.innerHTML.replace('menu-active-item', '')
+    menuList.innerHTML = menuTmpl.replace(footItemEmptyTmpl, footItemTemplate(addData, addData.id))
+    addFootMenuListEvents()
+  } else {
+    menuList.innerHTML = menuList.innerHTML.replace(footItemEmptyTmpl, '')
+    addFootMenuListEvents()
+  }
 }
 
 async function handleToAddFolder() {
@@ -154,7 +170,6 @@ function handleToChoicefolder(e) {
   // setStorageSync({ folderId: id })
 
   renderSigns(id)
-  // addElementEvents()
 }
 
 
