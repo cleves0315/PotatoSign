@@ -44,6 +44,11 @@ function render() {
   document.body.appendChild(dropdownMenu)
 }
 
+document.body.addEventListener('contextmenu', function(e) {
+  e.preventDefault()
+  console.log('e: ', e.target.parentNode)
+})
+
 render()
 
 export {
