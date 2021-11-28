@@ -1,6 +1,6 @@
 {
   "name": "potato-sign",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "potato-sign",
   "scripts": {
     "chrome-build": "cross-env TARGET=chrome gulp",
