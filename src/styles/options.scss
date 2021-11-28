@@ -133,8 +133,12 @@
 .menu-container {
   padding: 30px 60px;
 
+  $menuHeight: 80px;
+
   .menu-area {
+    overflow-x: auto;
     position: relative;
+    height: $menuHeight;
     border-radius: 25px;
     background: #f4f4f4;
 
@@ -154,14 +158,21 @@
 
   .menu-list {
     display: flex;
+    padding: 0 20px;
     align-items: center;
-    justify-content: center;
-    height: 80px;
-    // background: #eee;
+    height: $menuHeight;
+
+    &::after {
+      content: '0';
+      width: 30px;
+      height: 100%;
+      opacity: 0;
+    }
 
     .menu-item,
     .memu-add-item {
       display: flex;
+      flex-shrink: 0;
       align-items: center;
       justify-content: center;
       width: 80px;
@@ -169,7 +180,6 @@
       padding: 14px;
       color: #fff;
       cursor: pointer;
-      margin-right: 20px;
       border-radius: 10px;
       background-color: #0abde3;
       box-shadow: 1px 3px 5px #eee;
