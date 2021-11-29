@@ -35,6 +35,7 @@ class DropdownMenu {
 
     document.body.addEventListener('click', (e) => {
       e.preventDefault()
+      this.hide()
     })
     
     document.body.addEventListener('contextmenu', (e) => {
@@ -55,6 +56,8 @@ class DropdownMenu {
   
   show(x, y) {
     const menu = document.querySelector('.dropdown-menu')
+    menu.style.display = 'block'
+    
     let left, top = 0
     const { innerWidth, innerHeight } = window
     const { offsetWidth, offsetHeight } = menu
@@ -73,7 +76,11 @@ class DropdownMenu {
   
     menu.style.top = `${top}px`
     menu.style.left = `${left}px`
-    menu.style.display = 'block'
+  }
+
+  hide() {
+    const menu = document.querySelector('.dropdown-menu')
+    menu.style.display = 'none'
   }
   
   mount() {
