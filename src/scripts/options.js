@@ -8,7 +8,7 @@ var menuList = document.querySelector("#menu-list");
 
 const template = (data) => (`
   <a class="sign-item-link" href="${data.url}" title="${data.description}" target="_blank">
-    <div class="sign-item" data-id="${data.id}">
+    <div class="sign-item" data-id="${data.id}" data-dropdown-type="sign">
       <div class="del-wrap" data-id="${data.id}"><div class="del-btn" data-id="${data.id}"></div></div>
       <div class="icon"><img src="${data.favIconUrl}" /></div>
       <div class="title" data-type="text"><p title="${data.title}">${data.title}</p></div>

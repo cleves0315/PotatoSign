@@ -39,13 +39,24 @@ class DropdownMenu {
     })
     
     document.body.addEventListener('contextmenu', (e) => {
+      console.log(e)
       e.preventDefault()
+      let target = e.target
       const { clientX, clientY } = e
+
+      while ((target.tagName !== 'BODY') && !target.dataset['dropdownType']) {
+        target = target.parentNode
+      }
+
+      const { dropdownType } = target.dataset
+
+      console.log(target.dataset)
     
       this.show(clientX, clientY)
     })
 
     this.mount()
+    this.mentElm = document.querySelector('.dropdown-menu')
   }
   
   
@@ -55,7 +66,7 @@ class DropdownMenu {
   }
   
   show(x, y) {
-    const menu = document.querySelector('.dropdown-menu')
+    const menu = this.mentElm
     menu.style.display = 'block'
     
     let left, top = 0
@@ -79,7 +90,7 @@ class DropdownMenu {
   }
 
   hide() {
-    const menu = document.querySelector('.dropdown-menu')
+    const menu = this.mentElm
     menu.style.display = 'none'
   }
   
