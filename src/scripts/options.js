@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { ACTION, addDrodownEvents } from './layout/dropdown-menu'
+import DropdownMenu from './layout/dropdown-menu'
 import { signTmpl } from "./utils/mixin";
 import { getSignAndMapSync, setSignSync, getFIdAsync, setFIdAsync, getStorageAsync, setStorageSync } from "./utils/utils";
 
@@ -32,26 +32,6 @@ const footAddItemTmpl = `
 const footItemEmptyTmpl = `
   <div class="menu-item menu-active-item"><input id="addItem" type="text"></div>
 `
-
-addDrodownEvents((e) => {
-  const { action } = e.target.dataset
-
-  switch (+action) {
-    case ACTION['DELETE']:
-      
-      break;
-    case ACTION['RENAME']:
-      
-      break;
-    case ACTION['MOVETO']:
-      
-      break;
-  
-    default:
-      break;
-  }
-})
-
 
 /**
  * 
@@ -219,6 +199,5 @@ function addElementEvents() {
 
   addFootMenuListEvents()
 }
-
 
 renderSigns()
