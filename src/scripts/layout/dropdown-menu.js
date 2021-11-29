@@ -37,6 +37,28 @@ function addDrodownEvents(fn) {
     .addEventListener('click', fn)
 }
 
+function show(x, y) {
+  const menu = document.querySelector('.dropdown-menu')
+  let left, top = 0
+  const { innerWidth, innerHeight } = window
+  const { offsetWidth, offsetHeight } = menu
+
+  if ((x + offsetWidth) > innerWidth) {
+    left = x - offsetWidth
+  } else {
+    left = x
+  }
+
+  if ((y + offsetHeight) > innerHeight) {
+    top = y - offsetHeight
+  } else {
+    top = y
+  }
+
+  menu.style.top = `${top}px`
+  menu.style.left = `${left}px`
+}
+
 function render() {
   const dropdownMenu = document.createElement('div')
   dropdownMenu.innerHTML = template
@@ -46,7 +68,9 @@ function render() {
 
 document.body.addEventListener('contextmenu', function(e) {
   e.preventDefault()
-  console.log('e: ', e.target.parentNode)
+  const { clientX, clientY } = e
+
+  show(clientX, clientY)
 })
 
 render()
