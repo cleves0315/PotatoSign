@@ -5,11 +5,15 @@ const menuTypes = [
 
 class DropdownMenu {
   constructor() {
+    this.data = null
+    this.callBack = null
+    this.targetAttribute = 'id' // 抓取的属性（会赋值到this.data）
     this.ACTION = {
       DELETE: 0, // 删除
       RENAME: 1, // 重命名
       MOVETO: 2 // 移动
     }
+    this.menuElm = null
     this.menuList = [] // 展示列表
     this.sign = [
       { action: this.ACTION['RENAME'], text: '重命名' },
@@ -37,6 +41,7 @@ class DropdownMenu {
 
       if (menuTypes.includes(dropdownType)) {
         this.menuList = this[dropdownType]
+        this.data = target.dataset[this.targetAttribute]
         this.show(clientX, clientY, dropdownType)
       } else {
         this.hide()
@@ -44,7 +49,8 @@ class DropdownMenu {
     })
 
     this.mount()
-    this.mentElm = document.querySelector('.dropdown-menu')
+    this.menuElm = document.querySelector('.dropdown-menu')
+    this.addMenuItemEvent()
   }
 
   menuListTmpl() {
@@ -59,7 +65,15 @@ class DropdownMenu {
       )).join('')
     )
   }
-  
+  addMenuItemEvent() {
+    this.menuElm.querySelectorAll('.dropdown-menu-root')
+      .forEach(m => {
+        m.addEventListener('click', (e) => {
+          const { action } = e.target.dataset
+          this.callBack && this.callBack(action, this.data)
+        })
+      })
+  }
   
   addDrodownEvents(fn) {
     document.querySelector('.dropdown-menu-root')
@@ -67,9 +81,9 @@ class DropdownMenu {
   }
   
   show(x, y) {
-    const menu = this.mentElm
+    const menu = this.menuElm
     menu.style.display = 'block'
-    this.mentElm.querySelector('.dropdown-menu-root')
+    this.menuElm.querySelector('.dropdown-menu-root')
       .innerHTML = this.menuListTmpl()
     
     let left, top = 0
@@ -93,8 +107,9 @@ class DropdownMenu {
   }
 
   hide() {
-    const menu = this.mentElm
+    const menu = this.menuElm
     menu.style.display = 'none'
+    this.data = null
   }
   
   mount() {
@@ -111,6 +126,10 @@ class DropdownMenu {
   
     document.body.appendChild(dropdownMenu)
   }
+
+  onClick(fn) {
+    this.callBack = fn
+  }
 }
 
-export default new DropdownMenu()
+export default DropdownMenu

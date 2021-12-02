@@ -3,6 +3,8 @@ import DropdownMenu from './layout/dropdown-menu'
 import { signTmpl } from "./utils/mixin";
 import { getSignAndMapSync, setSignSync, getFIdAsync, setFIdAsync, getStorageAsync, setStorageSync } from "./utils/utils";
 
+const dropdownMenu = new DropdownMenu()
+dropdownMenu.onClick(handleToClickMenu)
 var options = document.querySelector("#options");
 var menuList = document.querySelector("#menu-list");
 
@@ -18,7 +20,7 @@ const template = (data) => (`
 `)
 
 const footItemTemplate = (data, folderId) => (`
-  <div class="menu-item ${data.id === folderId ? 'menu-active-item':''}" data-type="folder" data-id="${data.id}">
+  <div class="menu-item ${data.id === folderId ? 'menu-active-item':''}" data-dropdown-type="folder" data-id="${data.id}">
     ${data.id === '001' ? '默认收藏夹' : data.name}
   </div>
 `)
@@ -171,6 +173,10 @@ function handleToChoicefolder(e) {
   // setStorageSync({ folderId: id })
 
   renderSigns(id)
+}
+
+function handleToClickMenu(action, data) {
+  console.log('handleToClickMenu: ', action, data)
 }
 
 
