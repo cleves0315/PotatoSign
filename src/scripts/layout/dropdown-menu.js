@@ -8,7 +8,7 @@ class DropdownMenu {
     this.data = null
     this.callBack = null
     this.targetAttribute = 'id' // 抓取的属性（会赋值到this.data）
-    this.ACTION = {
+    this.ACTIONS = {
       DELETE: 0, // 删除
       RENAME: 1, // 重命名
       MOVETO: 2 // 移动
@@ -16,12 +16,12 @@ class DropdownMenu {
     this.menuElm = null
     this.menuList = [] // 展示列表
     this.sign = [
-      { action: this.ACTION['RENAME'], text: '重命名' },
-      { action: this.ACTION['MOVETO'], text: '移动' },
-      { action: this.ACTION['DELETE'], text: '删除' }
+      { action: this.ACTIONS['RENAME'], text: '重命名' },
+      { action: this.ACTIONS['MOVETO'], text: '移动' },
+      { action: this.ACTIONS['DELETE'], text: '删除' }
     ]
     this.folder = [
-      { action: this.ACTION['RENAME'], text: '重命名' }
+      { action: this.ACTIONS['RENAME'], text: '重命名' }
     ]
 
     document.body.addEventListener('click', (e) => {
@@ -56,7 +56,7 @@ class DropdownMenu {
   menuListTmpl() {
     return (
       this.menuList.map(m => (
-        m.action !== this.ACTION['DELETE'] ? (
+        m.action !== this.ACTIONS['DELETE'] ? (
           `<li class="dropdown-menu-item" data-action="${m.action}">${m.text}</li>`
         ) : (
           `<li class="dropdown-menu-divider"></li>

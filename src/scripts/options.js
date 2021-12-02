@@ -36,7 +36,7 @@ const footItemEmptyTmpl = `
 `
 
 /**
- * 
+ * 根据当前floderId渲染数据格式里list的数据列表
  * @param {string} folderId
  */
 async function renderSigns(folderId = '001') {
@@ -56,9 +56,12 @@ async function renderSigns(folderId = '001') {
   }
 }
 
-async function handleToDelSign(e) {
-  e.preventDefault()
-  const id = e.target.getAttribute('data-id')
+/**
+ * 删除当前folder的对应id的标签 并重新渲染
+ * @method
+ */
+async function toDelSign(id) {
+  console.log('toDelSign')
   const folderId = await getFIdAsync()
   const { sign, signMap } = await getSignAndMapSync()
 
@@ -72,8 +75,18 @@ async function handleToDelSign(e) {
     await setSignSync(sign)
     renderSigns()
   } catch (error) {
-    console.error('handleToDelSign: \n', error)
+    console.error('handleOnDelSign: \n', error)
   }
+}
+
+/**
+ * 点击Sign删除按钮
+ * @callback
+ */
+function handleOnDelSign(e) {
+  e.preventDefault()
+  const id = e.target.getAttribute('data-id')
+  toDelSign(id)
 }
 
 function handleToEdit(e) {
@@ -176,7 +189,21 @@ function handleToChoicefolder(e) {
 }
 
 function handleToClickMenu(action, data) {
-  console.log('handleToClickMenu: ', action, data)
+  const { DELETE, RENAME, MOVETO } = dropdownMenu.ACTIONS
+  switch (+action) {
+    case DELETE:
+      toDelSign(data)
+      break;
+    case RENAME:
+      
+      break;
+    case MOVETO:
+      
+      break;
+  
+    default:
+      break;
+  }
 }
 
 
@@ -196,7 +223,7 @@ function addFootMenuListEvents() {
 function addElementEvents() {
   document.querySelectorAll('.sign-item')
     .forEach(elm => {
-      elm.querySelector('.del-wrap').addEventListener('click', handleToDelSign)
+      elm.querySelector('.del-wrap').addEventListener('click', handleOnDelSign)
       elm.querySelector('.title[data-type="text"]').querySelector('p').addEventListener('click', handleToEdit)
       elm.querySelector('.title[data-type="input"]').addEventListener('click', (e) => e.preventDefault())
       elm.querySelector('.title[data-type="input"]').querySelector('input').addEventListener('blur', handleToCancelEdit)
