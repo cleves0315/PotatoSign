@@ -1,3 +1,6 @@
 import ext from "./ext";
 
-module.exports = (ext.storage.sync ? ext.storage.sync : ext.storage.local);
+module.exports = {
+  storage: ext.storage.local,
+  storageLive: ext.storage.sync
+}

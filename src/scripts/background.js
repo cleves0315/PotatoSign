@@ -1,14 +1,13 @@
 import { nanoid } from "nanoid";
 import { defaultSign, defaultSignMap } from "./utils/mixin";
 import ext from "./utils/ext";
-import storage from "./utils/storage";
 import { JSONToParse, setSignSync, setSignMapSync, getSignSync, getSignAndMapSync, judgeToRepeat } from "./utils/utils";
 
 // storage.clear()
 
 async function initSign() {
-  console.log('storage: ', storage)
   const { sign, signMap } = await getSignAndMapSync()
+  console.log('sign: ', sign)
   
   if (!sign || (Array.isArray(sign) && sign.length === 0)) {
     await setSignSync(defaultSign)
@@ -32,7 +31,7 @@ ext.runtime.onMessage.addListener(
         getSignSync().then(sign => {
           try {
             const isRepeat = judgeToRepeat(sign[0].list, reqData)
-            
+            console.log('isRepeat: ', isRepeat)
             // 得知有重复数据
             if (isRepeat) return
   

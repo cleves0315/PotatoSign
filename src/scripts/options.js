@@ -4,7 +4,7 @@ import { signTmpl } from "./utils/mixin";
 import { getSignAndMapSync, setSignSync, getFIdAsync, setFIdAsync, getStorageAsync, setStorageSync } from "./utils/utils";
 
 const dropdownMenu = new DropdownMenu()
-dropdownMenu.onClick(handleToClickMenu)
+dropdownMenu.onClick(handleToClickMenu) // 注册回掉函数
 var options = document.querySelector("#options");
 var menuList = document.querySelector("#menu-list");
 
