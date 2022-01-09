@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
-import { defaultSign, defaultSignMap } from "./utils/mixin";
 import ext from "./utils/ext";
+import { defaultSign, defaultSignMap } from "./utils/mixin";
 import { JSONToParse, setSignSync, setSignMapSync, getSignSync, getSignAndMapSync, judgeToRepeat } from "./utils/utils";
 
 // storage.clear()

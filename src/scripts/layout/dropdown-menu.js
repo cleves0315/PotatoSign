@@ -25,7 +25,7 @@ class DropdownMenu {
     ]
 
     document.body.addEventListener('click', (e) => {
-      e.preventDefault()
+      // e.preventDefault()
       this.hide()
     })
     document.body.addEventListener('contextmenu', (e) => {

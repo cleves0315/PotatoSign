@@ -4,16 +4,16 @@ import { signTmpl } from "./utils/mixin";
 import { getSignAndMapSync, setSignSync, getFIdAsync, setFIdAsync, getStorageAsync, setStorageSync } from "./utils/utils";
 
 const dropdownMenu = new DropdownMenu()
-dropdownMenu.onClick(handleToClickMenu) // 注册回掉函数
+dropdownMenu.onClick(handleToClickDropdownMenu) // 注册回掉函数
 var options = document.querySelector("#options");
 var menuList = document.querySelector("#menu-list");
 
 const template = (data) => (`
   <a class="sign-item-link" href="${data.url}" title="${data.description}" target="_blank">
-    <div class="sign-item" data-id="${data.id}" data-dropdown-type="sign">
+    <div class="sign-item" data-id="${data.id}" data-url="${data.url}" data-dropdown-type="sign">
       <div class="del-wrap" data-id="${data.id}"><div class="del-btn" data-id="${data.id}"></div></div>
       <div class="icon"><img src="${data.favIconUrl}" /></div>
-      <div class="title" data-type="text"><p title="${data.title}">${data.title}</p></div>
+      <div class="title" data-type="text"><p data-id="${data.id}" title="${data.title}">${data.title}</p></div>
       <div class="title" data-type="input" style="display: none;"><input data-id="${data.id}" value="${data.title}" /></div>
     </div>
   </a>
@@ -56,12 +56,12 @@ async function renderSigns(folderId = '001') {
   }
 }
 
+
 /**
  * 删除当前folder的对应id的标签 并重新渲染
  * @method
  */
 async function toDelSign(id) {
-  console.log('toDelSign')
   const folderId = await getFIdAsync()
   const { sign, signMap } = await getSignAndMapSync()
 
@@ -89,12 +89,30 @@ function handleOnDelSign(e) {
   toDelSign(id)
 }
 
-function handleToEdit(e) {
-  e.preventDefault()
-  console.log(e)
-  this.parentNode.style['display'] = 'none'
-  this.parentNode.nextElementSibling.style['display'] = 'block'
-  this.parentNode.nextElementSibling.querySelector('input').focus()
+/**
+ * 开启编辑·标签标题
+ * @param id
+ */
+function toEditSigTitle(id) {
+  const signElm = document.querySelector(`.sign-item[data-id=${id}]`)
+  // const signElm = document.querySelector(`#${id}`)
+  const textElm = signElm.querySelector('.title[data-type="text"]')
+  const inputElm = signElm.querySelector('.title[data-type="input"]')
+
+  textElm.style['display'] = 'none'
+  inputElm.style['display'] = 'block'
+  inputElm.querySelector('input').focus()
+}
+
+/**
+ * 点击标签的标题
+ * @callback
+ */
+function onSignTitleClick(e) {
+  const { id } = e.target.dataset
+
+  e && e.preventDefault()
+  toEditSigTitle(id)
 }
 
 function handleToEnterInput(e) {
@@ -188,14 +206,15 @@ function handleToChoicefolder(e) {
   renderSigns(id)
 }
 
-function handleToClickMenu(action, data) {
+/** 点击DropdownMenu列表 */
+function handleToClickDropdownMenu(action, data) {
   const { DELETE, RENAME, MOVETO } = dropdownMenu.ACTIONS
   switch (+action) {
     case DELETE:
       toDelSign(data)
       break;
     case RENAME:
-      
+      toEditSigTitle(data)
       break;
     case MOVETO:
       
@@ -223,8 +242,9 @@ function addFootMenuListEvents() {
 function addElementEvents() {
   document.querySelectorAll('.sign-item')
     .forEach(elm => {
+      // elm.addEventListener('click', () => window.open(elm.dataset.url))
       elm.querySelector('.del-wrap').addEventListener('click', handleOnDelSign)
-      elm.querySelector('.title[data-type="text"]').querySelector('p').addEventListener('click', handleToEdit)
+      elm.querySelector('.title[data-type="text"]').querySelector('p').addEventListener('click', onSignTitleClick)
       elm.querySelector('.title[data-type="input"]').addEventListener('click', (e) => e.preventDefault())
       elm.querySelector('.title[data-type="input"]').querySelector('input').addEventListener('blur', handleToCancelEdit)
       elm.querySelector('.title[data-type="input"]').querySelector('input').addEventListener('keydown', handleToEnterInput)
