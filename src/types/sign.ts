@@ -1,7 +1,7 @@
 interface Sign {
   id: string;
   name: string;
-  list: [];
+  list: Data[];
   type: string;
 }
 interface Data {
@@ -9,6 +9,7 @@ interface Data {
   audible: boolean;
   autoDiscardable: boolean;
   discarded: boolean;
+  description: string;
   favIconUrl: string;
   groupId: number;
   height: number;

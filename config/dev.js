@@ -24,7 +24,6 @@ const devServerOptions = {
     'Access-Control-Allow-Origin': '*',
   },
   allowedHosts: 'all',
-  open: true,
 };
 
 const options = webpackConfig.chromeExtensionBoilerplate || {};

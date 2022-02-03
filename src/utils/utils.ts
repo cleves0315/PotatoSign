@@ -37,7 +37,7 @@ function judgeToRepeat(list: Array<Data>, data: Data) {
  *
  * @param {string | string[]} params
  */
-async function getStorageAsync(params: any) {
+async function getStorageAsync(params: any): Promise<any> {
   return new Promise(resolve => {
     storage.get(params, function (result) {
       const resultData: any = {};
