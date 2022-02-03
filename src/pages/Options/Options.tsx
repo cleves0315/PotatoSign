@@ -18,13 +18,13 @@ interface Menu {
 }
 
 const Options: React.FC<Props> = () => {
-  const [sign, setSign]: any = useState();
-  const [signMap, setSignMap]: any = useState(0);
+  const [sign, setSign] = useState<any>();
+  const [signMap, setSignMap] = useState<any>({});
   const [folderId, setFolderId] = useState('001');
   const [editFolderId, setEditFolderId] = useState('');
   const [isAddFolder, setIsAddFolder] = useState(false);
-  const [dropMenus, setDropMenus] = useState<Menu[]>([{ text: '', value: '' }]);
-  const [dropData, setDropData] = useState<TabsData>();
+  const [dropMenus, setDropMenus] = useState<Menu[]>([]);
+  const [selectData, setSelectData] = useState<TabsData>();
 
   const RENAME = 'rename';
   const DELETE = 'delete';
@@ -44,7 +44,8 @@ const Options: React.FC<Props> = () => {
 
   const getSign = async () => {
     const { sign, signMap } = await getStorageAsync(['sign', 'signMap']);
-
+    console.log('sign: ', sign);
+    console.log('signMap: ', signMap);
     setSign(sign);
     setSignMap(signMap);
     setFIdAsync('001');
@@ -52,20 +53,27 @@ const Options: React.FC<Props> = () => {
 
   const showContextMenu = (data: TabsData) => {
     setDropMenus(signDropMenus);
-    setDropData(data);
+    setSelectData(data);
   };
 
-  const onMenuClick = (val: string) => {
-    if (dropData) {
+  const onDropMenuClick = (val: string) => {
+    if (selectData) {
       switch (val) {
+        case RENAME:
+          toEditSigTitle(selectData.id);
+          break;
         case DELETE:
-          toDelSign(dropData.id);
+          toDelSign(selectData.id);
           break;
 
         default:
           break;
       }
     }
+  };
+
+  const onDropMenuHide = () => {
+    setDropMenus([]);
   };
 
   const onSignItemClick = (data: TabsData) => {
@@ -106,7 +114,6 @@ const Options: React.FC<Props> = () => {
 
       setSign(sign);
       await setSignSync(sign);
-      // renderSigns()
     } catch (error) {
       console.error('handleOnDelSign: \n', error);
     }
@@ -120,14 +127,24 @@ const Options: React.FC<Props> = () => {
     setEditFolderId(id);
   }
 
-  const changeSignTitle = (e: any) => {
+  const onChangeSignTitle = async (e: any) => {
     const { value } = e.target;
-    console.log('changeSignTitle: ', value);
+    console.log('onChangeSignTitle: ', value);
+    const index = signMap[folderId];
+    const { list } = sign[index];
+
+    list.forEach((m: TabsData) => {
+      if (m.id === editFolderId) {
+        m.title = value;
+      }
+    });
+
+    setSign([...sign]);
   };
 
   const handleToCancelEdit = () => {
-    console.log('handleToCancelEdit');
     setEditFolderId('');
+    setSignSync(sign);
   };
 
   const handleToChoicefolder = (e: any) => {
@@ -140,11 +157,16 @@ const Options: React.FC<Props> = () => {
     setIsAddFolder(true);
   };
 
-  const index = signMap[folderId];
+  const index = signMap[folderId] || 0;
   const list = sign && sign[index] ? sign[index].list : [];
 
   return (
-    <DropdownMenu menuList={dropMenus} onClick={onMenuClick}>
+    <DropdownMenu
+      menuList={dropMenus}
+      delValue={DELETE}
+      onClick={onDropMenuClick}
+      onHide={onDropMenuHide}
+    >
       <div className="app-container">
         <div className="grid">
           <div className="unit whole center-on-mobiles">
@@ -166,9 +188,7 @@ const Options: React.FC<Props> = () => {
                   <div
                     key={data.id}
                     className="sign-item-link"
-                    // href={data.url}
                     title={data.description}
-                    // target="_blank"
                     onClick={() => onSignItemClick(data)}
                     onContextMenu={() => showContextMenu(data)}
                   >
@@ -196,7 +216,7 @@ const Options: React.FC<Props> = () => {
                             autoFocus
                             onClick={e => e.stopPropagation()}
                             onBlur={handleToCancelEdit}
-                            onChange={changeSignTitle}
+                            onChange={onChangeSignTitle}
                           />
                         </div>
                       ) : (
@@ -217,13 +237,9 @@ const Options: React.FC<Props> = () => {
             </div>
           </div>
 
-          <div className="menu-container">
+          {/* <div className="menu-container">
             <div className="menu-area">
               <div id="menu-list" className="menu-list">
-                {/* <div className="menu-item">默认收藏夹</div>
-              <div className="menu-item menu-active-item">
-                <input id="addItem" type="text" autoFocus />
-              </div> */}
                 {sign &&
                   sign.map((data: Sign) => (
                     <div
@@ -234,9 +250,6 @@ const Options: React.FC<Props> = () => {
                       data-dropdown-type="folder"
                       data-id={data.id}
                       onClick={handleToChoicefolder}
-                      onContextMenu={() => {
-                        setDropMenus(folderDropMenus);
-                      }}
                     >
                       {data.id === '001' ? '默认收藏夹' : data.name}
                     </div>
@@ -270,7 +283,7 @@ const Options: React.FC<Props> = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </section>
 
         <footer className="main-footer">

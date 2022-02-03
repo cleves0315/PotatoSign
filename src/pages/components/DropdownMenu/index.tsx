@@ -9,13 +9,17 @@ interface Menu {
 interface Props {
   children: ReactElement<any, any>;
   menuList: Menu[];
+  delValue: string;
   onClick: (value: string) => void;
+  onHide?: () => void;
 }
 
 const DropdownMenu: React.FC<Props> = ({
   children,
   menuList,
+  delValue,
   onClick,
+  onHide,
 }: Props) => {
   const [isShow, setIsShow] = useState(false);
   const [top, setTop] = useState(0);
@@ -23,6 +27,7 @@ const DropdownMenu: React.FC<Props> = ({
 
   const hide = () => {
     setIsShow(false);
+    onHide && onHide();
   };
 
   const onContextMenu = (e: any) => {
@@ -69,13 +74,23 @@ const DropdownMenu: React.FC<Props> = ({
             <ul className="dropdown-menu-root" onClick={onMenuClick}>
               {menuList &&
                 menuList.map(m => (
-                  <li
-                    key={m.value}
-                    className="dropdown-menu-item"
-                    data-value={m.value}
-                  >
-                    {m.text}
-                  </li>
+                  <div key={m.value}>
+                    {m.value !== delValue ? (
+                      <li className="dropdown-menu-item" data-value={m.value}>
+                        {m.text}
+                      </li>
+                    ) : (
+                      <>
+                        <li className="dropdown-menu-divider"></li>
+                        <li
+                          className="dropdown-menu-item dropdown-menu-danger"
+                          data-value={m.value}
+                        >
+                          {m.text}
+                        </li>
+                      </>
+                    )}
+                  </div>
                 ))}
             </ul>
           </div>
