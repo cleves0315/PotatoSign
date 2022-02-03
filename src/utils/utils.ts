@@ -1,5 +1,5 @@
 import { storage } from './storage';
-import { Sign, Data } from '../types/sign';
+import { Sign, TabsData } from '../types/sign';
 
 /**
  * @param {string} json
@@ -19,7 +19,7 @@ function JSONToStringify(json: any) {
  * @param {object} data
  * @returns boolean
  */
-function judgeToRepeat(list: Array<Data>, data: Data) {
+function judgeToRepeat(list: Array<TabsData>, data: TabsData) {
   let isRepeat = false;
 
   for (let i = 0; i < list.length; i++) {

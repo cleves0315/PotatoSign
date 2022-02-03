@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 import React, { useEffect, useState } from 'react';
 // import ext from '../../utils/ext';
-import { Sign, Data } from '../../types/sign';
+import { Sign, TabsData } from '../../types/sign';
 import { defaultSign, defaultSignMap } from '../../utils/mixin';
 import {
   JSONToParse,
