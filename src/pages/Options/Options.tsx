@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../components/DropdownMenu';
 import {
+  initSign,
   setFIdAsync,
   getFIdAsync,
   getSignAndMapSync,
@@ -46,8 +47,13 @@ const Options: React.FC<Props> = () => {
     const { sign, signMap } = await getStorageAsync(['sign', 'signMap']);
     console.log('sign: ', sign);
     console.log('signMap: ', signMap);
-    setSign(sign);
-    setSignMap(signMap);
+
+    if (!sign) {
+      initSign();
+    } else {
+      setSign(sign);
+      setSignMap(signMap);
+    }
     setFIdAsync('001');
   };
 

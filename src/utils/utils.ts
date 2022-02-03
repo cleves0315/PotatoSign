@@ -1,4 +1,5 @@
 import { storage } from './storage';
+import { defaultSign, defaultSignMap } from './mixin';
 import { Sign, TabsData } from '../types/sign';
 
 /**
@@ -11,6 +12,18 @@ function JSONToParse(json: string) {
 
 function JSONToStringify(json: any) {
   return JSON.stringify(json);
+}
+
+async function initSign() {
+  const { sign, signMap } = (await getSignAndMapSync()) as any;
+
+  if (!sign || (Array.isArray(sign) && sign.length === 0)) {
+    await setSignSync(defaultSign);
+  }
+
+  if (!signMap || JSON.stringify(signMap) === '{}') {
+    await setSignMapSync(defaultSignMap);
+  }
 }
 
 /**
@@ -154,6 +167,7 @@ async function setFIdAsync(folderId: string) {
 export {
   JSONToParse,
   JSONToStringify,
+  initSign,
   judgeToRepeat,
   getStorageAsync,
   setStorageSync,

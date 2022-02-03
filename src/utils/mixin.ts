@@ -11,11 +11,4 @@ const defaultSign: [Sign] = [
 
 const defaultSignMap = { '001': 0 };
 
-const signTmpl = {
-  id: '',
-  name: '',
-  list: [],
-  type: 'folder',
-};
-
-export { defaultSign, defaultSignMap, signTmpl };
+export { defaultSign, defaultSignMap };

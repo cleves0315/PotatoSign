@@ -2,7 +2,7 @@
   "name": "土豆签",
   "version": "0.0.1",
   "manifest_version": 3,
-  "description": "土豆签",
+  "description": "一个帮助你实现自定义导航站的插件",
   "icons": {
     "16": "icon-16.png",
     "128": "icon-128.png"
@@ -20,15 +20,8 @@
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icon-16.png",
-      "19": "icon-19.png",
-      "32": "icon-32.png",
+      "64": "icon-64.png",
       "128": "icon-128.png"
     }
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["inject.js"],
-      "matches": ["https://web-accessible-resources-1.glitch.me/*"]
-    }
-  ]
+  }
 }
