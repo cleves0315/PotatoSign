@@ -4,6 +4,7 @@
 @import '../../styles/grid';
 @import '../../styles/layout';
 @import '../../styles/utilities';
+@import '../../styles/color.scss';
 
 .app-container {
   width: 100vw;
@@ -37,6 +38,12 @@
       margin-bottom: 1em;
     }
 
+    .option-title {
+      padding: 0 20px;
+      font-size: 18px;
+      color: var(--context-primary);
+    }
+
     .radio-group {
       label {
         display: block;
@@ -63,7 +70,7 @@
 
       &:hover {
         transform: translateY(-8px);
-        background: rgba(37, 38, 43, 0.05);
+        background: var(--sign-card-back-color);
 
         .del-wrap {
           opacity: 1;
@@ -110,11 +117,10 @@
 
       .title {
         display: flex;
-        height: 50px;
         align-items: center;
         justify-content: center;
         p {
-          text-overflow: -o-ellipsis-lastline;
+          font-size: 14px;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
@@ -125,6 +131,7 @@
         input {
           width: 100%;
           padding: 0 8px;
+          font-size: 14px;
           box-sizing: border-box;
         }
       }

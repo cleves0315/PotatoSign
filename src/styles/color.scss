@@ -1,0 +1,14 @@
+:root {
+  color-scheme: light dark;
+  --context: 37, 38, 43;
+  --context-primary: rgb(var(--context));
+  --sign-card-back-color: rgba(37, 38, 43, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --context: 255, 255, 255;
+    --context-primary: rgb(var(--context));
+    --sign-card-back-color: rgba(37, 38, 43, 0.5);
+  }
+}

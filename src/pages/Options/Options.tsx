@@ -186,10 +186,10 @@ const Options: React.FC<Props> = () => {
           <div className="option-container">
             <div className="unit whole center-on-mobiles">
               <div className="option">
-                <div className="radio-group"></div>
+                <div className="option-title">默认收藏夹</div>
               </div>
 
-              <div id="options" className="option-wrap">
+              <div className="option-wrap">
                 {list.map((data: TabsData) => (
                   <div
                     key={data.id}
@@ -242,54 +242,6 @@ const Options: React.FC<Props> = () => {
               </div>
             </div>
           </div>
-
-          {/* <div className="menu-container">
-            <div className="menu-area">
-              <div id="menu-list" className="menu-list">
-                {sign &&
-                  sign.map((data: Sign) => (
-                    <div
-                      key={data.id}
-                      className={`menu-item ${
-                        data.id === folderId ? 'menu-active-item' : ''
-                      }`}
-                      data-dropdown-type="folder"
-                      data-id={data.id}
-                      onClick={handleToChoicefolder}
-                    >
-                      {data.id === '001' ? '默认收藏夹' : data.name}
-                    </div>
-                  ))}
-                {isAddFolder && (
-                  <div className="menu-item menu-active-item">
-                    <input id="addItem" type="text" autoFocus />
-                  </div>
-                )}
-                <div
-                  className="menu-item"
-                  data-type="add"
-                  onClick={handleToAddFolder}
-                >
-                  <svg
-                    // t="1636131075814"
-                    className="icon"
-                    viewBox="0 0 1024 1024"
-                    version="1.1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    p-id="2410"
-                    width="64"
-                    height="64"
-                  >
-                    <path
-                      d="M874.666667 469.333333H554.666667V149.333333c0-23.466667-19.2-42.666667-42.666667-42.666666s-42.666667 19.2-42.666667 42.666666v320H149.333333c-23.466667 0-42.666667 19.2-42.666666 42.666667s19.2 42.666667 42.666666 42.666667h320v320c0 23.466667 19.2 42.666667 42.666667 42.666666s42.666667-19.2 42.666667-42.666666V554.666667h320c23.466667 0 42.666667-19.2 42.666666-42.666667s-19.2-42.666667-42.666666-42.666667z"
-                      p-id="2411"
-                      fill="#ffffff"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div> */}
         </section>
 
         <footer className="main-footer">
