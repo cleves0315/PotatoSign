@@ -177,7 +177,7 @@ const Options: React.FC<Props> = () => {
         <div className="grid">
           <div className="unit whole center-on-mobiles">
             <div className="heading">
-              <h1>土豆签</h1>
+              <h1>Potato Sign</h1>
             </div>
           </div>
         </div>

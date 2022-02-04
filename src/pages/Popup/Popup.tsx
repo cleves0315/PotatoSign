@@ -83,7 +83,7 @@ const Options: React.FC<Props> = ({ title }: Props) => {
   console.log('pupop-function,: ', isSaved);
   return (
     <div className="OptionsContainer">
-      <h1 className="app-name">土豆签</h1>
+      <h1 className="app-name">Potato Sign</h1>
 
       <div id="display-container">
         {data ? (
