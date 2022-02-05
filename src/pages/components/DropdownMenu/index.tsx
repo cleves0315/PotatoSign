@@ -68,7 +68,7 @@ const DropdownMenu: React.FC<Props> = ({
             style={{
               top,
               left,
-              display: isShow ? 'block' : 'none',
+              display: isShow && menuList.length ? 'block' : 'none',
             }}
           >
             <ul className="dropdown-menu-root" onClick={onMenuClick}>

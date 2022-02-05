@@ -1,12 +1,11 @@
 .dropdown-menu {
   position: absolute;
   width: 160px;
-  // height: 300px;
   padding: 4px;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 0 1px 1px rgba(188, 188, 194, 0.05),
-    0 8px 24px rgba(188, 188, 194, 12%) !important;
+    0 8px 24px rgba(188, 188, 194, 12%);
 
   .dropdown-menu-divider {
     height: 1px;

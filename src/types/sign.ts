@@ -2,7 +2,7 @@ interface Sign {
   id: string;
   name: string;
   list: TabsData[];
-  type: string;
+  // type: string;
 }
 interface TabsData {
   active: boolean;

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../components/DropdownMenu';
+import Modal from '../components/Modal';
 import {
   initSign,
-  setFIdAsync,
-  getFIdAsync,
   getSignAndMapSync,
   setSignSync,
+  setSignMapSync,
   getStorageAsync,
 } from '../../utils/utils';
 import './index.scss';
+import { nanoid } from 'nanoid';
 
 interface Props {}
 
@@ -19,25 +20,32 @@ interface Menu {
 }
 
 const Options: React.FC<Props> = () => {
-  const [sign, setSign] = useState<any>();
-  const [signMap, setSignMap] = useState<any>({});
-  const [folderId, setFolderId] = useState('001');
-  const [editFolderId, setEditFolderId] = useState('');
-  const [isAddFolder, setIsAddFolder] = useState(false);
-  const [dropMenus, setDropMenus] = useState<Menu[]>([]);
-  const [selectData, setSelectData] = useState<TabsData>();
-
+  let isSignDropMenus = false;
+  const CREATE = 'create';
+  const RELODAD = 'reload';
   const RENAME = 'rename';
+  const MOVETO = 'moveto';
   const DELETE = 'delete';
   const signDropMenus = [
     { text: '重命名', value: RENAME },
-    // { text: '移动', value: 'moveto' },
+    { text: '移动', value: MOVETO },
     { text: '删除', value: DELETE },
   ];
   const folderDropMenus = [
     { text: '重命名', value: RENAME },
     { text: '删除', value: DELETE },
   ];
+  const backDropMenus = [
+    { text: '新建收藏夹', value: CREATE },
+    { text: '刷新页面', value: RELODAD },
+  ];
+
+  const [sign, setSign] = useState<any>([]);
+  const [signMap, setSignMap] = useState<any>({});
+  const [folderId, setFolderId] = useState('001'); // 目前应用在删除标签/修改标签/和render渲染
+  const [editFolderId, setEditFolderId] = useState('');
+  const [dropMenus, setDropMenus] = useState<Menu[]>([]);
+  const [selectData, setSelectData] = useState<TabsData>();
 
   useEffect(() => {
     getSign();
@@ -54,27 +62,46 @@ const Options: React.FC<Props> = () => {
       setSign(sign);
       setSignMap(signMap);
     }
-    setFIdAsync('001');
   };
 
-  const showContextMenu = (data: TabsData) => {
+  const onSignItemContextMenu = (data: TabsData) => {
+    isSignDropMenus = true;
     setDropMenus(signDropMenus);
     setSelectData(data);
   };
 
-  const onDropMenuClick = (val: string) => {
-    if (selectData) {
-      switch (val) {
-        case RENAME:
-          toEditSigTitle(selectData.id);
-          break;
-        case DELETE:
-          toDelSign(selectData.id);
-          break;
+  const onBackContextMenu = () => {
+    if (!isSignDropMenus) {
+      setDropMenus(backDropMenus);
+    } else {
+      isSignDropMenus = false;
+    }
+  };
 
-        default:
-          break;
-      }
+  const clearContextMenu = () => {
+    setDropMenus([]);
+  };
+
+  const onDropMenuClick = (val: string) => {
+    switch (val) {
+      case RENAME:
+        if (selectData) toEditSigTitle(selectData.id);
+        break;
+      case DELETE:
+        if (selectData) toDelSign(selectData.id);
+        break;
+      case CREATE:
+        showCreateFolderModal();
+        break;
+      case MOVETO:
+        showMoveSignModal();
+        break;
+      case RELODAD:
+        window.location.reload();
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -90,13 +117,12 @@ const Options: React.FC<Props> = () => {
   const handleOnDelSign = (e: any) => {
     e.stopPropagation();
     const id = e.target.getAttribute('data-id');
-    console.log('handleOnDelSign: ', id);
     toDelSign(id);
   };
 
   const onSignTitleClick = (e: any) => {
     if (e) {
-      const { dataset } = e && e.target;
+      const { dataset } = e.target;
       const { id } = dataset;
 
       e.stopPropagation();
@@ -123,6 +149,32 @@ const Options: React.FC<Props> = () => {
     } catch (error) {
       console.error('handleOnDelSign: \n', error);
     }
+  };
+
+  const showCreateFolderModal = () => {
+    console.log('showCreateFolderModal');
+    // 生成弹窗
+
+    // onCreateFolder('test-2');
+  };
+
+  const showMoveSignModal = () => {
+    // 生成弹窗
+  };
+
+  const onCreateFolder = (name: string) => {
+    const folder: Sign = {
+      id: nanoid(),
+      list: [],
+      name,
+    };
+
+    sign.push(folder);
+    signMap[folder.id] = sign.length - 1;
+    setSign(sign);
+    setSignMap(signMap);
+    setSignSync(sign);
+    setSignMapSync(signMap);
   };
 
   /**
@@ -159,12 +211,8 @@ const Options: React.FC<Props> = () => {
     setFolderId(id);
   };
 
-  const handleToAddFolder = () => {
-    setIsAddFolder(true);
-  };
-
-  const index = signMap[folderId] || 0;
-  const list = sign && sign[index] ? sign[index].list : [];
+  // const index = signMap[folderId] || 0;
+  // const list = sign && sign[index] ? sign[index].list : [];
 
   return (
     <DropdownMenu
@@ -174,7 +222,7 @@ const Options: React.FC<Props> = () => {
       onHide={onDropMenuHide}
     >
       <div className="app-container">
-        <div className="grid">
+        <div className="grid" onContextMenu={clearContextMenu}>
           <div className="unit whole center-on-mobiles">
             <div className="heading">
               <h1>Potato Sign</h1>
@@ -182,65 +230,69 @@ const Options: React.FC<Props> = () => {
           </div>
         </div>
 
-        <section className="content">
+        <section className="content" onContextMenu={onBackContextMenu}>
           <div className="option-container">
-            <div className="unit whole center-on-mobiles">
-              <div className="option">
-                <div className="option-title">默认收藏夹</div>
-              </div>
+            {sign.map((s: Sign) => (
+              <div className="unit whole center-on-mobiles" key={s.id}>
+                <div className="option">
+                  <div className="option-title">{s.name}</div>
+                </div>
 
-              <div className="option-wrap">
-                {list.map((data: TabsData) => (
-                  <div
-                    key={data.id}
-                    className="sign-item-link"
-                    title={data.description}
-                    onClick={() => onSignItemClick(data)}
-                    onContextMenu={() => showContextMenu(data)}
-                  >
+                <div className="option-wrap">
+                  {s.list.map((data: TabsData) => (
                     <div
-                      className="sign-item"
-                      data-id={data.id}
-                      data-url={data.url}
-                      data-dropdown-type="sign"
+                      key={data.id}
+                      className="sign-item-link"
+                      // title={data.description}
+                      title={data.title}
+                      onClick={() => onSignItemClick(data)}
+                      onContextMenu={() => onSignItemContextMenu(data)}
                     >
                       <div
-                        className="del-wrap"
+                        className="sign-item"
                         data-id={data.id}
-                        onClick={handleOnDelSign}
+                        data-url={data.url}
+                        data-dropdown-type="sign"
                       >
-                        <div className="del-btn" data-id={data.id}></div>
-                      </div>
-                      <div className="icon">
-                        <img src={data.favIconUrl} alt="icon" />
-                      </div>
-                      {editFolderId === data.id ? (
-                        <div className="title" data-type="input">
-                          <input
-                            data-id={data.id}
-                            value={data.title}
-                            autoFocus
-                            onClick={e => e.stopPropagation()}
-                            onBlur={handleToCancelEdit}
-                            onChange={onChangeSignTitle}
-                          />
-                        </div>
-                      ) : (
                         <div
-                          className="title"
-                          data-type="text"
-                          onClick={onSignTitleClick}
+                          className="del-wrap"
+                          data-id={data.id}
+                          onClick={handleOnDelSign}
                         >
-                          <p data-id={data.id} title={data.title}>
-                            {data.title}
-                          </p>
+                          <div className="del-btn" data-id={data.id}></div>
                         </div>
-                      )}
+                        <div className="icon">
+                          <img src={data.favIconUrl} alt="icon" />
+                        </div>
+                        {/* 编辑·标题 */}
+                        {editFolderId === data.id ? (
+                          <div className="title" data-type="input">
+                            <input
+                              data-id={data.id}
+                              value={data.title}
+                              autoFocus
+                              onClick={e => e.stopPropagation()}
+                              onBlur={handleToCancelEdit}
+                              onChange={onChangeSignTitle}
+                            />
+                          </div>
+                        ) : (
+                          <div
+                            className="title"
+                            data-type="text"
+                            onClick={onSignTitleClick}
+                          >
+                            <p data-id={data.id} title={data.title}>
+                              {data.title}
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </section>
 
@@ -251,6 +303,8 @@ const Options: React.FC<Props> = () => {
             </div>
           </div>
         </footer>
+
+        <Modal />
       </div>
     </DropdownMenu>
   );
