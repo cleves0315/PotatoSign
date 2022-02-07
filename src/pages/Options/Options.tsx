@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from 'react';
+// import { Modal } from 'antd';
+// import 'antd/dist/antd.min.css';
+// import 'antd/lib/modal/style/index.css';
+// import 'antd/lib/button/style/index.css';
+
 import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../components/DropdownMenu';
 import Modal from '../components/Modal';
@@ -9,6 +14,7 @@ import {
   setSignMapSync,
   getStorageAsync,
 } from '../../utils/utils';
+
 import './index.scss';
 import { nanoid } from 'nanoid';
 
@@ -46,6 +52,8 @@ const Options: React.FC<Props> = () => {
   const [editFolderId, setEditFolderId] = useState('');
   const [dropMenus, setDropMenus] = useState<Menu[]>([]);
   const [selectData, setSelectData] = useState<TabsData>();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
 
   useEffect(() => {
     getSign();
@@ -155,6 +163,8 @@ const Options: React.FC<Props> = () => {
     console.log('showCreateFolderModal');
     // 生成弹窗
 
+    setModalVisible(true);
+    setModalTitle('新建收藏夹');
     // onCreateFolder('test-2');
   };
 
@@ -211,8 +221,14 @@ const Options: React.FC<Props> = () => {
     setFolderId(id);
   };
 
-  // const index = signMap[folderId] || 0;
-  // const list = sign && sign[index] ? sign[index].list : [];
+  const handleModalSubmit = (val: string) => {
+    console.log('handleModalSubmit: ', val);
+  };
+
+  const handleModalCancel = () => {
+    console.log('handleModalCancel');
+    setModalVisible(false);
+  };
 
   return (
     <DropdownMenu
@@ -304,7 +320,21 @@ const Options: React.FC<Props> = () => {
           </div>
         </footer>
 
-        <Modal />
+        {/* <Modal
+          visible={modalVisible}
+          title={modalTitle}
+          onOk={() => {}}
+          onCancel={handleModalCancel}
+        >
+          <p>123</p>
+        </Modal> */}
+        <Modal
+          visible={modalVisible}
+          title={modalTitle}
+          width={340}
+          onOk={handleModalSubmit}
+          onCancel={handleModalCancel}
+        />
       </div>
     </DropdownMenu>
   );

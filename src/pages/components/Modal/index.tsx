@@ -8,7 +8,9 @@ interface Props {
   inputValue?: string;
   submitText?: string;
   maxLength?: number;
-  onSumbit?: (val: string) => void;
+  maskClosable?: boolean;
+  onOk?: (val: string) => void;
+  onCancel?: () => void;
 }
 
 const DropdownMenu: React.FC<Props> = ({
@@ -18,7 +20,9 @@ const DropdownMenu: React.FC<Props> = ({
   inputValue,
   submitText,
   maxLength,
-  onSumbit,
+  maskClosable = true,
+  onCancel,
+  onOk,
 }: Props) => {
   const ModalClass = 'modal';
   const [inputVal, setInputValue] = useState('');
@@ -28,9 +32,18 @@ const DropdownMenu: React.FC<Props> = ({
     setInputValue(value);
   };
 
-  const handleOnSubmit = () => {
+  const handleOnOk = () => {
     const value = inputVal.trim() || inputValue?.trim() || '';
-    onSumbit && onSumbit(value);
+    onOk && onOk(value);
+  };
+
+  const handleOnClickBack = () => {
+    maskClosable && handleOnCancel();
+  };
+
+  const handleOnCancel = () => {
+    console.log('handleOnCancel');
+    onCancel && onCancel();
   };
 
   const isBtnDisabled = (): boolean => {
@@ -47,9 +60,25 @@ const DropdownMenu: React.FC<Props> = ({
         {visible && <div className={`${ModalClass}-mask`}></div>}
         <div
           className={`${ModalClass}-wrap`}
+          tabIndex={-1}
+          role="dialog"
           style={!visible ? { display: 'none' } : {}}
+          onClick={handleOnClickBack}
         >
-          <div className={`${ModalClass}-wrapper`} style={modalStyle}>
+          <div
+            className={`${ModalClass}-wrapper`}
+            style={modalStyle}
+            onClick={e => e.stopPropagation()}
+          >
+            <div
+              tabIndex={0}
+              style={{
+                width: '0px',
+                height: '0px',
+                overflow: 'hidden',
+                outline: 'none',
+              }}
+            ></div>
             <div className={`${ModalClass}-content`}>
               <div className={`${ModalClass}-header`}>
                 <div className={`${ModalClass}-title`}>{title || '标题'}</div>
@@ -70,13 +99,22 @@ const DropdownMenu: React.FC<Props> = ({
                       isBtnDisabled() ? 'button-disabled' : ''
                     }`}
                     disabled={isBtnDisabled()}
-                    onClick={handleOnSubmit}
+                    onClick={handleOnOk}
                   >
                     {submitText || '确定'}
                   </button>
                 </div>
               </div>
             </div>
+            <div
+              tabIndex={0}
+              style={{
+                width: '0px',
+                height: '0px',
+                overflow: 'hidden',
+                outline: 'none',
+              }}
+            ></div>
           </div>
         </div>
       </div>
