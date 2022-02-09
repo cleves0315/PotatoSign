@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-// import { Modal } from 'antd';
-// import 'antd/dist/antd.min.css';
-// import 'antd/lib/modal/style/index.css';
-// import 'antd/lib/button/style/index.css';
+import { Modal, Input, Form } from 'antd';
+import 'antd/dist/antd.min.css';
 
+import Button from '../components/Button';
 import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../components/DropdownMenu';
-import Modal from '../components/Modal';
 import {
   initSign,
   getSignAndMapSync,
@@ -320,21 +318,24 @@ const Options: React.FC<Props> = () => {
           </div>
         </footer>
 
-        {/* <Modal
+        <Modal
           visible={modalVisible}
+          width={340}
           title={modalTitle}
           onOk={() => {}}
           onCancel={handleModalCancel}
+          footer={[
+            <div className="modal-footer">
+              <Button key="submit" type="primary" size="small">
+                确定
+              </Button>
+            </div>,
+          ]}
         >
-          <p>123</p>
-        </Modal> */}
-        <Modal
-          visible={modalVisible}
-          title={modalTitle}
-          width={340}
-          onOk={handleModalSubmit}
-          onCancel={handleModalCancel}
-        />
+          <Form>
+            <Input />
+          </Form>
+        </Modal>
       </div>
     </DropdownMenu>
   );
