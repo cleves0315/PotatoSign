@@ -26,6 +26,12 @@
     padding-right: 12px;
     min-width: 52px;
   }
+  &:large {
+    height: 42px;
+    padding-left: 25px;
+    padding-right: 25px;
+    min-width: 128px;
+  }
   &:hover {
     color: var(--basic_white);
     background: var(--theme_hover);
@@ -36,5 +42,10 @@
   }
   &:not(.disabled) {
     cursor: pointer;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    background: var(--divider_primary);
+    color: var(--context_quarternary);
   }
 }

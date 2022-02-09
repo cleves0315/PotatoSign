@@ -2,13 +2,23 @@ import React, { useState } from 'react';
 import './index.scss';
 
 interface Props {
-  type?: string;
-  size?: string;
+  type?: 'primary';
+  size?: 'small' | 'large';
   children: string;
+  disabled?: boolean;
 }
 
-const DropdownMenu: React.FC<Props> = ({ children, type, size }: Props) => {
-  return <button className={`button ${type} ${size}`}>{children}</button>;
+const DropdownMenu: React.FC<Props> = ({
+  children,
+  type,
+  size,
+  disabled,
+}: Props) => {
+  return (
+    <button className={`button ${type} ${size} ${disabled ? 'disabled' : ''}`}>
+      {children}
+    </button>
+  );
 };
 
 export default DropdownMenu;
