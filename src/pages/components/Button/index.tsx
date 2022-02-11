@@ -6,6 +6,7 @@ interface Props {
   size?: 'small' | 'large';
   children: string;
   disabled?: boolean;
+  onClick?: (e: any) => void;
 }
 
 const DropdownMenu: React.FC<Props> = ({
@@ -13,9 +14,17 @@ const DropdownMenu: React.FC<Props> = ({
   type,
   size,
   disabled,
+  onClick,
 }: Props) => {
+  const handleOnClick = (e: any) => {
+    onClick && !disabled && onClick(e);
+  };
+
   return (
-    <button className={`button ${type} ${size} ${disabled ? 'disabled' : ''}`}>
+    <button
+      className={`button ${type} ${size} ${disabled ? 'disabled' : ''}`}
+      onClick={handleOnClick}
+    >
       {children}
     </button>
   );

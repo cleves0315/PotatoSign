@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import React, { useEffect, useState } from 'react';
 import { Modal, Input, Form } from 'antd';
 import 'antd/dist/antd.min.css';
@@ -14,7 +15,6 @@ import {
 } from '../../utils/utils';
 
 import './index.scss';
-import { nanoid } from 'nanoid';
 
 interface Props {}
 
@@ -25,6 +25,7 @@ interface Menu {
 
 const Options: React.FC<Props> = () => {
   let isSignDropMenus = false;
+  const [form] = Form.useForm();
   const CREATE = 'create';
   const RELODAD = 'reload';
   const RENAME = 'rename';
@@ -52,6 +53,7 @@ const Options: React.FC<Props> = () => {
   const [selectData, setSelectData] = useState<TabsData>();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
+  const [folderValue, setFolderValue] = useState('');
 
   useEffect(() => {
     getSign();
@@ -219,12 +221,17 @@ const Options: React.FC<Props> = () => {
     setFolderId(id);
   };
 
-  const handleModalSubmit = (val: string) => {
-    console.log('handleModalSubmit: ', val);
+  const onModalValuesChange = ({ folder }: { folder: string }) => {
+    setFolderValue(folder);
+  };
+
+  const onModalFormFinish = ({ folder }: { folder: string }) => {
+    const foldName = folder.trim();
+    handleModalCancel();
+    onCreateFolder(foldName);
   };
 
   const handleModalCancel = () => {
-    console.log('handleModalCancel');
     setModalVisible(false);
   };
 
@@ -322,18 +329,29 @@ const Options: React.FC<Props> = () => {
           visible={modalVisible}
           width={340}
           title={modalTitle}
-          onOk={() => {}}
           onCancel={handleModalCancel}
           footer={[
             <div className="modal-footer" key="modal-footer">
-              <Button key="submit" type="primary" size="small">
+              <Button
+                key="submit"
+                type="primary"
+                size="small"
+                disabled={!folderValue.trim()}
+                onClick={() => form.submit()}
+              >
                 确定
               </Button>
             </div>,
           ]}
         >
-          <Form>
-            <Input />
+          <Form
+            form={form}
+            onValuesChange={onModalValuesChange}
+            onFinish={onModalFormFinish}
+          >
+            <Form.Item name="folder" noStyle={true}>
+              <Input />
+            </Form.Item>
           </Form>
         </Modal>
       </div>
