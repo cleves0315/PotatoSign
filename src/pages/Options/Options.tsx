@@ -31,6 +31,7 @@ const Options: React.FC<Props> = () => {
   const RENAME = 'rename';
   const MOVETO = 'moveto';
   const DELETE = 'delete';
+  const defaltAddFoldValue = '新建文件夹';
   const signDropMenus = [
     { text: '重命名', value: RENAME },
     { text: '移动', value: MOVETO },
@@ -45,7 +46,7 @@ const Options: React.FC<Props> = () => {
     { text: '刷新页面', value: RELODAD },
   ];
 
-  const [sign, setSign] = useState<any>([]);
+  const [sign, setSign] = useState<Sign[]>([]);
   const [signMap, setSignMap] = useState<any>({});
   const [folderId, setFolderId] = useState('001'); // 目前应用在删除标签/修改标签/和render渲染
   const [editFolderId, setEditFolderId] = useState('');
@@ -53,7 +54,7 @@ const Options: React.FC<Props> = () => {
   const [selectData, setSelectData] = useState<TabsData>();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
-  const [folderValue, setFolderValue] = useState('');
+  const [folderValue, setFolderValue] = useState(defaltAddFoldValue);
 
   useEffect(() => {
     getSign();
@@ -160,12 +161,9 @@ const Options: React.FC<Props> = () => {
   };
 
   const showCreateFolderModal = () => {
-    console.log('showCreateFolderModal');
     // 生成弹窗
-
     setModalVisible(true);
     setModalTitle('新建收藏夹');
-    // onCreateFolder('test-2');
   };
 
   const showMoveSignModal = () => {
@@ -225,6 +223,11 @@ const Options: React.FC<Props> = () => {
     setFolderValue(folder);
   };
 
+  const onModalInputFocus = () => {
+    const modalInput: any = document.querySelector('#modalInput');
+    modalInput && modalInput.select();
+  };
+
   const onModalFormFinish = ({ folder }: { folder: string }) => {
     const foldName = folder.trim();
     handleModalCancel();
@@ -232,7 +235,10 @@ const Options: React.FC<Props> = () => {
   };
 
   const handleModalCancel = () => {
+    console.log('handleModalCancel: ', folderValue);
+    form.resetFields();
     setModalVisible(false);
+    setFolderValue(defaltAddFoldValue);
   };
 
   return (
@@ -327,6 +333,7 @@ const Options: React.FC<Props> = () => {
 
         <Modal
           visible={modalVisible}
+          destroyOnClose={true}
           width={340}
           title={modalTitle}
           onCancel={handleModalCancel}
@@ -344,15 +351,20 @@ const Options: React.FC<Props> = () => {
             </div>,
           ]}
         >
-          <Form
-            form={form}
-            onValuesChange={onModalValuesChange}
-            onFinish={onModalFormFinish}
-          >
-            <Form.Item name="folder" noStyle={true}>
-              <Input />
-            </Form.Item>
-          </Form>
+          {modalVisible && (
+            <Form
+              form={form}
+              initialValues={{
+                folder: defaltAddFoldValue,
+              }}
+              onValuesChange={onModalValuesChange}
+              onFinish={onModalFormFinish}
+            >
+              <Form.Item name="folder" noStyle>
+                <Input id="modalInput" autoFocus onFocus={onModalInputFocus} />
+              </Form.Item>
+            </Form>
+          )}
         </Modal>
       </div>
     </DropdownMenu>

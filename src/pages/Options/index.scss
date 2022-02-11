@@ -277,4 +277,8 @@
       justify-content: flex-end;
     }
   }
+  .ant-input::selection {
+    background: var(--theme_tertiary);
+    color: var(--context_primary);
+  }
 }
