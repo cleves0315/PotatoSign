@@ -42,6 +42,7 @@ const InputModal: React.FC<Props> = ({
   return (
     <Modal
       visible={visible}
+      forceRender
       destroyOnClose={true}
       width={340}
       title={title}
