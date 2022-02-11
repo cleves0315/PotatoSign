@@ -1,0 +1,64 @@
+.ant-modal-wrap {
+  .ant-modal-header {
+    border-radius: 10px 10px 0 0;
+    border-bottom: none;
+    padding: 0 20px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    background-color: var(--background_tertiary);
+    .ant-modal-title {
+      line-height: 24px;
+      color: var(--context_primary);
+      max-width: 100%;
+    }
+  }
+
+  .ant-modal-content {
+    border-radius: 10px;
+    background-color: var(--background_tertiary);
+
+    path {
+      fill: var(--context_secondary);
+    }
+  }
+
+  .ant-modal-body {
+    padding: 0 20px;
+  }
+
+  .ant-input {
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: var(--divider_tertiary);
+    color: var(--context_primary);
+    transition: background-color 0.3s ease;
+    border: none;
+    box-shadow: none;
+
+    &:hover,
+    &:focus {
+      border: none;
+      background-color: var(--divider_secondary);
+      box-shadow: 0 0 0 1px var(--theme_primary);
+    }
+  }
+
+  .ant-modal-footer {
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 20px;
+    overflow: hidden;
+
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+  .ant-input::selection {
+    background: var(--theme_tertiary);
+    color: var(--context_primary);
+  }
+}

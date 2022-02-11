@@ -1,11 +1,9 @@
 import { nanoid } from 'nanoid';
 import React, { useEffect, useState } from 'react';
-import { Modal, Input, Form } from 'antd';
-import 'antd/dist/antd.min.css';
 
-import Button from '../components/Button';
 import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../components/DropdownMenu';
+import InputModal from '../components/InputModal';
 import {
   initSign,
   getSignAndMapSync,
@@ -25,7 +23,6 @@ interface Menu {
 
 const Options: React.FC<Props> = () => {
   let isSignDropMenus = false;
-  const [form] = Form.useForm();
   const CREATE = 'create';
   const RELODAD = 'reload';
   const RENAME = 'rename';
@@ -54,10 +51,10 @@ const Options: React.FC<Props> = () => {
   const [selectData, setSelectData] = useState<TabsData>();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
-  const [folderValue, setFolderValue] = useState(defaltAddFoldValue);
 
   useEffect(() => {
     getSign();
+    // chrome.storage.local.clear();
   }, []);
 
   const getSign = async () => {
@@ -219,26 +216,14 @@ const Options: React.FC<Props> = () => {
     setFolderId(id);
   };
 
-  const onModalValuesChange = ({ folder }: { folder: string }) => {
-    setFolderValue(folder);
-  };
-
-  const onModalInputFocus = () => {
-    const modalInput: any = document.querySelector('#modalInput');
-    modalInput && modalInput.select();
-  };
-
-  const onModalFormFinish = ({ folder }: { folder: string }) => {
-    const foldName = folder.trim();
-    handleModalCancel();
+  const onModalFormFinish = ({ value }: { value: string }) => {
+    const foldName = value.trim();
     onCreateFolder(foldName);
+    handleModalCancel();
   };
 
   const handleModalCancel = () => {
-    console.log('handleModalCancel: ', folderValue);
-    form.resetFields();
     setModalVisible(false);
-    setFolderValue(defaltAddFoldValue);
   };
 
   return (
@@ -331,41 +316,13 @@ const Options: React.FC<Props> = () => {
           </div>
         </footer>
 
-        <Modal
+        <InputModal
           visible={modalVisible}
-          destroyOnClose={true}
-          width={340}
           title={modalTitle}
+          initialValue={defaltAddFoldValue}
+          onFinish={onModalFormFinish}
           onCancel={handleModalCancel}
-          footer={[
-            <div className="modal-footer" key="modal-footer">
-              <Button
-                key="submit"
-                type="primary"
-                size="small"
-                disabled={!folderValue.trim()}
-                onClick={() => form.submit()}
-              >
-                确定
-              </Button>
-            </div>,
-          ]}
-        >
-          {modalVisible && (
-            <Form
-              form={form}
-              initialValues={{
-                folder: defaltAddFoldValue,
-              }}
-              onValuesChange={onModalValuesChange}
-              onFinish={onModalFormFinish}
-            >
-              <Form.Item name="folder" noStyle>
-                <Input id="modalInput" autoFocus onFocus={onModalInputFocus} />
-              </Form.Item>
-            </Form>
-          )}
-        </Modal>
+        />
       </div>
     </DropdownMenu>
   );
