@@ -325,7 +325,7 @@ const Options: React.FC<Props> = () => {
           onOk={() => {}}
           onCancel={handleModalCancel}
           footer={[
-            <div className="modal-footer">
+            <div className="modal-footer" key="modal-footer">
               <Button key="submit" type="primary" size="small">
                 确定
               </Button>
