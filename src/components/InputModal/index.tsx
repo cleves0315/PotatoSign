@@ -35,6 +35,7 @@ const InputModal: React.FC<Props> = ({
   };
 
   const onFocus = () => {
+    console.log('onFocus');
     const modalInput: any = document.querySelector('#modalInput');
     modalInput && modalInput.select();
   };

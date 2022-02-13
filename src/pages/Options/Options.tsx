@@ -2,8 +2,8 @@ import { nanoid } from 'nanoid';
 import React, { useEffect, useState } from 'react';
 
 import { Sign, TabsData } from '../../types/sign';
-import DropdownMenu from '../components/DropdownMenu';
-import InputModal from '../components/InputModal';
+import DropdownMenu from '../../components/DropdownMenu';
+import InputModal from '../../components/InputModal';
 import {
   initSign,
   getSignAndMapSync,
