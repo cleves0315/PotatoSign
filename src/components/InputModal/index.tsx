@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { InputHTMLAttributes, useEffect, useState } from 'react';
 import { Modal, Input, Form } from 'antd';
 
 import Button from '../Button';
@@ -27,17 +27,18 @@ const InputModal: React.FC<Props> = ({
   const [inptValue, setInptValue] = useState('');
 
   useEffect(() => {
-    if (!visible) form.resetFields();
+    if (!visible && form) form.resetFields();
+
+    if (visible) {
+      setTimeout(() => {
+        const modalInput: any = document.querySelector('#modalInput');
+        modalInput && modalInput.select();
+      });
+    }
   }, [visible, form]);
 
   const onValuesChange = ({ value }: { value: string }) => {
     setInptValue(value.trim());
-  };
-
-  const onFocus = () => {
-    console.log('onFocus');
-    const modalInput: any = document.querySelector('#modalInput');
-    modalInput && modalInput.select();
   };
 
   return (
@@ -71,7 +72,10 @@ const InputModal: React.FC<Props> = ({
         onFinish={onFinish}
       >
         <Form.Item name="value" noStyle>
-          <Input id="modalInput" autoFocus onFocus={onFocus} />
+          <Input
+            id="modalInput"
+            // autoFocus onFocus={onFocus}
+          />
         </Form.Item>
       </Form>
     </Modal>
