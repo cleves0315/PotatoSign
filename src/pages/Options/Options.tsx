@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../../components/DropdownMenu';
 import InputModal from '../../components/InputModal';
+import SelectModal from '../../components/SelectModal';
 import {
   initSign,
   getSignAndMapSync,
@@ -29,6 +30,7 @@ const Options: React.FC<Props> = () => {
   const MOVETO = 'moveto';
   const DELETE = 'delete';
   const defaltAddFoldValue = '新建文件夹';
+  const defaltRemoveFoldValue = '001';
   const signDropMenus = [
     { text: '重命名', value: RENAME },
     { text: '移动', value: MOVETO },
@@ -48,8 +50,10 @@ const Options: React.FC<Props> = () => {
   const [folderId, setFolderId] = useState('001'); // 目前应用在删除标签/修改标签/和render渲染
   const [editFolderId, setEditFolderId] = useState('');
   const [dropMenus, setDropMenus] = useState<Menu[]>([]);
-  const [selectData, setSelectData] = useState<TabsData>();
+  const [selectData, setSelectData] = useState<TabsData | any>({});
+  const [selectFolder, setSelectFolder] = useState<string>('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [seltModalVisible, setSeltModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
 
   useEffect(() => {
@@ -70,10 +74,11 @@ const Options: React.FC<Props> = () => {
     }
   };
 
-  const onSignItemContextMenu = (data: TabsData) => {
+  const onSignItemContextMenu = (data: TabsData, sign: Sign) => {
     isSignDropMenus = true;
     setDropMenus(signDropMenus);
     setSelectData(data);
+    setSelectFolder(sign.id);
   };
 
   const onBackContextMenu = () => {
@@ -165,6 +170,7 @@ const Options: React.FC<Props> = () => {
 
   const showMoveSignModal = () => {
     // 生成弹窗
+    setSeltModalVisible(true);
   };
 
   const onCreateFolder = (name: string) => {
@@ -182,6 +188,17 @@ const Options: React.FC<Props> = () => {
     setSignMapSync(signMap);
   };
 
+  const onMoveSignToFolder = (toFoldId: string) => {
+    const index = signMap[selectFolder];
+    const toIndex = signMap[toFoldId];
+    const findIndex = sign[index].list.findIndex(m => m.id === selectData.id);
+    const [data] = sign[index].list.splice(findIndex, 1);
+    sign[toIndex].list.push(data);
+
+    setSign(sign);
+    setSignSync(sign);
+  };
+
   /**
    * 开启编辑·标签标题
    * @param id
@@ -192,7 +209,6 @@ const Options: React.FC<Props> = () => {
 
   const onChangeSignTitle = async (e: any) => {
     const { value } = e.target;
-    console.log('onChangeSignTitle: ', value);
     const index = signMap[folderId];
     const { list } = sign[index];
 
@@ -222,8 +238,16 @@ const Options: React.FC<Props> = () => {
     handleModalCancel();
   };
 
+  const onSeltModalFormFinish = ({ value }: { value: string }) => {
+    onMoveSignToFolder(value);
+    handleSeltModalCancel();
+  };
+
   const handleModalCancel = () => {
     setModalVisible(false);
+  };
+  const handleSeltModalCancel = () => {
+    setSeltModalVisible(false);
   };
 
   return (
@@ -258,7 +282,7 @@ const Options: React.FC<Props> = () => {
                       // title={data.description}
                       title={data.title}
                       onClick={() => onSignItemClick(data)}
-                      onContextMenu={() => onSignItemContextMenu(data)}
+                      onContextMenu={() => onSignItemContextMenu(data, s)}
                     >
                       <div
                         className="sign-item"
@@ -322,6 +346,14 @@ const Options: React.FC<Props> = () => {
           initialValue={defaltAddFoldValue}
           onFinish={onModalFormFinish}
           onCancel={handleModalCancel}
+        />
+
+        <SelectModal
+          visible={seltModalVisible}
+          initialValue={defaltRemoveFoldValue}
+          options={sign.map(m => ({ label: m.name, value: m.id }))}
+          onCancel={handleSeltModalCancel}
+          onFinish={onSeltModalFormFinish}
         />
       </div>
     </DropdownMenu>
