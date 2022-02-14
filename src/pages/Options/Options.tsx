@@ -47,7 +47,6 @@ const Options: React.FC<Props> = () => {
 
   const [sign, setSign] = useState<Sign[]>([]);
   const [signMap, setSignMap] = useState<any>({});
-  const [folderId, setFolderId] = useState('001'); // 目前应用在删除标签/修改标签/和render渲染
   const [editFolderId, setEditFolderId] = useState('');
   const [dropMenus, setDropMenus] = useState<Menu[]>([]);
   const [selectData, setSelectData] = useState<TabsData | any>({});
@@ -75,6 +74,7 @@ const Options: React.FC<Props> = () => {
   };
 
   const onSignItemContextMenu = (data: TabsData, sign: Sign) => {
+    console.log('onSignItemContextMenu: ', data, sign);
     isSignDropMenus = true;
     setDropMenus(signDropMenus);
     setSelectData(data);
@@ -146,10 +146,8 @@ const Options: React.FC<Props> = () => {
    * @method
    */
   const toDelSign = async (id: string) => {
-    const { sign, signMap } = (await getSignAndMapSync()) as any;
-
     try {
-      const index = signMap[folderId];
+      const index = signMap[selectFolder];
       const signList = sign[index].list;
       const findIndex = signList.findIndex((m: TabsData) => m.id === id);
 
@@ -209,7 +207,7 @@ const Options: React.FC<Props> = () => {
 
   const onChangeSignTitle = async (e: any) => {
     const { value } = e.target;
-    const index = signMap[folderId];
+    const index = signMap[selectFolder];
     const { list } = sign[index];
 
     list.forEach((m: TabsData) => {
@@ -224,12 +222,6 @@ const Options: React.FC<Props> = () => {
   const handleToCancelEdit = () => {
     setEditFolderId('');
     setSignSync(sign);
-  };
-
-  const handleToChoicefolder = (e: any) => {
-    const { id } = e.target.dataset;
-
-    setFolderId(id);
   };
 
   const onModalFormFinish = ({ value }: { value: string }) => {
