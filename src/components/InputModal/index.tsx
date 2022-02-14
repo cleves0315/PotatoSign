@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Input, Form } from 'antd';
 
 import Button from '../Button';
@@ -72,10 +72,7 @@ const InputModal: React.FC<Props> = ({
         onFinish={onFinish}
       >
         <Form.Item name="value" noStyle>
-          <Input
-            id="modalInput"
-            // autoFocus onFocus={onFocus}
-          />
+          <Input id="modalInput" />
         </Form.Item>
       </Form>
     </Modal>
