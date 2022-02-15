@@ -2,13 +2,14 @@
   position: absolute;
   width: 160px;
   padding: 4px;
-  background: #fff;
   border-radius: 10px;
-  box-shadow: 0 0 1px 1px rgba(188, 188, 194, 0.05),
-    0 8px 24px rgba(188, 188, 194, 12%);
+  z-index: 10003;
+  background: var(--background_tertiary);
+  box-shadow: 0 0 1px 1px rgba(188, 188, 194, 0.05), 0 8px 24px #bcbcc21f;
 
   .dropdown-menu-root {
     margin: 0;
+    background: var(--background_tertiary);
   }
 
   .dropdown-menu-divider {
@@ -21,15 +22,14 @@
     display: flex;
     align-items: center;
     height: 36px;
-    color: #333;
+    color: var(--context_primary);
     padding: 0 8px;
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
-    background: #fff;
 
     &:hover {
-      background: #eee;
+      background-color: var(--divider_tertiary);
     }
 
     &.dropdown-menu-danger {

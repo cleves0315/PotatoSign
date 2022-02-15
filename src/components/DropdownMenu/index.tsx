@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import './index.scss';
 
 interface Menu {
@@ -32,8 +32,8 @@ const DropdownMenu: React.FC<Props> = ({
 
   const onContextMenu = (e: any) => {
     e.preventDefault();
-    const { clientX, clientY } = e;
-    show(clientX, clientY);
+    const { pageX, pageY } = e;
+    show(pageX, pageY);
   };
 
   const show = (x: number, y: number) => {
