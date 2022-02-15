@@ -116,3 +116,24 @@ blockquote {
   margin: 0;
   padding-left: 2.5em;
 }
+
+.ant-input {
+  padding: 8px 12px;
+  border-radius: 5px;
+  background-color: var(--divider_tertiary);
+  color: var(--context_primary);
+  transition: background-color 0.3s ease;
+  border: none;
+  box-shadow: none;
+
+  &:hover,
+  &:focus {
+    border: none;
+    background-color: var(--divider_secondary);
+    box-shadow: 0 0 0 1px var(--theme_primary);
+  }
+}
+.ant-input::selection {
+  background: var(--theme_tertiary);
+  color: var(--context_primary);
+}
