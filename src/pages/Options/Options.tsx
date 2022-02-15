@@ -1,5 +1,8 @@
+// uuid?
 import { nanoid } from 'nanoid';
+import { Collapse, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { EditOutlined } from '@ant-design/icons';
 
 import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../../components/DropdownMenu';
@@ -14,6 +17,8 @@ import {
 } from '../../utils/utils';
 
 import './index.scss';
+
+const { Panel } = Collapse;
 
 interface Props {}
 
@@ -54,6 +59,7 @@ const Options: React.FC<Props> = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [seltModalVisible, setSeltModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
+  const [isOpenEditFolder, setIsOpenEditFolder] = useState('');
 
   useEffect(() => {
     getSign();
@@ -114,6 +120,33 @@ const Options: React.FC<Props> = () => {
       default:
         break;
     }
+  };
+
+  const handleOpenEditFolder = (e: any, folderId: string) => {
+    e.stopPropagation();
+    setIsOpenEditFolder(folderId);
+  };
+
+  const onFocusInptOptnTitle = (folderId: string) => {
+    const curtFoldInput = document.querySelector(`#${folderId}`) as any;
+    curtFoldInput && curtFoldInput.select();
+  };
+
+  const onCancelEditFoldName = (e: any) => {
+    const value = e.target.value.trim();
+    if (value) {
+      for (let i = 0; i < sign.length; i++) {
+        const folder = sign[i];
+        if (folder.id === isOpenEditFolder) {
+          folder.name = value;
+          break;
+        }
+      }
+      setSign(sign);
+      setSignSync(sign);
+    }
+
+    setIsOpenEditFolder('');
   };
 
   const onDropMenuHide = () => {
@@ -259,69 +292,98 @@ const Options: React.FC<Props> = () => {
         </div>
 
         <section className="content" onContextMenu={onBackContextMenu}>
-          <div className="option-container">
-            {sign.map((s: Sign) => (
-              <div className="unit whole center-on-mobiles" key={s.id}>
-                <div className="option">
-                  <div className="option-title">{s.name}</div>
-                </div>
-
-                <div className="option-wrap">
-                  {s.list.map((data: TabsData) => (
-                    <div
-                      key={data.id}
-                      className="sign-item-link"
-                      // title={data.description}
-                      title={data.title}
-                      onClick={() => onSignItemClick(data)}
-                      onContextMenu={() => onSignItemContextMenu(data, s)}
-                    >
+          {sign.length > 0 && (
+            <Collapse
+              className="option-container"
+              ghost
+              defaultActiveKey={sign.map(m => m.id)}
+            >
+              {sign.map((s: Sign, i) => (
+                <Panel
+                  header={
+                    <div className="option-title-container unit whole center-on-mobiles">
+                      {isOpenEditFolder !== s.id ? (
+                        <div className="option-title">{s.name}</div>
+                      ) : (
+                        <Input
+                          id={`titleInput${s.id}`}
+                          autoFocus
+                          defaultValue={s.name}
+                          onFocus={() =>
+                            onFocusInptOptnTitle(`titleInput${s.id}`)
+                          }
+                          onPressEnter={onCancelEditFoldName}
+                          onBlur={onCancelEditFoldName}
+                          onClick={e => e.stopPropagation()}
+                        />
+                      )}
+                    </div>
+                  }
+                  key={s.id}
+                  extra={
+                    <EditOutlined
+                      className="edit-icon"
+                      onClick={e => handleOpenEditFolder(e, s.id)}
+                    />
+                  }
+                  showArrow={false}
+                >
+                  <div className="option-wrap">
+                    {s.list.map((data: TabsData) => (
                       <div
-                        className="sign-item"
-                        data-id={data.id}
-                        data-url={data.url}
-                        data-dropdown-type="sign"
+                        key={data.id}
+                        className="sign-item-link"
+                        title={data.title}
+                        onClick={() => onSignItemClick(data)}
+                        onContextMenu={() => onSignItemContextMenu(data, s)}
                       >
                         <div
-                          className="del-wrap"
+                          className="sign-item"
                           data-id={data.id}
-                          onClick={handleOnDelSign}
+                          data-url={data.url}
+                          data-dropdown-type="sign"
                         >
-                          <div className="del-btn" data-id={data.id}></div>
-                        </div>
-                        <div className="icon">
-                          <img src={data.favIconUrl} alt="icon" />
-                        </div>
-                        {/* 编辑·标题 */}
-                        {editFolderId === data.id ? (
-                          <div className="title" data-type="input">
-                            <input
-                              data-id={data.id}
-                              value={data.title}
-                              autoFocus
-                              onClick={e => e.stopPropagation()}
-                              onBlur={handleToCancelEdit}
-                              onChange={onChangeSignTitle}
-                            />
-                          </div>
-                        ) : (
                           <div
-                            className="title"
-                            data-type="text"
-                            onClick={onSignTitleClick}
+                            className="del-wrap"
+                            data-id={data.id}
+                            onClick={handleOnDelSign}
                           >
-                            <p data-id={data.id} title={data.title}>
-                              {data.title}
-                            </p>
+                            <div className="del-btn" data-id={data.id}></div>
                           </div>
-                        )}
+                          <div className="icon">
+                            <img src={data.favIconUrl} alt="icon" />
+                          </div>
+                          {/* 编辑·标题 */}
+                          {editFolderId === data.id ? (
+                            <div className="title" data-type="input">
+                              <input
+                                data-id={data.id}
+                                value={data.title}
+                                autoFocus
+                                onClick={e => e.stopPropagation()}
+                                onBlur={handleToCancelEdit}
+                                onChange={onChangeSignTitle}
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              className="title"
+                              data-type="text"
+                              onClick={onSignTitleClick}
+                            >
+                              <p data-id={data.id} title={data.title}>
+                                {data.title}
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+                    ))}
+                  </div>
+                </Panel>
+              ))}
+            </Collapse>
+          )}
         </section>
 
         <footer className="main-footer">

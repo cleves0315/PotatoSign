@@ -35,8 +35,11 @@
 
 .option-container {
   flex: 1;
-  .option {
-    margin: 1em auto;
+
+  .option-title-container {
+    width: 100%;
+    margin: 0 auto;
+
     h5 {
       margin-bottom: 1em;
     }
@@ -56,6 +59,9 @@
         margin: 3px 5px;
       }
     }
+  }
+  .edit-icon {
+    color: var(--context_primary);
   }
 
   .option-wrap {
@@ -130,6 +136,7 @@
           text-overflow: ellipsis;
           display: -webkit-box;
           -webkit-line-clamp: 2;
+          color: var(--context_primary);
           line-clamp: 2;
           -webkit-box-orient: vertical;
         }
@@ -194,7 +201,7 @@
       width: 80px;
       height: 80px;
       padding: 14px;
-      color: #fff;
+      // color: #fff;
       cursor: pointer;
       border-radius: 10px;
       background-color: #0abde3;
