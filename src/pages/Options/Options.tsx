@@ -2,7 +2,7 @@
 import { nanoid } from 'nanoid';
 import { Collapse, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined, CaretRightOutlined } from '@ant-design/icons';
 
 import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../../components/DropdownMenu';
@@ -297,6 +297,12 @@ const Options: React.FC<Props> = () => {
               className="option-container"
               ghost
               defaultActiveKey={sign.map(m => m.id)}
+              expandIcon={({ isActive }) => (
+                <CaretRightOutlined
+                  className="option-title-icon"
+                  rotate={isActive ? 90 : 0}
+                />
+              )}
             >
               {sign.map((s: Sign, i) => (
                 <Panel
@@ -308,6 +314,7 @@ const Options: React.FC<Props> = () => {
                         <Input
                           id={`titleInput${s.id}`}
                           autoFocus
+                          className="option-title-input"
                           defaultValue={s.name}
                           onFocus={() =>
                             onFocusInptOptnTitle(`titleInput${s.id}`)
@@ -322,11 +329,11 @@ const Options: React.FC<Props> = () => {
                   key={s.id}
                   extra={
                     <EditOutlined
-                      className="edit-icon"
+                      className="option-title-icon edit-icon"
                       onClick={e => handleOpenEditFolder(e, s.id)}
                     />
                   }
-                  showArrow={false}
+                  // showArrow={false}
                 >
                   <div className="option-wrap">
                     {s.list.map((data: TabsData) => (
