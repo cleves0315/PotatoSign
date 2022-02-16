@@ -52,7 +52,7 @@ const Options: React.FC<Props> = () => {
 
   const [sign, setSign] = useState<Sign[]>([]);
   const [signMap, setSignMap] = useState<any>({});
-  const [editFolderId, setEditFolderId] = useState('');
+  const [editSignId, setEditSignId] = useState('');
   const [dropMenus, setDropMenus] = useState<Menu[]>([]);
   const [selectData, setSelectData] = useState<TabsData | any>({});
   const [selectFolder, setSelectFolder] = useState<string>('');
@@ -102,7 +102,7 @@ const Options: React.FC<Props> = () => {
   const onDropMenuClick = (val: string) => {
     switch (val) {
       case RENAME:
-        if (selectData) toEditSigTitle(selectData.id);
+        if (selectData) setEditSignId(selectData.id);
         break;
       case DELETE:
         if (selectData) toDelSign(selectData.id);
@@ -127,8 +127,8 @@ const Options: React.FC<Props> = () => {
     setIsOpenEditFolder(folderId);
   };
 
-  const onFocusInptOptnTitle = (folderId: string) => {
-    const curtFoldInput = document.querySelector(`#${folderId}`) as any;
+  const onFocusInptOptnTitle = (queryId: string) => {
+    const curtFoldInput = document.querySelector(`#${queryId}`) as any;
     curtFoldInput && curtFoldInput.select();
   };
 
@@ -164,14 +164,10 @@ const Options: React.FC<Props> = () => {
     toDelSign(id);
   };
 
-  const onSignTitleClick = (e: any) => {
-    if (e) {
-      const { dataset } = e.target;
-      const { id } = dataset;
-
-      e.stopPropagation();
-      toEditSigTitle(id);
-    }
+  const onSignTitleClick = (e: any, signId: string, folderId: string) => {
+    e.stopPropagation();
+    setSelectFolder(folderId);
+    setEditSignId(signId);
   };
 
   /**
@@ -230,30 +226,18 @@ const Options: React.FC<Props> = () => {
     setSignSync(sign);
   };
 
-  /**
-   * 开启编辑·标签标题
-   * @param id
-   */
-  function toEditSigTitle(id: string) {
-    setEditFolderId(id);
-  }
-
-  const onChangeSignTitle = async (e: any) => {
+  const handleToCancelEdit = async (e: any) => {
     const { value } = e.target;
     const index = signMap[selectFolder];
     const { list } = sign[index];
 
     list.forEach((m: TabsData) => {
-      if (m.id === editFolderId) {
+      if (m.id === editSignId) {
         m.title = value;
       }
     });
 
-    setSign([...sign]);
-  };
-
-  const handleToCancelEdit = () => {
-    setEditFolderId('');
+    setEditSignId('');
     setSignSync(sign);
   };
 
@@ -333,7 +317,6 @@ const Options: React.FC<Props> = () => {
                       onClick={e => handleOpenEditFolder(e, s.id)}
                     />
                   }
-                  // showArrow={false}
                 >
                   <div className="option-wrap">
                     {s.list.map((data: TabsData) => (
@@ -361,26 +344,31 @@ const Options: React.FC<Props> = () => {
                             <img src={data.favIconUrl} alt="icon" />
                           </div>
                           {/* 编辑·标题 */}
-                          {editFolderId === data.id ? (
+                          {editSignId === data.id ? (
                             <div className="title" data-type="input">
-                              <input
+                              <Input
+                                id={`titleInput${data.id}`}
                                 data-id={data.id}
-                                value={data.title}
+                                defaultValue={data.title}
                                 autoFocus
                                 onClick={e => e.stopPropagation()}
                                 onBlur={handleToCancelEdit}
-                                onChange={onChangeSignTitle}
+                                onPressEnter={handleToCancelEdit}
+                                onFocus={() =>
+                                  onFocusInptOptnTitle(`titleInput${data.id}`)
+                                }
+                                // onChange={onChangeSignTitle}
                               />
                             </div>
                           ) : (
                             <div
                               className="title"
                               data-type="text"
-                              onClick={onSignTitleClick}
+                              onClick={(e: any) =>
+                                onSignTitleClick(e, data.id, s.id)
+                              }
                             >
-                              <p data-id={data.id} title={data.title}>
-                                {data.title}
-                              </p>
+                              <p>{data.title}</p>
                             </div>
                           )}
                         </div>
