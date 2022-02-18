@@ -115,15 +115,27 @@
         padding: 3px;
         border-radius: 6px;
         opacity: 0;
+
         &:hover {
-          background: #fff;
+          background: var(--context_primary);
+
+          .del-btn {
+            color: var(--red_hover);
+          }
         }
+        &[data-confirm='true'] {
+          background: var(--red_quarternary);
+        }
+        // color: var(--red_hover)
+        // hover-back: var(--red_quarternary)
 
         .del-btn {
           width: 17px;
           height: 17px;
-          background-image: url(../../assets/img/del.png);
-          background-size: 100% 100%;
+          font-size: 17px;
+          color: var(--context_primary);
+          // background-image: url(../../assets/img/del.png);
+          // background-size: 100% 100%;
         }
       }
       .icon img {
