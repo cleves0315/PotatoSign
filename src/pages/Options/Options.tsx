@@ -2,7 +2,11 @@
 import { nanoid } from 'nanoid';
 import { Collapse, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { EditOutlined, CaretRightOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  CaretRightOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons';
 
 import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../../components/DropdownMenu';
@@ -105,7 +109,7 @@ const Options: React.FC<Props> = () => {
         if (selectData) setEditSignId(selectData.id);
         break;
       case DELETE:
-        if (selectData) toDelSign(selectData.id);
+        if (selectData) toDelSign(selectData.id, selectFolder);
         break;
       case CREATE:
         showCreateFolderModal();
@@ -158,10 +162,10 @@ const Options: React.FC<Props> = () => {
     window.open(url);
   };
 
-  const handleOnDelSign = (e: any) => {
+  const handleOnDelSign = (e: any, signId: string, folderId: string) => {
     e.stopPropagation();
-    const id = e.target.getAttribute('data-id');
-    toDelSign(id);
+
+    toDelSign(signId, folderId);
   };
 
   const onSignTitleClick = (e: any, signId: string, folderId: string) => {
@@ -170,19 +174,15 @@ const Options: React.FC<Props> = () => {
     setEditSignId(signId);
   };
 
-  /**
-   * 删除当前folder的对应id的标签 并重新渲染
-   * @method
-   */
-  const toDelSign = async (id: string) => {
+  const toDelSign = async (id: string, folderId: string) => {
     try {
-      const index = signMap[selectFolder];
+      const index = signMap[folderId];
       const signList = sign[index].list;
       const findIndex = signList.findIndex((m: TabsData) => m.id === id);
 
       signList.splice(findIndex, 1);
 
-      setSign(sign);
+      setSign([...sign]);
       await setSignSync(sign);
     } catch (error) {
       console.error('handleOnDelSign: \n', error);
@@ -335,10 +335,16 @@ const Options: React.FC<Props> = () => {
                         >
                           <div
                             className="del-wrap"
-                            data-id={data.id}
-                            onClick={handleOnDelSign}
+                            data-confirm="false"
+                            onClick={(e: any) =>
+                              handleOnDelSign(e, data.id, s.id)
+                            }
                           >
-                            <div className="del-btn" data-id={data.id}></div>
+                            {/* <div className="del-btn" data-id={data.id}></div> */}
+                            <DeleteOutlined
+                              className="del-btn"
+                              data-id={data.id}
+                            />
                           </div>
                           <div className="icon">
                             <img src={data.favIconUrl} alt="icon" />
