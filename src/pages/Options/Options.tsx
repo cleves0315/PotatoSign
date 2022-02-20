@@ -64,6 +64,7 @@ const Options: React.FC<Props> = () => {
   const [seltModalVisible, setSeltModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [isOpenEditFolder, setIsOpenEditFolder] = useState('');
+  const [confirmDelSign, setConfirmDelSign] = useState('');
 
   useEffect(() => {
     getSign();
@@ -165,7 +166,11 @@ const Options: React.FC<Props> = () => {
   const handleOnDelSign = (e: any, signId: string, folderId: string) => {
     e.stopPropagation();
 
-    toDelSign(signId, folderId);
+    if (confirmDelSign === signId) {
+      toDelSign(signId, folderId);
+    } else {
+      setConfirmDelSign(signId);
+    }
   };
 
   const onSignTitleClick = (e: any, signId: string, folderId: string) => {
@@ -183,6 +188,7 @@ const Options: React.FC<Props> = () => {
       signList.splice(findIndex, 1);
 
       setSign([...sign]);
+      setConfirmDelSign('');
       await setSignSync(sign);
     } catch (error) {
       console.error('handleOnDelSign: \n', error);
@@ -335,7 +341,7 @@ const Options: React.FC<Props> = () => {
                         >
                           <div
                             className="del-wrap"
-                            data-confirm="false"
+                            data-confirm={confirmDelSign === data.id}
                             onClick={(e: any) =>
                               handleOnDelSign(e, data.id, s.id)
                             }
