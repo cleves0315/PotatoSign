@@ -38,10 +38,19 @@
 
   .option-title-container {
     display: flex;
-    // align-items: center;
+    align-items: baseline;
     width: 100%;
     height: 40px;
     max-width: 50%;
+
+    &:hover {
+      .del-wrap {
+        opacity: 1;
+        transition: opacity;
+        visibility: visible;
+        transition-delay: 0.36s;
+      }
+    }
 
     h5 {
       margin-bottom: 1em;
@@ -56,6 +65,28 @@
     }
     .option-title-input {
       font-size: 16px;
+    }
+    .del-wrap {
+      padding: 3px;
+      border-radius: 6px;
+      margin-left: 10px;
+      visibility: hidden;
+      opacity: 0;
+
+      &:hover {
+        background: var(--context_primary);
+
+        .del-btn {
+          color: var(--red_hover);
+        }
+      }
+      &[data-confirm='true'] {
+        background: var(--red_quarternary);
+      }
+    }
+    .del-btn {
+      font-size: 18px;
+      color: var(--context_primary);
     }
 
     .radio-group {
@@ -96,6 +127,7 @@
         .del-wrap {
           opacity: 1;
           transition: opacity;
+          visibility: visible;
           transition-delay: 0.36s;
         }
       }
@@ -118,6 +150,7 @@
         padding: 3px;
         border-radius: 6px;
         opacity: 0;
+        visibility: hidden;
 
         &:hover {
           background: var(--context_primary);
@@ -129,8 +162,6 @@
         &[data-confirm='true'] {
           background: var(--red_quarternary);
         }
-        // color: var(--red_hover)
-        // hover-back: var(--red_quarternary)
 
         .del-btn {
           width: 17px;

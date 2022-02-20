@@ -65,6 +65,7 @@ const Options: React.FC<Props> = () => {
   const [modalTitle, setModalTitle] = useState('');
   const [isOpenEditFolder, setIsOpenEditFolder] = useState('');
   const [confirmDelSign, setConfirmDelSign] = useState('');
+  const [confirmDelFolder, setConfirmDelFolder] = useState('');
 
   useEffect(() => {
     getSign();
@@ -154,6 +155,17 @@ const Options: React.FC<Props> = () => {
     setIsOpenEditFolder('');
   };
 
+  const handleClickDelFolder = (e: any, folderId: string) => {
+    e.stopPropagation();
+
+    if (confirmDelFolder === folderId) {
+      // delete folder
+      toDelFolder(folderId);
+    } else {
+      setConfirmDelFolder(folderId);
+    }
+  };
+
   const onDropMenuHide = () => {
     setDropMenus([]);
   };
@@ -177,6 +189,15 @@ const Options: React.FC<Props> = () => {
     e.stopPropagation();
     setSelectFolder(folderId);
     setEditSignId(signId);
+  };
+
+  const toDelFolder = (folderId: string) => {
+    const index = signMap[folderId];
+    sign.splice(index, 1);
+
+    setSign([...sign]);
+    setConfirmDelFolder('');
+    setSignSync(sign);
   };
 
   const toDelSign = async (id: string, folderId: string) => {
@@ -314,6 +335,13 @@ const Options: React.FC<Props> = () => {
                           onClick={e => e.stopPropagation()}
                         />
                       )}
+                      <div
+                        className="del-wrap"
+                        data-confirm={confirmDelFolder === s.id}
+                        onClick={e => handleClickDelFolder(e, s.id)}
+                      >
+                        <DeleteOutlined className="del-btn" />
+                      </div>
                     </div>
                   }
                   key={s.id}
@@ -347,10 +375,7 @@ const Options: React.FC<Props> = () => {
                             }
                           >
                             {/* <div className="del-btn" data-id={data.id}></div> */}
-                            <DeleteOutlined
-                              className="del-btn"
-                              data-id={data.id}
-                            />
+                            <DeleteOutlined className="del-btn" />
                           </div>
                           <div className="icon">
                             <img src={data.favIconUrl} alt="icon" />
