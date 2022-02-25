@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './index.scss';
 
+type type = 'default' | 'primary' | string;
+type size = 'small' | 'large';
 interface Props {
-  type?: string;
-  size?: string; // small' | 'large'
+  type?: type;
+  size?: size;
   children: string;
   disabled?: boolean;
   onClick?: (e: any) => void;
@@ -11,7 +13,7 @@ interface Props {
 
 const DropdownMenu: React.FC<Props> = ({
   children,
-  type = 'primary',
+  type = 'default',
   size = 'small',
   disabled,
   onClick,

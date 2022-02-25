@@ -31,59 +31,61 @@ async function initSign() {
   }
 }
 
+let sign: Sign[];
+
 const Options: React.FC<Props> = ({ title }: Props) => {
   const successMsg = '书签已成功保存 (•̀∀•́)';
   const errorMsg = '抱歉，保存时出错了 ╥﹏╥';
   const failMsg = '抱歉，无法提取该页面的url';
   const [data, setData] = useState<TabsData>();
-  const [message, setMessage] = useState('');
-  const [isSaved, setIsSaved] = useState(false);
+  const [btnText, setBtnText] = useState('收藏');
 
   useEffect(() => {
     getTabs();
+    getSign();
   }, []);
 
   const getTabs = async () => {
-    const [activeTab]: any[] = await chrome.tabs.query({
+    const [activeTab]: TabsData[] = (await chrome.tabs.query({
       active: true,
       currentWindow: true,
-    });
+    })) as any[];
     setData(activeTab);
   };
 
-  // const saveTabs = () => {
-  //   // const sign = await getSignSync()
-  //   getSignSync().then((sign: any) => {
-  //     console.log('getSignSync: ', sign);
-  //     setIsSaved(true);
-  //     setMessage(successMsg);
-  //     try {
-  //       const isRepeat = judgeToRepeat(sign[0].list, data);
-  //       console.log('isRepeat: ', isRepeat);
-  //       // 得知有重复数据
-  //       if (isRepeat) return;
+  const getSign = async () => {
+    sign = await getSignSync();
+    console.log('getSign: ', sign);
+  };
 
-  //       data.id = nanoid();
-  //       sign[0].list.push(data); // 0 => 目前默认往默认文件夹放数据
+  const saveTabs = () => {
+    if (data) {
+      setBtnText('已收藏');
 
-  //       setSignSync(sign);
-  //     } catch (error) {
-  //       // await initSign()
-  //       initSign().then(() => {
-  //         data.id = nanoid();
-  //         sign[0].list.push(data); // 0 => 目前默认往默认文件夹放数据
+      if (sign.length > 0) {
+        const isRepeat = judgeToRepeat(sign[0].list, data);
+        // 得知有重复数据
+        if (isRepeat) return;
 
-  //         setSignSync(sign);
-  //       });
-  //     }
-  //   });
-  // };
+        data.id = nanoid();
+        sign[0].list.push(data); // 0 => 目前默认往默认文件夹放数据
+
+        setSignSync(sign);
+      } else {
+        initSign().then(() => {
+          data.id = nanoid();
+          sign[0].list.push(data); // 0 => 目前默认往默认文件夹放数据
+
+          setSignSync(sign);
+        });
+      }
+    }
+  };
 
   const gotoOptions = () => {
     chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
   };
 
-  console.log('pupop-function,: ', isSaved);
   return (
     <div className="popup-container">
       <div className="header">
@@ -104,7 +106,9 @@ const Options: React.FC<Props> = ({ title }: Props) => {
               <div className="url">{data?.url}</div>
             </div>
             <div className="btn-wrap">
-              <Button>保存</Button>
+              <Button type="primary" onClick={saveTabs}>
+                {btnText}
+              </Button>
             </div>
           </div>
         ) : (

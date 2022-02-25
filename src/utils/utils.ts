@@ -37,7 +37,7 @@ function judgeToRepeat(list: Array<TabsData>, data: TabsData): Boolean {
 
   for (let i = 0; i < list.length; i++) {
     const s = list[i];
-    if (s.url === data?.url) {
+    if (s.url === data.url) {
       isRepeat = true;
       break;
     }
@@ -82,7 +82,7 @@ async function setStorageSync(params: any) {
   });
 }
 
-async function getSignSync() {
+async function getSignSync(): Promise<Sign[]> {
   return new Promise(resolve => {
     storage.get('sign', function (result) {
       const { sign: signJson } = result;
