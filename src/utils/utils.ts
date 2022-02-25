@@ -32,12 +32,12 @@ async function initSign() {
  * @param {object} data
  * @returns boolean
  */
-function judgeToRepeat(list: Array<TabsData>, data: TabsData) {
+function judgeToRepeat(list: Array<TabsData>, data: TabsData): Boolean {
   let isRepeat = false;
 
   for (let i = 0; i < list.length; i++) {
     const s = list[i];
-    if (s.url === data.url) {
+    if (s.url === data?.url) {
       isRepeat = true;
       break;
     }
