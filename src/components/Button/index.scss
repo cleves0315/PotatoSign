@@ -18,9 +18,34 @@
   transition: background 0.3s ease, color 0.3s ease, border 0.3s ease,
     box-shadow 0.3s ease, -webkit-box-shadow 0.3s ease;
 
+  &.default {
+    color: var(--context_secondary);
+    box-shadow: inset 0 0 0 1px var(--divider_secondary);
+    background: transparent;
+
+    &:hover {
+      color: var(--theme_hover);
+      background: var(--theme_quarternary);
+      box-shadow: inset 0 0 0 0 transparent;
+    }
+    &:active {
+      color: var(--theme_active);
+      background: var(--theme_tertiary);
+      box-shadow: inset 0 0 0 0 transparent;
+    }
+  }
   &.primary {
     color: var(--basic_white);
     background: var(--theme_primary);
+
+    &:hover {
+      color: var(--basic_white);
+      background: var(--theme_hover);
+    }
+    &:active {
+      color: var(--basic_white);
+      background: var(--theme_active);
+    }
   }
   &.small {
     height: 32px;
@@ -33,14 +58,6 @@
     padding-left: 25px;
     padding-right: 25px;
     min-width: 128px;
-  }
-  &:hover {
-    color: var(--basic_white);
-    background: var(--theme_hover);
-  }
-  &:active {
-    color: var(--basic_white);
-    background: var(--theme_active);
   }
   &:not(.disabled) {
     cursor: pointer;

@@ -1,5 +1,6 @@
+@import '../../styles/color.scss';
 .popup-container {
-  min-width: 200px;
+  min-width: 300px;
   padding: 10px;
 }
 
@@ -11,65 +12,120 @@
   justify-content: space-between;
   margin-bottom: 20px;
 
+  .left {
+    display: flex;
+    align-items: flex-end;
+  }
+
   .setting-icon {
     cursor: pointer;
   }
 }
 
+.logo-wrap {
+  width: 35px;
+  height: 35px;
+  flex-shrink: 0;
+  margin-right: 10px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .content-wrap {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
+  .list-line {
+    display: flex;
+    // align-items: center;
+    justify-content: space-between;
 
-  .logo-wrap {
-    width: 35px;
-    height: 35px;
-    flex-shrink: 0;
-    margin-right: 10px;
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
+    &:not(:last-child) {
+      margin-bottom: 15px;
     }
   }
 
-  .center-content {
-    flex: 1;
-    margin-right: 10px;
+  .label {
+    margin-right: 20px;
     white-space: nowrap;
   }
 
-  .title {
-    margin-bottom: 5px;
-    font-size: 14px;
-    max-width: 270px;
+  .content {
+    width: 250px;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
 
-  .url {
-    max-width: 270px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  $folderLineHeight: 35px;
+  .folder-list-wrap {
+    position: relative;
+    // display: flex;
+    // padding: 10px;
+    // box-shadow: inset 0 0 0 1px var(--divider_secondary);
   }
 
-  .btn-wrap {
+  .folder-list-item {
     display: flex;
-    flex-shrink: 0;
-    min-width: 60px;
-    justify-content: flex-end;
+    height: $folderLineHeight;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+    cursor: pointer;
+    background: var(--divider_tertiary);
+
+    &:hover {
+      background: var(--divider_tertiary);
+    }
+  }
+
+  .folder-select-list {
+    // position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY($folderLineHeight);
+  }
+
+  .folder-img {
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+  }
+
+  .folder-name {
+    font-size: 13px;
+  }
+
+  .tips {
+    font-size: 15px;
+    white-space: nowrap;
   }
 }
 
-.tips {
-  font-size: 14px;
-  white-space: nowrap;
+.footer {
+  margin-top: 20px;
+
+  .btns-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .remove-btn,
+  .finish-btn {
+    width: 65px;
+  }
+
+  .remove-btn {
+    margin-right: 10px;
+  }
 }
 
 .input {
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: 5px;
   background-color: var(--divider_tertiary);
   color: var(--context_primary);
