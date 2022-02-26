@@ -102,7 +102,10 @@ const Options: React.FC<Props> = ({ title }: Props) => {
               <img src="./icon-64.png" alt="logo" />
             </div>
             <div className="center-content">
-              <div className="title">{data?.title}</div>
+              <div className="title">
+                <input className="input" value={data.title} />
+              </div>
+              {/* <div className="title">{data?.title}</div> */}
               <div className="url">{data?.url}</div>
             </div>
             <div className="btn-wrap">

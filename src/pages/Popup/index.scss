@@ -67,3 +67,47 @@
   font-size: 14px;
   white-space: nowrap;
 }
+
+.input {
+  padding: 4px 12px;
+  border-radius: 5px;
+  background-color: var(--divider_tertiary);
+  color: var(--context_primary);
+  transition: background-color 0.3s ease;
+  border: none;
+  box-shadow: none;
+  background-image: none;
+  font-size: 14px;
+  line-height: 1.5715;
+  font-variant: tabular-nums;
+  list-style: none;
+  font-feature-settings: 'tnum';
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0;
+  overflow: visible;
+  outline: none;
+
+  &:not([type='range']) {
+    touch-action: manipulation;
+  }
+
+  &[type='text'] {
+    -webkit-appearance: none;
+  }
+
+  &:hover {
+    border: none;
+    background-color: var(--divider_secondary);
+    box-shadow: 0 0 0 1px var(--theme_primary) inset;
+  }
+
+  &:focus {
+    border: none;
+    background-color: var(--divider_secondary);
+    box-shadow: 0 0 0 1px var(--theme_primary) inset;
+  }
+}
