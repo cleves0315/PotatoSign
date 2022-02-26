@@ -194,10 +194,13 @@ const Options: React.FC<Props> = () => {
   const toDelFolder = (folderId: string) => {
     const index = signMap[folderId];
     sign.splice(index, 1);
+    delete signMap[folderId];
 
     setSign([...sign]);
+    setSign({ ...signMap });
     setConfirmDelFolder('');
     setSignSync(sign);
+    setSignMapSync(signMap);
   };
 
   const toDelSign = async (id: string, folderId: string) => {
