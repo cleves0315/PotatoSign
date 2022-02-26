@@ -37,37 +37,28 @@
 
 .content-wrap {
   display: flex;
-  .list-line {
-    display: flex;
-    // align-items: center;
-    justify-content: space-between;
-
-    &:not(:last-child) {
-      margin-bottom: 15px;
-    }
-  }
-
-  .label {
-    margin-right: 20px;
-    white-space: nowrap;
-  }
+  align-items: flex-start;
+  justify-content: space-between;
 
   .content {
-    width: 250px;
-    overflow: hidden;
+    flex: 1;
+    max-width: 240px;
+    margin-right: 10px;
   }
 
   $folderLineHeight: 35px;
   .folder-list-wrap {
-    position: relative;
-    // display: flex;
-    // padding: 10px;
-    // box-shadow: inset 0 0 0 1px var(--divider_secondary);
+    height: $folderLineHeight;
+    max-height: 200px;
+    overflow: hidden;
+    margin-top: 10px;
   }
 
   .folder-list-item {
     display: flex;
+    width: 100%;
     height: $folderLineHeight;
+    box-sizing: border-box;
     align-items: center;
     justify-content: space-between;
     border-radius: 5px;
@@ -75,17 +66,27 @@
     padding-right: 12px;
     cursor: pointer;
     background: var(--divider_tertiary);
+  }
 
+  .folder-select-list-wrap {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .folder-select-list-item {
+    height: $folderLineHeight;
+    line-height: $folderLineHeight;
+    border-radius: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 240px;
     &:hover {
       background: var(--divider_tertiary);
     }
-  }
-
-  .folder-select-list {
-    // position: absolute;
-    top: 0;
-    left: 0;
-    transform: translateY($folderLineHeight);
   }
 
   .folder-img {
@@ -96,31 +97,26 @@
   }
 
   .folder-name {
+    width: 100%;
+    max-width: 190px;
+    white-space: nowrap;
     font-size: 13px;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .btns-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+  .finish-btn {
+    margin-bottom: 10px;
   }
 
   .tips {
     font-size: 15px;
     white-space: nowrap;
-  }
-}
-
-.footer {
-  margin-top: 20px;
-
-  .btns-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  .remove-btn,
-  .finish-btn {
-    width: 65px;
-  }
-
-  .remove-btn {
-    margin-right: 10px;
   }
 }
 
