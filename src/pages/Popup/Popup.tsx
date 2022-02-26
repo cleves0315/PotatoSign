@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid';
+import { v4 as uuidv4 } from 'uuid';
 import { SettingOutlined, CaretDownOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 
@@ -82,14 +82,14 @@ const Options: React.FC<Props> = ({ title }: Props) => {
         // 判断是否有重复数据
         const isRepeat = judgeToRepeat(sign[0].list, data);
         if (!isRepeat) {
-          data.id = nanoid();
+          data.id = uuidv4();
           sign[0].list.push(data); // 0 => 目前默认往默认文件夹放数据
 
           setSignSync(sign);
         }
       } else {
         initSign().then(() => {
-          data.id = nanoid();
+          data.id = uuidv4();
           sign[0].list.push(data); // 0 => 目前默认往默认文件夹放数据
 
           setSignSync(sign);

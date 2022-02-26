@@ -1,5 +1,4 @@
-// uuid?
-import { nanoid } from 'nanoid';
+import { v4 as uuidv4 } from 'uuid';
 import { Collapse, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
@@ -232,7 +231,7 @@ const Options: React.FC<Props> = () => {
 
   const onCreateFolder = (name: string) => {
     const folder: Sign = {
-      id: nanoid(),
+      id: uuidv4(),
       list: [],
       name,
     };
