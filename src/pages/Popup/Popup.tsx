@@ -79,14 +79,14 @@ const Options: React.FC<Props> = ({ title }: Props) => {
       setBtnText('已收藏');
 
       if (sign.length > 0) {
+        // 判断是否有重复数据
         const isRepeat = judgeToRepeat(sign[0].list, data);
-        // 得知有重复数据
-        if (isRepeat) return;
+        if (!isRepeat) {
+          data.id = nanoid();
+          sign[0].list.push(data); // 0 => 目前默认往默认文件夹放数据
 
-        data.id = nanoid();
-        sign[0].list.push(data); // 0 => 目前默认往默认文件夹放数据
-
-        setSignSync(sign);
+          setSignSync(sign);
+        }
       } else {
         initSign().then(() => {
           data.id = nanoid();
@@ -95,6 +95,8 @@ const Options: React.FC<Props> = ({ title }: Props) => {
           setSignSync(sign);
         });
       }
+
+      window.close();
     }
   };
 
@@ -163,7 +165,7 @@ const Options: React.FC<Props> = ({ title }: Props) => {
             </div>
 
             <div className="btns-wrap">
-              <Button className="finish-btn" type="primary">
+              <Button className="finish-btn" type="primary" onClick={saveTabs}>
                 完成
               </Button>
               <Button className="remove-btn">移除</Button>
