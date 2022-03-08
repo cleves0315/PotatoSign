@@ -301,6 +301,20 @@ const Options: React.FC<Props> = () => {
             <div className="heading">
               <h1>Potato Sign</h1>
             </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              百度搜索：
+              <Input
+                onPressEnter={(e: any) => {
+                  window.open(`http://www.baidu.com/s?wd=${e.target.value}`);
+                }}
+              />
+            </div>
           </div>
         </div>
 
