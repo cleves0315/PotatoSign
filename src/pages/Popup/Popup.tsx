@@ -15,15 +15,18 @@ import {
 } from '../../utils/utils';
 import './index.scss';
 
+interface MapSign {
+  [name: string]: string;
+}
 interface InputDom {
   select: () => void;
 }
 
-type InputElm = Element & InputDom;
-
-interface Props {
-  title: string;
+interface Elem {
+  click: () => void;
 }
+
+interface Props {}
 
 async function initSign() {
   const { sign, signMap } = (await getSignAndMapSync()) as any;
@@ -37,24 +40,26 @@ async function initSign() {
   }
 }
 
-// let sign: Sign[];
-
-const Options: React.FC<Props> = ({ title }: Props) => {
+const Options: React.FC<Props> = Props => {
   const successMsg = '书签已成功保存 (•̀∀•́)';
   const errorMsg = '抱歉，保存时出错了 ╥﹏╥';
   const failMsg = '抱歉，无法提取该页面的url';
   const [data, setData] = useState<TabsData>();
   const [sign, setSign] = useState<Sign[]>([]);
-  // const [inputElm, setInputElm] = useState<InputElm>();
-  const [btnText, setBtnText] = useState('收藏');
+  const [signNameMap, setSignNameMap] = useState<MapSign>({});
+  const [choiceFolder, setChoiceFolder] = useState('');
   const [showFolderList, setShowFolderList] = useState(false);
 
   useEffect(() => {
-    // const inputElm = document.querySelector('input') as InputElm;
-    // setInputElm(inputElm);
-    getTabs();
-    getSign();
+    initProcess();
   }, []);
+
+  const initProcess = async () => {
+    getTabs();
+    await getSign();
+    // 触发saveTabs
+    document.querySelector<Elem & Element>('#toSave')?.click();
+  };
 
   const getTabs = async () => {
     const [activeTab]: TabsData[] = (await chrome.tabs.query({
@@ -69,21 +74,38 @@ const Options: React.FC<Props> = ({ title }: Props) => {
 
   const getSign = async () => {
     const sign = await getSignSync();
+
     setSign(sign);
+    setChoiceFolder(sign[0].id); // 默认展示第一个文件
+    mapSignIdToName(sign);
     console.log('sign: ', sign);
   };
 
-  const saveTabs = () => {
-    // console.log('savetags: ', document.querySelector('.input').value);
-    if (data) {
-      setBtnText('已收藏');
+  const findSign = () => {};
 
+  const onMountSave = () => {
+    saveTabs();
+  };
+
+  const mapSignIdToName = (sign: Sign[]) => {
+    const obj: MapSign = {};
+    sign.forEach(s => {
+      obj[s.id] = s.name;
+    });
+
+    setSignNameMap(obj);
+  };
+
+  const saveTabs = (id?: string) => {
+    if (data) {
       if (sign.length > 0) {
+        const findFolder = sign.find(s => s.id === id) || sign[0];
+
         // 判断是否有重复数据
-        const isRepeat = judgeToRepeat(sign[0].list, data);
+        const isRepeat = judgeToRepeat(findFolder.list, data);
         if (!isRepeat) {
           data.id = uuidv4();
-          sign[0].list.push(data); // 0 => 目前默认往默认文件夹放数据
+          findFolder.list.push(data);
 
           setSignSync(sign);
         }
@@ -95,8 +117,16 @@ const Options: React.FC<Props> = ({ title }: Props) => {
           setSignSync(sign);
         });
       }
+    }
+  };
 
-      window.close();
+  const removeTabs = (folderId: string) => {
+    const findFolder = sign.find(m => m.id === folderId) || sign[0];
+    const findIndex = findFolder.list.findIndex(m => m.url === data?.url);
+
+    if (findIndex > -1) {
+      findFolder.list.splice(findIndex, 1);
+      setSignSync(sign);
     }
   };
 
@@ -104,19 +134,19 @@ const Options: React.FC<Props> = ({ title }: Props) => {
     chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
   };
 
-  const arr = [
-    '默认文件夹1',
-    '默认文件夹2',
-    '默认文件夹3',
-    '默认文件夹4',
-    '默认文件夹4',
-    '默认文件夹5',
-    '默认文件夹6',
-    '默认文件夹7',
-    '默认文件夹8',
-    '默认文件夹9',
-    '默认文件夹0',
-  ];
+  const onDelete = () => {
+    removeTabs(choiceFolder);
+    window.close();
+  };
+
+  const onChoiceFolder = (e: any) => {
+    const { id } = e.target.dataset;
+
+    removeTabs(choiceFolder);
+    setChoiceFolder(id);
+    setShowFolderList(false);
+    saveTabs(id);
+  };
 
   return (
     <div className="popup-container">
@@ -126,7 +156,6 @@ const Options: React.FC<Props> = ({ title }: Props) => {
             <img src="./icon-64.png" alt="logo" />
           </div>
           已加入书签
-          {/* <div className="tips">╥﹏╥ 抱歉，无法提取该页面的url</div> */}
         </div>
         <div className="right">
           <SettingOutlined className="setting-icon" onClick={gotoOptions} />
@@ -150,13 +179,22 @@ const Options: React.FC<Props> = ({ title }: Props) => {
                     setShowFolderList(!showFolderList);
                   }}
                 >
-                  <div className="folder-name">{sign[0]?.name}</div>
+                  <div className="folder-name">
+                    {signNameMap[choiceFolder] || ''}
+                  </div>
                   <CaretDownOutlined />
                 </div>
 
-                <div className="folder-select-list-wrap">
+                <div
+                  className="folder-select-list-wrap"
+                  onClick={onChoiceFolder}
+                >
                   {sign?.map((m, i) => (
-                    <div className="folder-select-list-item" key={`${m.id}`}>
+                    <div
+                      className="folder-select-list-item"
+                      key={`${m.id}`}
+                      data-id={m.id}
+                    >
                       {m.name}
                     </div>
                   ))}
@@ -165,16 +203,25 @@ const Options: React.FC<Props> = ({ title }: Props) => {
             </div>
 
             <div className="btns-wrap">
-              <Button className="finish-btn" type="primary" onClick={saveTabs}>
+              <Button
+                className="finish-btn"
+                type="primary"
+                onClick={() => window.close()}
+              >
                 完成
               </Button>
-              <Button className="remove-btn">移除</Button>
+              <Button className="remove-btn" onClick={onDelete}>
+                移除
+              </Button>
+              {/* 此元素没有渲染在页面，只是当作页面刚渲染时自动触发函数的元素 */}
+              <button
+                id="toSave"
+                className="hide"
+                onClick={onMountSave}
+              ></button>
             </div>
           </div>
         ) : (
-          //   /* <Button type="primary" onClick={saveTabs}>
-          //   {btnText}
-          // </Button> */
           <div className="tips">╥﹏╥ 抱歉，无法提取该页面的url</div>
         )}
       </div>
