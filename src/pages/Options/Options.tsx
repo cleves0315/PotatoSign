@@ -308,7 +308,12 @@ const Options: React.FC<Props> = () => {
                 whiteSpace: 'nowrap',
               }}
             >
-              百度搜索：
+              <img
+                width="35"
+                height="35"
+                src="https://www.baidu.com/favicon.ico"
+                alt=""
+              />
               <Input
                 onPressEnter={(e: any) => {
                   window.open(`http://www.baidu.com/s?wd=${e.target.value}`);
