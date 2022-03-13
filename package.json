@@ -1,5 +1,5 @@
 {
-  "name": "chrome-extension-cli",
+  "name": "potato-tag",
   "version": "1.0.0",
   "description": "chrome拓展脚手架",
   "scripts": {
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cleves0315/chrome-extension-cli.git"
+    "url": "git+https://github.com/cleves0315/potato-tag.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cleves0315/chrome-extension-cli/issues"
+    "url": "https://github.com/cleves0315/potato-tag/issues"
   },
-  "homepage": "https://github.com/cleves0315/chrome-extension-cli#readme",
+  "homepage": "https://github.com/cleves0315/potato-tag#readme",
   "dependencies": {
     "antd": "^4.18.5",
     "react": "^17.0.2",

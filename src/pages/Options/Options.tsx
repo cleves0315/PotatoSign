@@ -299,7 +299,7 @@ const Options: React.FC<Props> = () => {
         <div className="grid" onContextMenu={clearContextMenu}>
           <div className="unit whole center-on-mobiles">
             <div className="heading">
-              <h1>Potato Sign</h1>
+              <h1>potato tag</h1>
             </div>
             <div
               style={{
@@ -442,7 +442,7 @@ const Options: React.FC<Props> = () => {
         <footer className="main-footer">
           <div className="grid">
             <div className="unit whole center-on-mobiles">
-              <p className="text-center text-muted">&copy; Potato Sign</p>
+              <p className="text-center text-muted">&copy; potato tag</p>
             </div>
           </div>
         </footer>
