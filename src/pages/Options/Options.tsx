@@ -196,7 +196,7 @@ const Options: React.FC<Props> = () => {
     delete signMap[folderId];
 
     setSign([...sign]);
-    setSign({ ...signMap });
+    setSignMap({ ...signMap });
     setConfirmDelFolder('');
     setSignSync(sign);
     setSignMapSync(signMap);
@@ -458,7 +458,7 @@ const Options: React.FC<Props> = () => {
         <SelectModal
           visible={seltModalVisible}
           initialValue={defaltRemoveFoldValue}
-          options={sign.map(m => ({ label: m.name, value: m.id }))}
+          options={sign ? sign.map(m => ({ label: m.name, value: m.id })) : []}
           onCancel={handleSeltModalCancel}
           onFinish={onSeltModalFormFinish}
         />
