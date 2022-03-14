@@ -24,21 +24,22 @@ const InputModal: React.FC<Props> = ({
   onFinish,
 }: Props) => {
   const [form] = Form.useForm();
-  const [inptValue, setInptValue] = useState('');
+  const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     if (!visible && form) form.resetFields();
 
     if (visible) {
+      setDisabled(!initialValue);
       setTimeout(() => {
         const modalInput: any = document.querySelector('#modalInput');
         modalInput && modalInput.select();
       });
     }
-  }, [visible, form]);
+  }, [visible, form, initialValue]);
 
   const onValuesChange = ({ value }: { value: string }) => {
-    setInptValue(value.trim());
+    setDisabled(!value.trim());
   };
 
   return (
@@ -55,7 +56,7 @@ const InputModal: React.FC<Props> = ({
             key="submit"
             type={okType}
             size="small"
-            disabled={!inptValue}
+            disabled={disabled}
             onClick={() => form.submit()}
           >
             {okText}
