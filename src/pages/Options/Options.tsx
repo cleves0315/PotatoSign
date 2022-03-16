@@ -296,11 +296,12 @@ const Options: React.FC<Props> = () => {
       onHide={onDropMenuHide}
     >
       <div className="app-container">
-        <div className="grid" onContextMenu={clearContextMenu}>
+        <div className="header" onContextMenu={clearContextMenu}>
+          <div className="header-logo"></div>
+          <h1>Potato tag</h1>
+        </div>
+        {/* <div className="grid">
           <div className="unit whole center-on-mobiles">
-            <div className="heading">
-              <h1>potato tag</h1>
-            </div>
             <div
               style={{
                 display: 'flex',
@@ -321,7 +322,7 @@ const Options: React.FC<Props> = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         <section className="content" onContextMenu={onBackContextMenu}>
           {sign.length > 0 && (

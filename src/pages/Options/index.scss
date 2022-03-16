@@ -17,23 +17,29 @@
   display: flex;
   flex-direction: column;
   filter: opacity(80%);
-  background-size: 100% 100%;
+  background-size: cover;
   background-repeat: no-repeat;
-  background-image: url(../../assets/img/back.png);
+  // background-image: url(../../assets/img/back.png);
   // background-image: url(https://magazine.artstation.com/wp-content/uploads/2022/02/download-6.jpg);
 }
 
-.heading {
-  margin: 1em auto;
-  padding-bottom: 1em;
-  border-bottom: 1px solid #eee;
+.header {
+  display: flex;
+  align-items: center;
+  padding: 30px 20px;
+  margin-bottom: 10px;
+
+  .header-logo {
+    width: 34px;
+    height: 34px;
+    margin-right: 15px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-image: url(../../assets/img/icon-128.png);
+  }
 
   h1 {
     color: var(--context_primary);
-  }
-
-  h1 + .lead {
-    margin-top: 0.2em;
   }
 }
 
