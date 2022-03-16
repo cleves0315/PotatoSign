@@ -58,7 +58,11 @@ const DropdownMenu: React.FC<Props> = ({
   };
 
   return (
-    <div onClick={hide} onContextMenu={onContextMenu}>
+    <div
+      className="dropdown-menu-container"
+      onClick={hide}
+      onContextMenu={onContextMenu}
+    >
       {children}
       <div style={{ position: 'absolute', top: '0', left: '0', width: '100%' }}>
         <div>

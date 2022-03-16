@@ -6,10 +6,21 @@
 @import '../../styles/utilities';
 @import '../../styles/color.scss';
 
+#app {
+  width: 100%;
+  height: 100%;
+}
+
 .app-container {
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  filter: opacity(80%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url(../../assets/img/back.png);
+  // background-image: url(https://magazine.artstation.com/wp-content/uploads/2022/02/download-6.jpg);
 }
 
 .heading {
