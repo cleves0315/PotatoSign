@@ -11,13 +11,7 @@ import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../../components/DropdownMenu';
 import InputModal from '../../components/InputModal';
 import SelectModal from '../../components/SelectModal';
-import {
-  initSign,
-  getSignAndMapSync,
-  setSignSync,
-  setSignMapSync,
-  getStorageAsync,
-} from '../../utils/utils';
+import { initSign, setSignSync, getStorageAsync } from '../../utils/utils';
 
 import './index.scss';
 
@@ -54,7 +48,6 @@ const Options: React.FC<Props> = () => {
   ];
 
   const [sign, setSign] = useState<Sign[]>([]);
-  const [signMap, setSignMap] = useState<any>({});
   const [editSignId, setEditSignId] = useState('');
   const [dropMenus, setDropMenus] = useState<Menu[]>([]);
   const [selectData, setSelectData] = useState<TabsData | any>({});
@@ -72,15 +65,13 @@ const Options: React.FC<Props> = () => {
   }, []);
 
   const getSign = async () => {
-    const { sign, signMap } = await getStorageAsync(['sign', 'signMap']);
+    const { sign } = await getStorageAsync(['sign']);
     console.log('sign: ', sign);
-    console.log('signMap: ', signMap);
 
     if (!sign) {
       initSign();
     } else {
       setSign(sign);
-      setSignMap(signMap);
     }
   };
 
@@ -191,20 +182,17 @@ const Options: React.FC<Props> = () => {
   };
 
   const toDelFolder = (folderId: string) => {
-    const index = signMap[folderId];
+    const index = sign.findIndex(s => s.id === folderId);
     sign.splice(index, 1);
-    delete signMap[folderId];
 
     setSign([...sign]);
-    setSignMap({ ...signMap });
     setConfirmDelFolder('');
     setSignSync(sign);
-    setSignMapSync(signMap);
   };
 
   const toDelSign = async (id: string, folderId: string) => {
     try {
-      const index = signMap[folderId];
+      const index = sign.findIndex(s => s.id === folderId);
       const signList = sign[index].list;
       const findIndex = signList.findIndex((m: TabsData) => m.id === id);
 
@@ -237,16 +225,13 @@ const Options: React.FC<Props> = () => {
     };
 
     sign.push(folder);
-    signMap[folder.id] = sign.length - 1;
     setSign(sign);
-    setSignMap(signMap);
     setSignSync(sign);
-    setSignMapSync(signMap);
   };
 
   const onMoveSignToFolder = (toFoldId: string) => {
-    const index = signMap[selectFolder];
-    const toIndex = signMap[toFoldId];
+    const index = sign.findIndex(s => s.id === selectFolder);
+    const toIndex = sign.findIndex(s => s.id === toFoldId);
     const findIndex = sign[index].list.findIndex(m => m.id === selectData.id);
     const [data] = sign[index].list.splice(findIndex, 1);
     sign[toIndex].list.push(data);
@@ -257,7 +242,7 @@ const Options: React.FC<Props> = () => {
 
   const handleToCancelEdit = async (e: any) => {
     const { value } = e.target;
-    const index = signMap[selectFolder];
+    const index = sign.findIndex(s => s.id === selectFolder);
     const { list } = sign[index];
 
     list.forEach((m: TabsData) => {

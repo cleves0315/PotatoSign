@@ -1,5 +1,5 @@
 import { storage } from './storage';
-import { defaultSign, defaultSignMap } from './mixin';
+import { defaultSign } from './mixin';
 import { Sign, TabsData } from '../types/sign';
 
 /**
@@ -15,14 +15,10 @@ function JSONToStringify(json: any) {
 }
 
 async function initSign() {
-  const { sign, signMap } = (await getSignAndMapSync()) as any;
+  const { sign } = (await getSignAndMapSync()) as any;
 
   if (!sign || (Array.isArray(sign) && sign.length === 0)) {
     await setSignSync(defaultSign);
-  }
-
-  if (!signMap || JSON.stringify(signMap) === '{}') {
-    await setSignMapSync(defaultSignMap);
   }
 }
 
@@ -93,29 +89,17 @@ async function getSignSync(): Promise<Sign[]> {
   });
 }
 
-async function getSignMapSync() {
-  return new Promise(resolve => {
-    storage.get('sign', function (result) {
-      const { signMap: signMapJson } = result;
-      const signMap = JSONToParse(signMapJson) || {};
-
-      resolve(signMap);
-    });
-  });
-}
-
 /**
  *
- * @returns {object} { sign, signMap }
+ * @returns {object} { sign }
  */
 async function getSignAndMapSync() {
   return new Promise(resolve => {
-    storage.get(['sign', 'signMap'], function (result) {
-      const { sign: signJson, signMap: signMapJson } = result;
+    storage.get(['sign'], function (result) {
+      const { sign: signJson } = result;
       const sign = JSONToParse(signJson) || [];
-      const signMap = JSONToParse(signMapJson) || {};
 
-      resolve({ sign, signMap });
+      resolve({ sign });
     });
   });
 }
@@ -127,16 +111,6 @@ async function getSignAndMapSync() {
 async function setSignSync(sign: Sign[]) {
   return new Promise<void>(resolve => {
     storage.set({ sign: JSONToStringify(sign) }, resolve);
-  });
-}
-
-/**
- *
- * @param {array} signMap
- */
-async function setSignMapSync(signMap: {}) {
-  return new Promise<void>(resolve => {
-    storage.set({ signMap: JSONToStringify(signMap) }, resolve);
   });
 }
 
@@ -172,10 +146,8 @@ export {
   getStorageAsync,
   setStorageSync,
   getSignSync,
-  getSignMapSync,
   getSignAndMapSync,
   setSignSync,
-  setSignMapSync,
   getFIdAsync,
   // setFIdAsync,
 };

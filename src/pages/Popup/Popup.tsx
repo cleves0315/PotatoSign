@@ -4,13 +4,10 @@ import React, { useEffect, useState } from 'react';
 
 import Button from '../../components/Button';
 import { Sign, TabsData } from '../../types/sign';
-import { defaultSign, defaultSignMap } from '../../utils/mixin';
 import {
-  JSONToParse,
+  initSign,
   setSignSync,
-  setSignMapSync,
   getSignSync,
-  getSignAndMapSync,
   judgeToRepeat,
 } from '../../utils/utils';
 import './index.scss';
@@ -27,18 +24,6 @@ interface Elem {
 }
 
 interface Props {}
-
-async function initSign() {
-  const { sign, signMap } = (await getSignAndMapSync()) as any;
-
-  if (!sign || (Array.isArray(sign) && sign.length === 0)) {
-    await setSignSync(defaultSign);
-  }
-
-  if (!signMap || JSON.stringify(signMap) === '{}') {
-    await setSignMapSync(defaultSignMap);
-  }
-}
 
 const Options: React.FC<Props> = Props => {
   const successMsg = '书签已成功保存 (•̀∀•́)';

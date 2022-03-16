@@ -9,6 +9,4 @@ const defaultSign: [Sign] = [
   },
 ];
 
-const defaultSignMap = { '001': 0 };
-
-export { defaultSign, defaultSignMap };
+export { defaultSign };
