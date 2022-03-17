@@ -123,6 +123,12 @@
     }
   }
 
+  .ant-collapse-item {
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+
   .option-title-icon {
     color: var(--context_primary);
   }
