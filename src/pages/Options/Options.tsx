@@ -315,12 +315,12 @@ const Options: React.FC<Props> = () => {
               className="option-container"
               ghost
               defaultActiveKey={sign.map(m => m.id)}
-              expandIcon={({ isActive }) => (
-                <CaretRightOutlined
-                  className="option-title-icon"
-                  rotate={isActive ? 90 : 0}
-                />
-              )}
+              // expandIcon={({ isActive }) => (
+              //   <CaretRightOutlined
+              //     className="option-title-icon"
+              //     rotate={isActive ? 90 : 0}
+              //   />
+              // )}
             >
               {sign.map((s: Sign, i) => (
                 <Panel

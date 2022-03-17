@@ -26,6 +26,7 @@
 .header {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 30px 20px;
   margin-bottom: 10px;
 
@@ -53,6 +54,7 @@
   flex: 1;
 
   .option-title-container {
+    position: relative;
     display: flex;
     align-items: flex-start;
     width: 100%;
