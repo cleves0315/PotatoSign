@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Collapse, Input } from 'antd';
+import { Collapse, Divider, Input, Popover } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
   EditOutlined,
@@ -327,7 +327,37 @@ const Options: React.FC<Props> = () => {
                   header={
                     <div className="option-title-container unit whole center-on-mobiles">
                       {isOpenEditFolder !== s.id ? (
-                        <div className="option-title">{s.name}</div>
+                        <>
+                          <div className="option-title">{s.name}</div>
+                          <div
+                            className="del-wrap"
+                            data-confirm={confirmDelFolder === s.id}
+                            onClick={e => handleClickDelFolder(e, s.id)}
+                          >
+                            <DeleteOutlined className="del-btn" />
+                            {/* <Popover
+                              placement="bottom"
+                              title={'text'}
+                              content={
+                                <div>
+                                  <p>重命名</p>
+                                  <p>删除</p>
+                                </div>
+                              }
+                              trigger="click"
+                            >
+                              <div
+                                style={{
+                                  color: '#fff',
+                                  fontSize: '16px',
+                                  transform: 'translateY(-6px)',
+                                }}
+                              >
+                                ...
+                              </div>
+                            </Popover> */}
+                          </div>
+                        </>
                       ) : (
                         <Input
                           id={`titleInput${s.id}`}
@@ -342,13 +372,6 @@ const Options: React.FC<Props> = () => {
                           onClick={e => e.stopPropagation()}
                         />
                       )}
-                      <div
-                        className="del-wrap"
-                        data-confirm={confirmDelFolder === s.id}
-                        onClick={e => handleClickDelFolder(e, s.id)}
-                      >
-                        <DeleteOutlined className="del-btn" />
-                      </div>
                     </div>
                   }
                   key={s.id}
