@@ -23,5 +23,8 @@
       "64": "icon-64.png",
       "128": "icon-128.png"
     }
+  },
+  "chrome_url_overrides": {
+    "newtab": "options.html"
   }
 }
