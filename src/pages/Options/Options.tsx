@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { Collapse, Divider, Input, Popover } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
@@ -58,6 +59,10 @@ const Options: React.FC<Props> = () => {
   const [isOpenEditFolder, setIsOpenEditFolder] = useState('');
   const [confirmDelSign, setConfirmDelSign] = useState('');
   const [confirmDelFolder, setConfirmDelFolder] = useState('');
+
+  useHotkeys('ctrl+k,command+k', () => {
+    console.log('ctrl+k');
+  });
 
   useEffect(() => {
     getSign();
