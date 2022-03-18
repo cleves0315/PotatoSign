@@ -206,17 +206,16 @@
           // background-size: 100% 100%;
         }
       }
-      .icon img {
-        display: block;
-        width: 35px;
-        height: 35px;
-        margin: 0 auto;
+      .icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
+
       .icon .img {
         display: block;
         width: 30px;
         height: 30px;
-        margin: 0 auto;
         background-size: 100% 100%;
         background-image: url(../../assets/img/icon-64.png);
       }
@@ -324,5 +323,14 @@
 body {
   .ant-popover-title {
     display: none;
+  }
+}
+
+.content {
+  // 折叠板header区域[expandIconPosition="right"]间距
+  .ant-collapse-icon-position-right
+    > .ant-collapse-item
+    > .ant-collapse-header {
+    padding: 12px 26px 12px 26px;
   }
 }

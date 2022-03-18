@@ -319,6 +319,7 @@ const Options: React.FC<Props> = () => {
             <Collapse
               className="option-container"
               ghost
+              expandIconPosition="right"
               defaultActiveKey={sign.map(m => m.id)}
               // expandIcon={({ isActive }) => (
               //   <CaretRightOutlined
@@ -387,6 +388,13 @@ const Options: React.FC<Props> = () => {
                     />
                   }
                 >
+                  {/* <div
+                    style={{
+                      height: '1px',
+                      background: '#eee',
+                      transform: 'translateY(-23px)',
+                    }}
+                  ></div> */}
                   <div className="option-wrap">
                     {s.list.map((data: TabsData) => (
                       <div
@@ -413,7 +421,6 @@ const Options: React.FC<Props> = () => {
                             <DeleteOutlined className="del-btn" />
                           </div>
                           <div className="icon">
-                            {/* <img src={data.favIconUrl} alt="icon" /> */}
                             <div
                               className="img"
                               style={{
