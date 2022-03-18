@@ -212,6 +212,14 @@
         height: 35px;
         margin: 0 auto;
       }
+      .icon .img {
+        display: block;
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+        background-size: 100% 100%;
+        background-image: url(../../assets/img/icon-64.png);
+      }
 
       .title {
         display: flex;

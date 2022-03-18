@@ -413,7 +413,14 @@ const Options: React.FC<Props> = () => {
                             <DeleteOutlined className="del-btn" />
                           </div>
                           <div className="icon">
-                            <img src={data.favIconUrl} alt="icon" />
+                            {/* <img src={data.favIconUrl} alt="icon" /> */}
+                            <div
+                              className="img"
+                              style={{
+                                backgroundImage:
+                                  data.favIconUrl && `url(${data.favIconUrl})`,
+                              }}
+                            ></div>
                           </div>
                           {/* 编辑·标题 */}
                           {editSignId === data.id ? (
