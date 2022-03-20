@@ -1,0 +1,110 @@
+// 448 512 640
+.command-palette-root {
+  .search-icon {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+  .folder-icon {
+    margin-right: 6px;
+  }
+
+  .command-palette-mask {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    z-index: 10001;
+    background-color: rgba(0, 0, 0, 0.45);
+  }
+
+  .command-palette-wrap {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    outline: 0;
+    z-index: 10002;
+  }
+
+  .command-palette-container {
+    width: 640px;
+    // max-height: 460px;
+    max-height: 80vh;
+    margin: 10vh auto;
+    border-radius: 8px;
+    background-color: var(--background_primary);
+    border: 1px solid #d0d7de;
+    box-shadow: 0 1px 0 rgba(27, 31, 36, 0.04);
+  }
+
+  .command-palette-input-container {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    height: 49px;
+    line-height: 1.5;
+    color: var(--context_primary);
+    border-bottom: 1px solid var(--context_tertiary);
+    padding-left: 5px;
+
+    .command-input {
+      color: var(--context_primary);
+    }
+
+    .ant-input {
+      background-color: transparent;
+
+      &:hover {
+        box-shadow: unset;
+      }
+    }
+    .anticon.ant-input-clear-icon {
+      font-size: 15px;
+      color: var(--context_tertiary);
+
+      &:hover {
+        color: var(--context_secondary);
+      }
+    }
+  }
+
+  .command-palette-stack {
+    .command-palette-group {
+      padding-top: 8px;
+      padding-bottom: 8px;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid var(--context_tertiary);
+      }
+    }
+
+    .command-palette-header {
+      display: flex;
+      align-items: center;
+      height: 34px;
+      font-size: 12px;
+      font-weight: 600;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    .command-palette-item {
+      display: flex;
+      align-items: center;
+      height: 44px;
+      padding-left: 8px;
+      padding-right: 8px;
+      margin-left: 8px;
+      margin-right: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--divider_tertiary);
+      }
+    }
+  }
+}
