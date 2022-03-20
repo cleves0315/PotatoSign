@@ -330,11 +330,14 @@ const Options: React.FC<Props> = () => {
             >
               {sign.map((s: Sign, i) => (
                 <Panel
+                  showArrow={false}
                   header={
                     <div className="option-title-container unit whole center-on-mobiles">
                       {isOpenEditFolder !== s.id ? (
                         <>
-                          <div className="option-title">{s.name}</div>
+                          <div id={s.id} className="option-title">
+                            {s.name}
+                          </div>
                           <div
                             className="del-wrap"
                             data-confirm={confirmDelFolder === s.id}
@@ -382,19 +385,14 @@ const Options: React.FC<Props> = () => {
                   }
                   key={s.id}
                   extra={
-                    <EditOutlined
-                      className="option-title-icon edit-icon"
-                      onClick={e => handleOpenEditFolder(e, s.id)}
-                    />
+                    <div>
+                      <EditOutlined
+                        className="option-title-icon edit-icon"
+                        onClick={e => handleOpenEditFolder(e, s.id)}
+                      />
+                    </div>
                   }
                 >
-                  {/* <div
-                    style={{
-                      height: '1px',
-                      background: '#eee',
-                      transform: 'translateY(-23px)',
-                    }}
-                  ></div> */}
                   <div className="option-wrap">
                     {s.list.map((data: TabsData) => (
                       <div
