@@ -56,20 +56,18 @@ const DropdownMenu: React.FC<Props> = ({
   };
 
   const onChangeCommand = (e: any) => {
-    console.log('onChangeCommand: ', e);
     const { value } = e.target;
-    const commandText = value.trim();
+    const command = value.trim();
 
-    if (commandText) {
-      setCommandText(commandText);
-      searchFolder(commandText);
+    setCommandText(command);
+
+    if (command) {
+      searchFolder(command);
     }
   };
 
-  const searchFolder = (commandText: string) => {
-    const searched: Sign[] = localSign.filter(s =>
-      s.name.includes(commandText)
-    );
+  const searchFolder = (command: string) => {
+    const searched: Sign[] = localSign.filter(s => s.name.includes(command));
 
     setFolSearResult(searched);
   };
@@ -77,7 +75,9 @@ const DropdownMenu: React.FC<Props> = ({
   const onClickStack = (e: any) => {
     const { action, id } = e.target.dataset;
 
-    onCancel && onCancel();
+    if (commandText.trim()) {
+      onCancel && onCancel();
+    }
 
     switch (action) {
       case MOVETOFOLDER:
@@ -125,30 +125,42 @@ const DropdownMenu: React.FC<Props> = ({
               </div>
 
               <div className="command-palette-stack" onClick={onClickStack}>
-                <div className="command-palette-group">
-                  {!!folSearResult.length && (
-                    <>
-                      <div className="command-palette-header">文件夹</div>
-                      {folSearResult.map(m => (
-                        <div
-                          className="command-palette-item"
-                          key={m.id}
-                          data-action={MOVETOFOLDER}
-                          data-id={m.id}
-                        >
-                          <FolderOutlined className="folder-icon" />
-                          {m.name}
-                        </div>
-                      ))}
-                    </>
-                  )}
-                </div>
-                <div className="command-palette-group">
-                  <div className="command-palette-item" data-action={GOOGLING}>
-                    <SearchOutlined className="search-icon" />
-                    在百度搜索中搜索
+                {!commandText && (
+                  <div className="command-palette-group">
+                    <div className="command-palette-header">
+                      提示：输入文件名
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {!!folSearResult.length && (
+                  <div className="command-palette-group">
+                    <div className="command-palette-header">文件夹</div>
+                    {folSearResult.map(m => (
+                      <div
+                        className="command-palette-item"
+                        key={m.id}
+                        data-action={MOVETOFOLDER}
+                        data-id={m.id}
+                      >
+                        <FolderOutlined className="folder-icon" />
+                        {m.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {commandText && (
+                  <div className="command-palette-group">
+                    <div
+                      className="command-palette-item"
+                      data-action={GOOGLING}
+                    >
+                      <SearchOutlined className="search-icon" />
+                      在百度搜索中搜索
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
