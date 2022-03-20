@@ -30,11 +30,8 @@ const DropdownMenu: React.FC<Props> = ({
   const [folSearResult, setFolSearResult] = useState<Sign[]>([]);
 
   useEffect(() => {
-    getSign();
-  }, []);
-
-  useEffect(() => {
     if (visible) {
+      getSign();
       const commandInput: any = document.querySelector('#commandInput');
       commandInput && commandInput.select();
     } else {
@@ -43,6 +40,7 @@ const DropdownMenu: React.FC<Props> = ({
   }, [visible]);
 
   const clearResulted = () => {
+    setCommandText('');
     setFolSearResult([]);
   };
 
@@ -79,10 +77,12 @@ const DropdownMenu: React.FC<Props> = ({
   const onClickStack = (e: any) => {
     const { action, id } = e.target.dataset;
 
+    onCancel && onCancel();
+
     switch (action) {
       case MOVETOFOLDER:
         const element: any = document.querySelector(`[data-folderid="${id}"]`);
-        onCancel && onCancel();
+
         if (element) {
           const offsetTop = element.parentElement.offsetTop;
           window.scrollTo({
