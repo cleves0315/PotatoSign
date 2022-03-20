@@ -12,6 +12,7 @@ import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../../components/DropdownMenu';
 import InputModal from '../../components/InputModal';
 import SelectModal from '../../components/SelectModal';
+import CommandPalette from '../../components/CommandPalette';
 import { initSign, setSignSync, getStorageAsync } from '../../utils/utils';
 
 import './index.scss';
@@ -32,6 +33,7 @@ const Options: React.FC<Props> = () => {
   const RENAME = 'rename';
   const MOVETO = 'moveto';
   const DELETE = 'delete';
+  const COMMAND = 'command';
   const defaltAddFoldValue = '新建文件夹';
   const defaltRemoveFoldValue = '001';
   const signDropMenus = [
@@ -45,6 +47,7 @@ const Options: React.FC<Props> = () => {
   ];
   const backDropMenus = [
     { text: '新建收藏夹', value: CREATE },
+    { text: '命令面板', value: COMMAND },
     { text: '刷新页面', value: RELODAD },
   ];
 
@@ -59,9 +62,10 @@ const Options: React.FC<Props> = () => {
   const [isOpenEditFolder, setIsOpenEditFolder] = useState('');
   const [confirmDelSign, setConfirmDelSign] = useState('');
   const [confirmDelFolder, setConfirmDelFolder] = useState('');
+  const [commandVisible, setCommandVisible] = useState(false);
 
   useHotkeys('ctrl+k,command+k', () => {
-    console.log('ctrl+k');
+    setCommandVisible(true);
   });
 
   useEffect(() => {
@@ -116,6 +120,9 @@ const Options: React.FC<Props> = () => {
         break;
       case RELODAD:
         window.location.reload();
+        break;
+      case COMMAND:
+        setCommandVisible(true);
         break;
 
       default:
@@ -278,6 +285,10 @@ const Options: React.FC<Props> = () => {
     setSeltModalVisible(false);
   };
 
+  const onCancelCommand = () => {
+    setCommandVisible(false);
+  };
+
   return (
     <DropdownMenu
       menuList={dropMenus}
@@ -332,12 +343,13 @@ const Options: React.FC<Props> = () => {
                 <Panel
                   showArrow={false}
                   header={
-                    <div className="option-title-container unit whole center-on-mobiles">
+                    <div
+                      className="option-title-container unit whole center-on-mobiles"
+                      data-folderid={s.id}
+                    >
                       {isOpenEditFolder !== s.id ? (
                         <>
-                          <div id={s.id} className="option-title">
-                            {s.name}
-                          </div>
+                          <div className="option-title">{s.name}</div>
                           <div
                             className="del-wrap"
                             data-confirm={confirmDelFolder === s.id}
@@ -488,6 +500,7 @@ const Options: React.FC<Props> = () => {
           onCancel={handleSeltModalCancel}
           onFinish={onSeltModalFormFinish}
         />
+        <CommandPalette visible={commandVisible} onCancel={onCancelCommand} />
       </div>
     </DropdownMenu>
   );
