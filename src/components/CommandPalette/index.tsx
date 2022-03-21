@@ -3,7 +3,7 @@ import { Input } from 'antd';
 import { FolderOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { getStorageAsync } from '../../utils/utils';
-import { Sign } from '../../types/sign';
+import { Sign, TabsData } from '../../types/sign';
 
 import './index.scss';
 
@@ -15,6 +15,10 @@ interface Props {
   onOk?: () => void;
 }
 
+interface SignSearResult extends TabsData {
+  folderName: string;
+}
+
 const DropdownMenu: React.FC<Props> = ({
   visible = false,
   maskClosable = true,
@@ -24,10 +28,12 @@ const DropdownMenu: React.FC<Props> = ({
 }: Props) => {
   // actionType
   const MOVETOFOLDER = 'moveToFolder';
+  const MOVETOSIGN = 'moveToSign';
   const GOOGLING = 'googling';
   const [commandText, setCommandText] = useState('');
   const [localSign, setLocalSign] = useState<Sign[]>([]);
   const [folSearResult, setFolSearResult] = useState<Sign[]>([]);
+  const [signSearResult, setSignSearResult] = useState<SignSearResult[]>([]);
 
   useEffect(() => {
     if (visible) {
@@ -42,6 +48,7 @@ const DropdownMenu: React.FC<Props> = ({
   const clearResulted = () => {
     setCommandText('');
     setFolSearResult([]);
+    setSignSearResult([]);
   };
 
   const onClickMask = () => {
@@ -63,13 +70,31 @@ const DropdownMenu: React.FC<Props> = ({
 
     if (command) {
       searchFolder(command);
+      searchSign(command);
     }
   };
 
   const searchFolder = (command: string) => {
     const searched: Sign[] = localSign.filter(s => s.name.includes(command));
-
     setFolSearResult(searched);
+  };
+
+  const searchSign = (command: string) => {
+    const searched: SignSearResult[] = [];
+
+    localSign.forEach(folder => {
+      folder.list.forEach(sign => {
+        if (sign.title.includes(command)) {
+          searched.push({
+            ...sign,
+            // ...folder
+            folderName: folder.name,
+          });
+        }
+      });
+    });
+
+    setSignSearResult(searched);
   };
 
   const onClickStack = (e: any) => {
@@ -81,15 +106,10 @@ const DropdownMenu: React.FC<Props> = ({
 
     switch (action) {
       case MOVETOFOLDER:
-        const element: any = document.querySelector(`[data-folderid="${id}"]`);
-
-        if (element) {
-          const offsetTop = element.parentElement.offsetTop;
-          window.scrollTo({
-            top: offsetTop,
-            behavior: 'smooth',
-          });
-        }
+        handelMoveToFolder(id);
+        break;
+      case MOVETOSIGN:
+        handleMoveToSign(id);
         break;
       case GOOGLING:
         window.open(`http://www.baidu.com/s?wd=${commandText}`);
@@ -97,6 +117,42 @@ const DropdownMenu: React.FC<Props> = ({
 
       default:
         break;
+    }
+  };
+
+  const handelMoveToFolder = (folderId: string) => {
+    let element: any = document.querySelector(`[data-folderid="${folderId}"]`);
+
+    if (element) {
+      let offsetTop = 0;
+
+      while (element.offsetTop < 100) {
+        element = element.parentElement;
+      }
+
+      offsetTop = element.offsetTop;
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const handleMoveToSign = (signId: string) => {
+    let element: any = document.querySelector(`[data-signid="${signId}"]`);
+
+    if (element) {
+      let offsetTop = 0;
+
+      while (element.offsetTop < 100) {
+        element = element.parentElement;
+      }
+
+      offsetTop = element.offsetTop;
+      window.scrollTo({
+        top: offsetTop - 30,
+        behavior: 'smooth',
+      });
     }
   };
 
@@ -144,7 +200,36 @@ const DropdownMenu: React.FC<Props> = ({
                         data-id={m.id}
                       >
                         <FolderOutlined className="folder-icon" />
-                        {m.name}
+                        <div
+                          className="result-content"
+                          data-action={MOVETOFOLDER}
+                          data-id={m.id}
+                        >
+                          {m.name}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {!!signSearResult.length && (
+                  <div className="command-palette-group">
+                    <div className="command-palette-header">标签</div>
+                    {signSearResult.map(m => (
+                      <div
+                        className="command-palette-item"
+                        key={m.id}
+                        data-action={MOVETOSIGN}
+                        data-id={m.id}
+                      >
+                        <FolderOutlined className="folder-icon" />
+                        <div
+                          className="result-content"
+                          data-action={MOVETOSIGN}
+                          data-id={m.id}
+                        >
+                          {m.folderName} / {m.title}
+                        </div>
                       </div>
                     ))}
                   </div>

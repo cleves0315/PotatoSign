@@ -341,6 +341,7 @@ const Options: React.FC<Props> = () => {
                           autoFocus
                           className="option-title-input"
                           defaultValue={s.name}
+                          maxLength={24}
                           onFocus={() =>
                             onFocusInptOptnTitle(`titleInput${s.id}`)
                           }
@@ -372,7 +373,7 @@ const Options: React.FC<Props> = () => {
                       >
                         <div
                           className="sign-item"
-                          data-id={data.id}
+                          data-signid={data.id}
                           data-url={data.url}
                           data-dropdown-type="sign"
                         >
@@ -400,9 +401,9 @@ const Options: React.FC<Props> = () => {
                             <div className="title" data-type="input">
                               <Input
                                 id={`titleInput${data.id}`}
-                                data-id={data.id}
                                 defaultValue={data.title}
                                 autoFocus
+                                maxLength={60}
                                 onClick={e => e.stopPropagation()}
                                 onBlur={handleToCancelEdit}
                                 onPressEnter={handleToCancelEdit}
@@ -455,6 +456,7 @@ const Options: React.FC<Props> = () => {
           onCancel={handleSeltModalCancel}
           onFinish={onSeltModalFormFinish}
         />
+
         <CommandPalette visible={commandVisible} onCancel={onCancelCommand} />
       </div>
     </DropdownMenu>
