@@ -301,29 +301,6 @@ const Options: React.FC<Props> = () => {
           <div className="header-logo"></div>
           <h1>Potato tag</h1>
         </div>
-        {/* <div className="grid">
-          <div className="unit whole center-on-mobiles">
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <img
-                width="35"
-                height="35"
-                src="https://www.baidu.com/favicon.ico"
-                alt=""
-              />
-              <Input
-                onPressEnter={(e: any) => {
-                  window.open(`http://www.baidu.com/s?wd=${e.target.value}`);
-                }}
-              />
-            </div>
-          </div>
-        </div> */}
 
         <section className="content" onContextMenu={onBackContextMenu}>
           {sign.length > 0 && (
@@ -356,27 +333,6 @@ const Options: React.FC<Props> = () => {
                             onClick={e => handleClickDelFolder(e, s.id)}
                           >
                             <DeleteOutlined className="del-btn" />
-                            {/* <Popover
-                              placement="bottom"
-                              title={'text'}
-                              content={
-                                <div>
-                                  <p>重命名</p>
-                                  <p>删除</p>
-                                </div>
-                              }
-                              trigger="click"
-                            >
-                              <div
-                                style={{
-                                  color: '#fff',
-                                  fontSize: '16px',
-                                  transform: 'translateY(-6px)',
-                                }}
-                              >
-                                ...
-                              </div>
-                            </Popover> */}
                           </div>
                         </>
                       ) : (
@@ -453,7 +409,6 @@ const Options: React.FC<Props> = () => {
                                 onFocus={() =>
                                   onFocusInptOptnTitle(`titleInput${data.id}`)
                                 }
-                                // onChange={onChangeSignTitle}
                               />
                             </div>
                           ) : (
