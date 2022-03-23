@@ -137,3 +137,52 @@ blockquote {
   background: var(--theme_tertiary);
   color: var(--context_primary);
 }
+
+// ant-message
+.ant-message-notice-content {
+  border-radius: 999px;
+  background: var(--background_tertiary);
+}
+
+.ant-message {
+  color: var(--context_primary);
+
+  .anticon {
+    font-size: 22px;
+  }
+
+  .message-content-wrap {
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+  }
+
+  // 按钮
+  .handle-wrapper {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    padding: 0 12px;
+    cursor: pointer;
+    margin-left: 24px;
+    white-space: nowrap;
+    color: var(--context_secondary);
+    transition: all 0.3s ease;
+    border-radius: 100px;
+
+    &:hover {
+      background-color: var(--divider_tertiary);
+    }
+  }
+}
+
+.ant-message-custom-content {
+  display: flex;
+  align-items: center;
+
+  .message-content-wrap {
+    margin-left: 0;
+  }
+}
+
+// ant-message end

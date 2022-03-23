@@ -19,7 +19,7 @@ interface SignSearResult extends TabsData {
   folderName: string;
 }
 
-const DropdownMenu: React.FC<Props> = ({
+const CommandPalette: React.FC<Props> = ({
   visible = false,
   maskClosable = true,
   escCancel = true,
@@ -255,4 +255,4 @@ const DropdownMenu: React.FC<Props> = ({
   );
 };
 
-export default DropdownMenu;
+export default CommandPalette;

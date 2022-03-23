@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Collapse, Divider, Input, Popover } from 'antd';
+import { Collapse, Divider, Input, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
   EditOutlined,
@@ -195,11 +195,34 @@ const Options: React.FC<Props> = () => {
 
   const toDelFolder = (folderId: string) => {
     const index = sign.findIndex(s => s.id === folderId);
-    sign.splice(index, 1);
+    const cloneSign = JSON.parse(JSON.stringify(sign));
+    const delData = cloneSign.splice(index, 1);
 
-    setSign([...sign]);
+    setSign([...cloneSign]);
     setConfirmDelFolder('');
-    setSignSync(sign);
+    setSignSync(cloneSign);
+
+    const msgKey = Date.now();
+    message.success({
+      key: msgKey,
+      content: (
+        <div className="message-content-wrap">
+          删除成功
+          <div
+            className="handle-wrapper"
+            onClick={async () => {
+              const { sign } = await getStorageAsync(['sign']);
+              sign.push(...delData);
+              setSign(sign);
+              setSignSync(sign);
+              message.destroy(msgKey);
+            }}
+          >
+            撤回
+          </div>
+        </div>
+      ),
+    });
   };
 
   const toDelSign = async (id: string, folderId: string) => {
@@ -208,11 +231,33 @@ const Options: React.FC<Props> = () => {
       const signList = sign[index].list;
       const findIndex = signList.findIndex((m: TabsData) => m.id === id);
 
-      signList.splice(findIndex, 1);
+      const delData = signList.splice(findIndex, 1);
 
       setSign([...sign]);
       setConfirmDelSign('');
       await setSignSync(sign);
+
+      const msgKey = Date.now();
+      message.success({
+        key: msgKey,
+        content: (
+          <div className="message-content-wrap">
+            删除成功
+            <div
+              className="handle-wrapper"
+              onClick={async () => {
+                const { sign } = await getStorageAsync(['sign']);
+                sign[index].list.push(...delData);
+                setSign(sign);
+                setSignSync(sign);
+                message.destroy(msgKey);
+              }}
+            >
+              撤回
+            </div>
+          </div>
+        ),
+      });
     } catch (error) {
       console.error('handleOnDelSign: \n', error);
     }
@@ -239,6 +284,7 @@ const Options: React.FC<Props> = () => {
     sign.push(folder);
     setSign(sign);
     setSignSync(sign);
+    message.success({ content: '创建成功' });
   };
 
   const onMoveSignToFolder = (toFoldId: string) => {
