@@ -174,7 +174,13 @@ const Newtab: React.FC<Props> = () => {
 
   const onSignItemClick = (data: TabsData) => {
     const { url } = data;
-    window.open(url);
+    const chromeUrl = new RegExp('^(chrome://)+');
+
+    if (chromeUrl.test(url)) {
+      chrome.tabs.create({ url });
+    } else {
+      window.open(url);
+    }
   };
 
   const handleOnDelSign = (e: any, signId: string, folderId: string) => {
