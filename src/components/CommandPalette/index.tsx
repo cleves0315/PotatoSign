@@ -67,40 +67,45 @@ const CommandPalette: React.FC<Props> = ({
     const command = value.trim();
 
     setCommandText(command);
-
-    if (command) {
-      searchFolder(command);
-      searchSign(command);
-    }
+    searchFolder(command);
+    searchSign(command);
   };
 
   const searchFolder = (command: string) => {
-    const searched: Sign[] = localSign.filter(s => s.name.includes(command));
-    setFolSearResult(searched);
+    if (command) {
+      const searched: Sign[] = localSign.filter(s => s.name.includes(command));
+      setFolSearResult(searched);
+    } else {
+      setFolSearResult([]);
+    }
   };
 
   const searchSign = (command: string) => {
     const searched: SignSearResult[] = [];
 
-    localSign.forEach(folder => {
-      folder.list.forEach(sign => {
-        if (sign.title.includes(command)) {
-          searched.push({
-            ...sign,
-            // ...folder
-            folderName: folder.name,
-          });
-        }
+    if (command) {
+      localSign.forEach(folder => {
+        folder.list.forEach(sign => {
+          if (sign.title.includes(command)) {
+            searched.push({
+              ...sign,
+              // ...folder
+              folderName: folder.name,
+            });
+          }
+        });
       });
-    });
 
-    setSignSearResult(searched);
+      setSignSearResult(searched);
+    } else {
+      setSignSearResult([]);
+    }
   };
 
   const onClickStack = (e: any) => {
     const { action, id } = e.target.dataset;
 
-    if (commandText.trim()) {
+    if (action) {
       onCancel && onCancel();
     }
 

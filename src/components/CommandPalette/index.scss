@@ -31,10 +31,10 @@
 
   .command-palette-container {
     width: 640px;
-    // max-height: 460px;
-    max-height: 80vh;
+    max-height: 460px;
     margin: 10vh auto;
     border-radius: 8px;
+    overflow-y: auto;
     background-color: var(--background_primary);
     border: 1px solid #d0d7de;
     box-shadow: 0 1px 0 rgba(27, 31, 36, 0.04);
