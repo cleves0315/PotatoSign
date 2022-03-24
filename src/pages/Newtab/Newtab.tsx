@@ -12,7 +12,7 @@ import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../../components/DropdownMenu';
 import InputModal from '../../components/InputModal';
 import SelectModal from '../../components/SelectModal';
-import CommandPalette from '../../components/CommandPalette';
+import CommandPalette from './components/CommandPalette';
 import { initSign, setSignSync, getStorageAsync } from '../../utils/utils';
 
 import './index.scss';
@@ -26,7 +26,7 @@ interface Menu {
   value: string;
 }
 
-const Options: React.FC<Props> = () => {
+const Newtab: React.FC<Props> = () => {
   let isSignDropMenus = false;
   const CREATE = 'create';
   const RELODAD = 'reload';
@@ -509,4 +509,4 @@ const Options: React.FC<Props> = () => {
   );
 };
 
-export default Options;
+export default Newtab;

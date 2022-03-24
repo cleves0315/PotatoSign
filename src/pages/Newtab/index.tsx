@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 import 'antd/dist/antd.min.css';
-import Options from './Options';
+import Newtab from './Newtab';
 
-render(<Options />, document.querySelector('#app'));
+render(<Newtab />, document.querySelector('#app'));

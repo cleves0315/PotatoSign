@@ -11,10 +11,6 @@
     "service_worker": "background.js"
   },
   "permissions": ["tabs", "storage", "unlimitedStorage"],
-  "host_permissions": ["http://*/*", "https://*/*"],
-  "options_ui": {
-    "page": "options.html"
-  },
   "action": {
     "default_title": "土豆签",
     "default_popup": "popup.html",
@@ -25,6 +21,6 @@
     }
   },
   "chrome_url_overrides": {
-    "newtab": "options.html"
+    "newtab": "newtab.html"
   }
 }

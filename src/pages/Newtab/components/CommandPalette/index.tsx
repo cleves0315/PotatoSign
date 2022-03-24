@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Input } from 'antd';
 import { FolderOutlined, SearchOutlined } from '@ant-design/icons';
 
-import { getStorageAsync } from '../../utils/utils';
-import { Sign, TabsData } from '../../types/sign';
+import { getStorageAsync } from '../../../../utils/utils';
+import { Sign, TabsData } from '../../../../types/sign';
 
 import './index.scss';
 

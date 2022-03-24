@@ -116,7 +116,8 @@ const Options: React.FC<Props> = Props => {
   };
 
   const gotoOptions = () => {
-    chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
+    chrome.tabs.create({});
+    // chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
   };
 
   const onDelete = () => {
