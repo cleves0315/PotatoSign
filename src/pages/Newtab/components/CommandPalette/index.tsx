@@ -73,7 +73,8 @@ const CommandPalette: React.FC<Props> = ({
 
   const searchFolder = (command: string) => {
     if (command) {
-      const searched: Sign[] = localSign.filter(s => s.name.includes(command));
+      const reg = new RegExp(`(${command})+`, 'i');
+      const searched: Sign[] = localSign.filter(s => reg.test(s.name));
       setFolSearResult(searched);
     } else {
       setFolSearResult([]);
@@ -84,9 +85,10 @@ const CommandPalette: React.FC<Props> = ({
     const searched: SignSearResult[] = [];
 
     if (command) {
+      const reg = new RegExp(`(${command})+`, 'i');
       localSign.forEach(folder => {
         folder.list.forEach(sign => {
-          if (sign.title.includes(command)) {
+          if (reg.test(sign.title)) {
             searched.push({
               ...sign,
               // ...folder
