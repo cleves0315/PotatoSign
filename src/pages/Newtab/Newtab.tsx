@@ -64,7 +64,8 @@ const Newtab: React.FC<Props> = () => {
   const [confirmDelFolder, setConfirmDelFolder] = useState('');
   const [commandVisible, setCommandVisible] = useState(false);
 
-  useHotkeys('ctrl+k,command+k', () => {
+  useHotkeys('ctrl+k,command+k', (e: any) => {
+    e.preventDefault();
     setCommandVisible(true);
   });
 
