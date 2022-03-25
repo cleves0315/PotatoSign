@@ -63,6 +63,7 @@ const Newtab: React.FC<Props> = () => {
   const [confirmDelSign, setConfirmDelSign] = useState('');
   const [confirmDelFolder, setConfirmDelFolder] = useState('');
   const [commandVisible, setCommandVisible] = useState(false);
+  const [showCurrentFolder, setShowCurrentFolder] = useState<string[]>([]);
 
   useHotkeys('ctrl+k,command+k', (e: any) => {
     e.preventDefault();
@@ -75,13 +76,14 @@ const Newtab: React.FC<Props> = () => {
   }, []);
 
   const getSign = async () => {
-    const { sign } = await getStorageAsync(['sign']);
+    const { sign }: { sign: Sign[] } = await getStorageAsync(['sign']);
     console.log('sign: ', sign);
 
     if (!sign) {
       initSign();
     } else {
       setSign(sign);
+      setShowCurrentFolder(sign.map(m => m.id));
     }
   };
 
@@ -98,6 +100,14 @@ const Newtab: React.FC<Props> = () => {
       setDropMenus(backDropMenus);
     } else {
       isSignDropMenus = false;
+    }
+  };
+
+  const onChangeCollapse = (keys: string | string[]) => {
+    if (Array.isArray(keys)) {
+      setShowCurrentFolder(keys);
+    } else {
+      setShowCurrentFolder([keys]);
     }
   };
 
@@ -291,6 +301,7 @@ const Newtab: React.FC<Props> = () => {
     sign.push(folder);
     setSign(sign);
     setSignSync(sign);
+    setShowCurrentFolder([...showCurrentFolder, folder.id]);
     message.success({ content: '创建成功' });
   };
 
@@ -328,6 +339,7 @@ const Newtab: React.FC<Props> = () => {
 
   const onSeltModalFormFinish = ({ value }: { value: string }) => {
     onMoveSignToFolder(value);
+    message.success({ content: '移动成功' });
     handleSeltModalCancel();
   };
 
@@ -361,7 +373,12 @@ const Newtab: React.FC<Props> = () => {
               className="option-container"
               ghost
               expandIconPosition="right"
-              defaultActiveKey={sign.map(m => m.id)}
+              activeKey={
+                showCurrentFolder.length
+                  ? showCurrentFolder
+                  : sign.map(m => m.id)
+              }
+              onChange={onChangeCollapse}
               // expandIcon={({ isActive }) => (
               //   <CaretRightOutlined
               //     className="option-title-icon"
