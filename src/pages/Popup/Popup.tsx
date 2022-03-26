@@ -36,11 +36,11 @@ const Options: React.FC<Props> = Props => {
   const [showFolderList, setShowFolderList] = useState(false);
 
   useEffect(() => {
-    initProcess();
+    init();
   }, []);
 
-  const initProcess = async () => {
-    getTabs();
+  const init = async () => {
+    await getTabs();
     await getSign();
     // 触发saveTabs
     document.querySelector<Elem & Element>('#toSave')?.click();
@@ -61,12 +61,29 @@ const Options: React.FC<Props> = Props => {
     const sign = await getSignSync();
 
     setSign(sign);
-    setChoiceFolder(sign[0].id); // 默认展示第一个文件
+    folderToFindTag(sign);
     mapSignIdToName(sign);
     console.log('sign: ', sign);
   };
 
-  const findSign = () => {};
+  const folderToFindTag = (sign: Sign[]) => {
+    if (data) {
+      let find;
+      for (let i = 0; i < sign.length; i++) {
+        const list = sign[i].list;
+
+        find = list.find(s => s.url === data.url);
+        if (find) {
+          setChoiceFolder(find.id);
+          return;
+        }
+      }
+
+      if (!find) setChoiceFolder(sign[0].id); // 默认展示第一个文件
+    } else {
+      setChoiceFolder(sign[0].id); // 默认展示第一个文件
+    }
+  };
 
   const onMountSave = () => {
     saveTabs();
@@ -173,6 +190,7 @@ const Options: React.FC<Props> = Props => {
 
                 <div
                   className="folder-select-list-wrap"
+                  hidden={!showFolderList}
                   onClick={onChoiceFolder}
                 >
                   {sign?.map((m, i) => (
