@@ -1,12 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Collapse, Divider, Input, message } from 'antd';
+import { Collapse, Input, message } from 'antd';
 import React, { useEffect, useState } from 'react';
-import {
-  EditOutlined,
-  CaretRightOutlined,
-  DeleteOutlined,
-} from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { Sign, TabsData } from '../../types/sign';
 import DropdownMenu from '../../components/DropdownMenu';
@@ -80,7 +76,8 @@ const Newtab: React.FC<Props> = () => {
     console.log('sign: ', sign);
 
     if (!sign) {
-      initSign();
+      await initSign();
+      getSign();
     } else {
       setSign(sign);
       setShowCurrentFolder(sign.map(m => m.id));
@@ -233,6 +230,7 @@ const Newtab: React.FC<Props> = () => {
               setSign(sign);
               setSignSync(sign);
               message.destroy(msgKey);
+              delData.splice(0, 1);
             }}
           >
             撤回
@@ -268,6 +266,7 @@ const Newtab: React.FC<Props> = () => {
                 setSign(sign);
                 setSignSync(sign);
                 message.destroy(msgKey);
+                delData.splice(0, 1);
               }}
             >
               撤回
