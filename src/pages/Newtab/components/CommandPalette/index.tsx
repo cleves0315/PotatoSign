@@ -4,15 +4,27 @@ import { FolderOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { getStorageAsync } from '../../../../utils/utils';
 import { Sign, TabsData } from '../../../../types/sign';
+import { MOVETOFOLDER, MOVETOSIGN, GOOGLING } from './constanst';
 
 import './index.scss';
+
+interface TargetElement extends Element {
+  offsetTop: number;
+  parentElement: HTMLElement;
+}
+
+interface OkParams {
+  action: string;
+  sign: string;
+  commandText?: string;
+}
 
 interface Props {
   visible: boolean;
   maskClosable?: boolean; // 点击遮罩是否关闭
   escCancel?: boolean; // 是否支持键盘 esc 关闭
   onCancel?: () => void;
-  onOk?: () => void;
+  onOk?: (params: OkParams) => void;
 }
 
 interface SignSearResult extends TabsData {
@@ -26,10 +38,6 @@ const CommandPalette: React.FC<Props> = ({
   onCancel,
   onOk,
 }: Props) => {
-  // actionType
-  const MOVETOFOLDER = 'moveToFolder';
-  const MOVETOSIGN = 'moveToSign';
-  const GOOGLING = 'googling';
   const [commandText, setCommandText] = useState('');
   const [localSign, setLocalSign] = useState<Sign[]>([]);
   const [folSearResult, setFolSearResult] = useState<Sign[]>([]);
@@ -107,19 +115,23 @@ const CommandPalette: React.FC<Props> = ({
   const onClickStack = (e: any) => {
     const { action, id } = e.target.dataset;
 
-    if (action) {
-      onCancel && onCancel();
-    }
+    if (!action) return;
+
+    onCancel && onCancel();
 
     switch (action) {
       case MOVETOFOLDER:
+        onOk && onOk({ action, sign: id, commandText });
         handelMoveToFolder(id);
         break;
       case MOVETOSIGN:
+        onOk && onOk({ action, sign: id, commandText });
         handleMoveToSign(id);
         break;
       case GOOGLING:
-        window.open(`http://www.baidu.com/s?wd=${commandText}`);
+        const url = `http://www.baidu.com/s?wd=${commandText}`;
+        onOk && onOk({ action, sign: url, commandText });
+        window.open(url);
         break;
 
       default:
@@ -128,38 +140,69 @@ const CommandPalette: React.FC<Props> = ({
   };
 
   const handelMoveToFolder = (folderId: string) => {
-    let element: any = document.querySelector(`[data-folderid="${folderId}"]`);
+    let targetElement: TargetElement | null = document.querySelector(
+      `[data-folderid="${folderId}"]`
+    );
 
-    if (element) {
-      let offsetTop = 0;
-
-      while (element.offsetTop < 100) {
-        element = element.parentElement;
-      }
-
-      offsetTop = element.offsetTop;
-      window.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth',
-      });
+    if (targetElement) {
+      scrollTo(targetElement);
+      folderToSeeAnimation(folderId);
     }
   };
 
   const handleMoveToSign = (signId: string) => {
-    let element: any = document.querySelector(`[data-signid="${signId}"]`);
+    const targetElement: TargetElement | null = document.querySelector(
+      `[data-signid="${signId}"]`
+    );
 
-    if (element) {
-      let offsetTop = 0;
+    if (targetElement) {
+      scrollTo(targetElement);
+      tagToSeeAnimation(signId);
+    }
+  };
 
-      while (element.offsetTop < 100) {
+  const scrollTo = (targetElement: TargetElement) => {
+    let offsetTop = 0;
+    let element: TargetElement | HTMLElement = targetElement;
+
+    while (element.offsetTop < 100) {
+      if (element.parentElement) {
         element = element.parentElement;
+      } else {
+        break;
       }
+    }
 
-      offsetTop = element.offsetTop;
-      window.scrollTo({
-        top: offsetTop - 30,
-        behavior: 'smooth',
-      });
+    offsetTop = element.offsetTop;
+    window.scrollTo({
+      top: offsetTop - 200,
+      behavior: 'smooth',
+    });
+  };
+
+  const folderToSeeAnimation = (folderId: string) => {
+    const targetElement: TargetElement | null = document.querySelector(
+      `[data-folderid="${folderId}"]`
+    );
+
+    if (targetElement) {
+      targetElement.classList.add('checking');
+      setTimeout(() => {
+        targetElement.classList.remove('checking');
+      }, 1500);
+    }
+  };
+
+  const tagToSeeAnimation = (signId: string) => {
+    const targetElement: TargetElement | null = document.querySelector(
+      `[data-signid="${signId}"]`
+    );
+
+    if (targetElement) {
+      targetElement.parentElement.classList.add('checking');
+      setTimeout(() => {
+        targetElement.parentElement.classList.remove('checking');
+      }, 1500);
     }
   };
 
@@ -177,7 +220,6 @@ const CommandPalette: React.FC<Props> = ({
               <div className="command-palette-input-container">
                 <Input
                   id="commandInput"
-                  // size="large"
                   bordered={false}
                   autoComplete="off"
                   className="command-input"

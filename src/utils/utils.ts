@@ -118,6 +118,35 @@ async function setFIdAsync(folderId: string) {
   });
 }
 
+/**
+ * 查找出传入的标签id所在的文件夹id
+ * @param tagId
+ * @param sign
+ * @returns
+ */
+async function folderToFindTagId(tagId: string, sign?: Sign[]) {
+  let signs: Sign[];
+  let folderId = '';
+
+  if (!sign) {
+    signs = await getSignSync();
+  } else {
+    signs = sign;
+  }
+
+  for (let i = 0; i < signs.length; i++) {
+    const folder = signs[i];
+    const find = folder.list.find(m => m.id === tagId);
+
+    if (find) {
+      folderId = folder.id;
+      break;
+    }
+  }
+
+  return folderId;
+}
+
 export {
   JSONToParse,
   JSONToStringify,
@@ -128,5 +157,6 @@ export {
   getSignAndMapSync,
   setSignSync,
   getFIdAsync,
+  folderToFindTagId,
   // setFIdAsync,
 };

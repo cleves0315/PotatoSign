@@ -9,11 +9,27 @@ import DropdownMenu from '../../components/DropdownMenu';
 import InputModal from '../../components/InputModal';
 import SelectModal from '../../components/SelectModal';
 import CommandPalette from './components/CommandPalette';
-import { initSign, setSignSync, getStorageAsync } from '../../utils/utils';
+import {
+  MOVETOFOLDER,
+  MOVETOSIGN,
+  GOOGLING,
+} from './components/CommandPalette/constanst';
+import {
+  initSign,
+  setSignSync,
+  getStorageAsync,
+  folderToFindTagId,
+} from '../../utils/utils';
 
 import './index.scss';
 
 const { Panel } = Collapse;
+
+interface OkParams {
+  action: string;
+  sign: string;
+  commandText?: string;
+}
 
 interface Props {}
 
@@ -349,7 +365,28 @@ const Newtab: React.FC<Props> = () => {
     setSeltModalVisible(false);
   };
 
-  const onCancelCommand = () => {
+  const onCommandOk = async ({ action, sign: sg }: OkParams) => {
+    switch (action) {
+      case MOVETOFOLDER:
+        break;
+      case MOVETOSIGN:
+        // 如果文件夹折叠，则打开
+        const folderId = await folderToFindTagId(sg);
+        const isFolderShow = showCurrentFolder.includes(folderId);
+
+        if (!isFolderShow) {
+          setShowCurrentFolder([...showCurrentFolder, folderId]);
+        }
+        break;
+      case GOOGLING:
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const onCommandCancel = () => {
     setCommandVisible(false);
   };
 
@@ -526,7 +563,11 @@ const Newtab: React.FC<Props> = () => {
           onFinish={onSeltModalFormFinish}
         />
 
-        <CommandPalette visible={commandVisible} onCancel={onCancelCommand} />
+        <CommandPalette
+          visible={commandVisible}
+          onOk={onCommandOk}
+          onCancel={onCommandCancel}
+        />
       </div>
     </DropdownMenu>
   );
