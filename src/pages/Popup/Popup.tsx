@@ -14,10 +14,6 @@ interface InputDom {
   select: () => void;
 }
 
-interface Elem {
-  click: () => void;
-}
-
 interface Props {}
 
 const Options: React.FC<Props> = Props => {
@@ -65,7 +61,7 @@ const Options: React.FC<Props> = Props => {
   const getSign = async () => {
     const sign = await getSignSync();
 
-    if (sign) {
+    if (sign.length) {
       setSign(sign);
       mapSignIdToName(sign);
     } else {
