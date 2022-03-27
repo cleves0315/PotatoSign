@@ -40,6 +40,8 @@ const CommandPalette: React.FC<Props> = ({
 }: Props) => {
   const [commandText, setCommandText] = useState('');
   const [localSign, setLocalSign] = useState<Sign[]>([]);
+  const [topResultFolder, setTopResultFolder] = useState<Sign | null>(null);
+  const [topResultTag, setTopResultTag] = useState<SignSearResult | null>(null);
   const [folSearResult, setFolSearResult] = useState<Sign[]>([]);
   const [signSearResult, setSignSearResult] = useState<SignSearResult[]>([]);
 
@@ -55,6 +57,8 @@ const CommandPalette: React.FC<Props> = ({
 
   const clearResulted = () => {
     setCommandText('');
+    setTopResultFolder(null);
+    setTopResultTag(null);
     setFolSearResult([]);
     setSignSearResult([]);
   };
@@ -79,35 +83,77 @@ const CommandPalette: React.FC<Props> = ({
     searchSign(command);
   };
 
+  const onPressEnter = () => {
+    onCancel && onCancel();
+
+    // 执行进准查询结果
+    if (topResultFolder) {
+      handelMoveToFolder(topResultFolder.id);
+      return;
+    }
+    if (topResultTag) {
+      handleMoveToSign(topResultTag.id);
+      return;
+    }
+
+    // 执行模糊查询结果
+    if (folSearResult.length) {
+      handelMoveToFolder(folSearResult[0].id);
+      return;
+    }
+    if (signSearResult.length) {
+      handleMoveToSign(signSearResult[0].id);
+      return;
+    }
+
+    // 跳转搜索引擎搜索
+    handleJumpToUrl();
+  };
+
   const searchFolder = (command: string) => {
     if (command) {
       const reg = new RegExp(`(${command})+`, 'i');
-      const searched: Sign[] = localSign.filter(s => reg.test(s.name));
-      setFolSearResult(searched);
+      const topReg = new RegExp(`^(${command})+$`, 'i');
+      const topResult = localSign.find(s => topReg.test(s.name)) || null;
+      const result: Sign[] = localSign.filter(s => reg.test(s.name));
+
+      setTopResultFolder(topResult);
+      setFolSearResult(result);
     } else {
+      setTopResultFolder(null);
       setFolSearResult([]);
     }
   };
 
   const searchSign = (command: string) => {
-    const searched: SignSearResult[] = [];
-
     if (command) {
+      let topResult: SignSearResult | null = null;
+      const searched: SignSearResult[] = [];
       const reg = new RegExp(`(${command})+`, 'i');
+      const topReg = new RegExp(`^(${command})+$`, 'i');
+
       localSign.forEach(folder => {
         folder.list.forEach(sign => {
+          if (!topResult && topReg.test(sign.title)) {
+            topResult = {
+              ...sign,
+              folderName: folder.name,
+            };
+          }
+
           if (reg.test(sign.title)) {
             searched.push({
               ...sign,
-              // ...folder
               folderName: folder.name,
             });
           }
         });
       });
 
+      setTopResultTag(topResult);
       setSignSearResult(searched);
     } else {
+      setTopResultTag(null);
       setSignSearResult([]);
     }
   };
@@ -121,17 +167,13 @@ const CommandPalette: React.FC<Props> = ({
 
     switch (action) {
       case MOVETOFOLDER:
-        onOk && onOk({ action, sign: id, commandText });
         handelMoveToFolder(id);
         break;
       case MOVETOSIGN:
-        onOk && onOk({ action, sign: id, commandText });
         handleMoveToSign(id);
         break;
       case GOOGLING:
-        const url = `http://www.baidu.com/s?wd=${commandText}`;
-        onOk && onOk({ action, sign: url, commandText });
-        window.open(url);
+        handleJumpToUrl();
         break;
 
       default:
@@ -147,6 +189,7 @@ const CommandPalette: React.FC<Props> = ({
     if (targetElement) {
       scrollTo(targetElement);
       folderToSeeAnimation(folderId);
+      onOk && onOk({ action: MOVETOFOLDER, sign: folderId, commandText });
     }
   };
 
@@ -158,7 +201,14 @@ const CommandPalette: React.FC<Props> = ({
     if (targetElement) {
       scrollTo(targetElement);
       tagToSeeAnimation(signId);
+      onOk && onOk({ action: MOVETOSIGN, sign: signId, commandText });
     }
+  };
+
+  const handleJumpToUrl = () => {
+    const url = `http://www.baidu.com/s?wd=${commandText}`;
+    onOk && onOk({ action: GOOGLING, sign: url, commandText });
+    window.open(url);
   };
 
   const scrollTo = (targetElement: TargetElement) => {
@@ -226,6 +276,7 @@ const CommandPalette: React.FC<Props> = ({
                   prefix={<SearchOutlined className="search-icon" />}
                   allowClear
                   onChange={onChangeCommand}
+                  onPressEnter={onPressEnter}
                 />
               </div>
 
@@ -234,6 +285,48 @@ const CommandPalette: React.FC<Props> = ({
                   <div className="command-palette-group">
                     <div className="command-palette-header">
                       提示：输入文件名
+                    </div>
+                  </div>
+                )}
+
+                {topResultFolder && (
+                  <div className="command-palette-group">
+                    <div className="command-palette-header">最佳结果</div>
+                    <div
+                      className="command-palette-item"
+                      key={topResultFolder.id}
+                      data-action={MOVETOFOLDER}
+                      data-id={topResultFolder.id}
+                    >
+                      <FolderOutlined className="folder-icon" />
+                      <div
+                        className="result-content"
+                        data-action={MOVETOFOLDER}
+                        data-id={topResultFolder.id}
+                      >
+                        {topResultFolder.name}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {!topResultFolder && topResultTag && (
+                  <div className="command-palette-group">
+                    <div className="command-palette-header">最佳结果</div>
+                    <div
+                      className="command-palette-item"
+                      key={topResultTag.id}
+                      data-action={MOVETOSIGN}
+                      data-id={topResultTag.id}
+                    >
+                      <FolderOutlined className="folder-icon" />
+                      <div
+                        className="result-content"
+                        data-action={MOVETOSIGN}
+                        data-id={topResultTag.id}
+                      >
+                        {topResultTag.folderName} / {topResultTag.title}
+                      </div>
                     </div>
                   </div>
                 )}
