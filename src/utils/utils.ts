@@ -24,26 +24,6 @@ async function initSign() {
 
 /**
  *
- * @param {array} list
- * @param {object} data
- * @returns boolean
- */
-function judgeToRepeat(list: Array<TabsData>, data: TabsData): Boolean {
-  let isRepeat = false;
-
-  for (let i = 0; i < list.length; i++) {
-    const s = list[i];
-    if (s.url === data.url) {
-      isRepeat = true;
-      break;
-    }
-  }
-
-  return isRepeat;
-}
-
-/**
- *
  * @param {string | string[]} params
  */
 async function getStorageAsync(params: any): Promise<any> {
@@ -142,7 +122,6 @@ export {
   JSONToParse,
   JSONToStringify,
   initSign,
-  judgeToRepeat,
   getStorageAsync,
   setStorageSync,
   getSignSync,

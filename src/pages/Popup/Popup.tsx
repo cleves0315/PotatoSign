@@ -1,15 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import { SettingOutlined, CaretDownOutlined } from '@ant-design/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 import Button from '../../components/Button';
 import { Sign, TabsData } from '../../types/sign';
-import {
-  initSign,
-  setSignSync,
-  getSignSync,
-  judgeToRepeat,
-} from '../../utils/utils';
+import { initSign, setSignSync, getSignSync } from '../../utils/utils';
 import './index.scss';
 
 interface MapSign {
@@ -39,11 +34,21 @@ const Options: React.FC<Props> = Props => {
     init();
   }, []);
 
+  useEffect(() => {
+    if (data && sign.length) {
+      folderToFindTag(sign);
+    }
+  }, [data, sign]);
+
+  useEffect(() => {
+    if (choiceFolder) {
+      saveTabs(choiceFolder);
+    }
+  }, [choiceFolder]);
+
   const init = async () => {
     await getTabs();
     await getSign();
-    // 触发saveTabs
-    document.querySelector<Elem & Element>('#toSave')?.click();
   };
 
   const getTabs = async () => {
@@ -60,9 +65,14 @@ const Options: React.FC<Props> = Props => {
   const getSign = async () => {
     const sign = await getSignSync();
 
-    setSign(sign);
-    folderToFindTag(sign);
-    mapSignIdToName(sign);
+    if (sign) {
+      setSign(sign);
+      mapSignIdToName(sign);
+    } else {
+      await initSign();
+      getSign();
+    }
+
     console.log('sign: ', sign);
   };
 
@@ -73,8 +83,9 @@ const Options: React.FC<Props> = Props => {
         const list = sign[i].list;
 
         find = list.find(s => s.url === data.url);
+
         if (find) {
-          setChoiceFolder(find.id);
+          setChoiceFolder(sign[i].id);
           return;
         }
       }
@@ -83,10 +94,6 @@ const Options: React.FC<Props> = Props => {
     } else {
       setChoiceFolder(sign[0].id); // 默认展示第一个文件
     }
-  };
-
-  const onMountSave = () => {
-    saveTabs();
   };
 
   const mapSignIdToName = (sign: Sign[]) => {
@@ -102,22 +109,14 @@ const Options: React.FC<Props> = Props => {
     if (data) {
       if (sign.length > 0) {
         const findFolder = sign.find(s => s.id === id) || sign[0];
+        const isRepeat = !!findFolder.list.find(m => m.url === data.url);
 
-        // 判断是否有重复数据
-        const isRepeat = judgeToRepeat(findFolder.list, data);
         if (!isRepeat) {
           data.id = uuidv4();
           findFolder.list.push(data);
 
           setSignSync(sign);
         }
-      } else {
-        initSign().then(() => {
-          data.id = uuidv4();
-          sign[0].list.push(data); // 0 => 目前默认往默认文件夹放数据
-
-          setSignSync(sign);
-        });
       }
     }
   };
@@ -148,7 +147,6 @@ const Options: React.FC<Props> = Props => {
     removeTabs(choiceFolder);
     setChoiceFolder(id);
     setShowFolderList(false);
-    saveTabs(id);
   };
 
   return (
@@ -217,12 +215,6 @@ const Options: React.FC<Props> = Props => {
               <Button className="remove-btn" onClick={onDelete}>
                 移除
               </Button>
-              {/* 此元素没有渲染在页面，只是当作页面刚渲染时自动触发函数的元素 */}
-              <button
-                id="toSave"
-                className="hide"
-                onClick={onMountSave}
-              ></button>
             </div>
           </div>
         ) : (
