@@ -117,6 +117,7 @@ blockquote {
   padding-left: 2.5em;
 }
 
+// ant-input
 .ant-input {
   padding: 8px 12px;
   border-radius: 5px;
@@ -137,6 +138,13 @@ blockquote {
   background: var(--theme_tertiary);
   color: var(--context_primary);
 }
+// ant-input end
+
+// ant-select
+.ant-select-dropdown {
+  border-radius: 5px;
+}
+// ant-select end
 
 // ant-message
 .ant-message-notice-content {
