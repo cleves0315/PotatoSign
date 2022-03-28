@@ -143,6 +143,23 @@ blockquote {
 // ant-select
 .ant-select-dropdown {
   border-radius: 5px;
+  background-color: var(--background_tertiary);
+}
+
+.ant-select-item {
+  padding: 9px 12px;
+  border-radius: 5px;
+  color: var(--context_secondary);
+  background-color: var(--background_tertiary);
+
+  &:hover {
+    background-color: var(--background_secondary);
+  }
+}
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled),
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  color: var(--context_secondary);
+  background-color: var(--background_secondary);
 }
 // ant-select end
 
