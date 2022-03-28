@@ -1,7 +1,7 @@
 {
   "name": "potato-tag",
   "version": "1.0.0",
-  "description": "chrome拓展脚手架",
+  "description": "一个浏览器扩展程序，建立一个属于你自己的导航站点",
   "scripts": {
     "dev": "node config/dev.js",
     "start": "node config/dev.js",
