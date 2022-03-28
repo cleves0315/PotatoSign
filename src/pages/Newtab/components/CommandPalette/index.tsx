@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from 'antd';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { FolderOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { getStorageAsync } from '../../../../utils/utils';
@@ -45,6 +46,11 @@ const CommandPalette: React.FC<Props> = ({
   const [folSearResult, setFolSearResult] = useState<Sign[]>([]);
   const [signSearResult, setSignSearResult] = useState<SignSearResult[]>([]);
 
+  useHotkeys('esc', (e: any) => {
+    e.preventDefault();
+    onCancel && onCancel();
+  });
+
   useEffect(() => {
     if (visible) {
       getSign();
@@ -74,6 +80,13 @@ const CommandPalette: React.FC<Props> = ({
     setLocalSign(sign);
   };
 
+  const onKeyDownCommand = (e: any) => {
+    const key = e.key;
+    if (key === 'Escape') {
+      onCancel && onCancel();
+    }
+  };
+
   const onChangeCommand = (e: any) => {
     const { value } = e.target;
     const command = value.trim();
@@ -84,6 +97,8 @@ const CommandPalette: React.FC<Props> = ({
   };
 
   const onPressEnter = () => {
+    if (!commandText) return;
+
     onCancel && onCancel();
 
     // 执行进准查询结果
@@ -275,6 +290,7 @@ const CommandPalette: React.FC<Props> = ({
                   className="command-input"
                   prefix={<SearchOutlined className="search-icon" />}
                   allowClear
+                  onKeyDown={onKeyDownCommand}
                   onChange={onChangeCommand}
                   onPressEnter={onPressEnter}
                 />
