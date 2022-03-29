@@ -11,12 +11,20 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  // filter: opacity(80%);
-  // overflow: auto;
-  // background-size: cover;
-  // background-repeat: no-repeat;
-  // background-image: url(../../assets/img/back.png);
-  // background-image: url(https://magazine.artstation.com/wp-content/uploads/2022/02/download-6.jpg);
+
+  &::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    // filter: opacity(80%);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    // background-image: url(../../assets/img/back.png);
+  }
 }
 
 .header {
