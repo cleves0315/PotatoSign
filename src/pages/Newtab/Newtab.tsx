@@ -332,15 +332,18 @@ const Newtab: React.FC<Props> = () => {
   };
 
   const handleToCancelEdit = async (e: any) => {
-    const { value } = e.target;
+    const value = e.target.value.trim();
+
     const index = sign.findIndex(s => s.id === selectFolder);
     const { list } = sign[index];
 
-    list.forEach((m: TabsData) => {
-      if (m.id === editSignId) {
-        m.title = value;
-      }
-    });
+    if (value) {
+      list.forEach((m: TabsData) => {
+        if (m.id === editSignId) {
+          m.title = value;
+        }
+      });
+    }
 
     setEditSignId('');
     setSignSync(sign);
