@@ -27,8 +27,14 @@ const Options: React.FC<Props> = Props => {
   const [showFolderList, setShowFolderList] = useState(false);
 
   useEffect(() => {
-    init();
+    getSign();
   }, []);
+
+  useEffect(() => {
+    if (sign.length) {
+      getTabs();
+    }
+  }, [sign]);
 
   useEffect(() => {
     if (data && sign.length) {
@@ -42,17 +48,25 @@ const Options: React.FC<Props> = Props => {
     }
   }, [choiceFolder]);
 
-  const init = async () => {
-    await getTabs();
-    await getSign();
-  };
-
   const getTabs = async () => {
     const [activeTab]: TabsData[] = (await chrome.tabs.query({
       active: true,
       currentWindow: true,
     })) as any[];
-    setData(activeTab);
+
+    let findTab = null;
+    for (let i = 0; i < sign.length; i++) {
+      const folder = sign[i];
+      findTab = folder.list.find(m => m.url === activeTab.url);
+
+      if (findTab) break;
+    }
+
+    if (findTab) {
+      setData(findTab);
+    } else {
+      setData(activeTab);
+    }
 
     const input = document.querySelector('.input') as InputDom & Element;
     input?.select();
@@ -75,12 +89,19 @@ const Options: React.FC<Props> = Props => {
   const onInputBlur = (e: any) => {
     const value = e.target.value.trim();
 
-    console.log('blur: ', value);
-
     if (value && data) {
       data.title = value;
       setData(data);
       saveTabs(choiceFolder);
+    }
+  };
+
+  const onKeyDown = (e: any) => {
+    const { keyCode } = e;
+
+    if (keyCode === 13) {
+      onInputBlur(e);
+      window.close();
     }
   };
 
@@ -180,6 +201,7 @@ const Options: React.FC<Props> = Props => {
                 className="input"
                 defaultValue={data.title}
                 onBlur={onInputBlur}
+                onKeyDown={onKeyDown}
               />
               <div
                 className="folder-list-wrap"
