@@ -72,6 +72,18 @@ const Options: React.FC<Props> = Props => {
     console.log('sign: ', sign);
   };
 
+  const onInputBlur = (e: any) => {
+    const value = e.target.value.trim();
+
+    console.log('blur: ', value);
+
+    if (value && data) {
+      data.title = value;
+      setData(data);
+      saveTabs(choiceFolder);
+    }
+  };
+
   const folderToFindTag = (sign: Sign[]) => {
     if (data) {
       let find;
@@ -105,14 +117,15 @@ const Options: React.FC<Props> = Props => {
     if (data) {
       if (sign.length > 0) {
         const findFolder = sign.find(s => s.id === id) || sign[0];
-        const isRepeat = !!findFolder.list.find(m => m.url === data.url);
+        const findIndex = findFolder.list.findIndex(m => m.url === data.url);
 
-        if (!isRepeat) {
+        if (findIndex === -1) {
           data.id = uuidv4();
           findFolder.list.push(data);
-
-          setSignSync(sign);
+        } else {
+          findFolder.list.splice(findIndex, 1, data);
         }
+        setSignSync(sign);
       }
     }
   };
@@ -163,7 +176,11 @@ const Options: React.FC<Props> = Props => {
         {data ? (
           <div className="content-wrap">
             <div className="content">
-              <input className="input" defaultValue={data.title} />
+              <input
+                className="input"
+                defaultValue={data.title}
+                onBlur={onInputBlur}
+              />
               <div
                 className="folder-list-wrap"
                 style={{
