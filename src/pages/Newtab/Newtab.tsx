@@ -403,7 +403,7 @@ const Newtab: React.FC<Props> = () => {
       <div className="app-container">
         <div className="header" onContextMenu={clearContextMenu}>
           <div className="header-logo"></div>
-          <h1>Potato tag</h1>
+          <h1>Potato Tag</h1>
         </div>
 
         <section className="content" onContextMenu={onBackContextMenu}>

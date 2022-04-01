@@ -2,7 +2,7 @@
   "name": "土豆签",
   "version": "0.0.1",
   "manifest_version": 3,
-  "description": "一个帮助你实现自定义导航站的插件",
+  "description": "一个帮助你实现自定义导航站的拓展程序",
   "icons": {
     "16": "icon-16.png",
     "128": "icon-128.png"
