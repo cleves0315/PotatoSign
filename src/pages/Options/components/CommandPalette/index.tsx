@@ -223,7 +223,7 @@ const CommandPalette: React.FC<Props> = ({
   const handleJumpToUrl = () => {
     const url = `http://www.baidu.com/s?wd=${commandText}`;
     onOk && onOk({ action: GOOGLING, sign: url, commandText });
-    window.open(url);
+    chrome.tabs.update({ url });
   };
 
   const scrollTo = (targetElement: TargetElement) => {

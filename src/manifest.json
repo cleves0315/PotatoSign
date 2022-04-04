@@ -1,6 +1,6 @@
 {
-  "name": "土豆签",
-  "version": "0.0.1",
+  "name": "PotatoTag",
+  "version": "0.0.2",
   "manifest_version": 3,
   "description": "一个帮助你实现自定义导航站的拓展程序",
   "icons": {
@@ -20,7 +20,7 @@
       "128": "icon-128.png"
     }
   },
-  "chrome_url_overrides": {
-    "newtab": "newtab.html"
+  "options_ui": {
+    "page": "options.html"
   }
 }

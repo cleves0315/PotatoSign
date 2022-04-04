@@ -23,7 +23,7 @@ module.exports = {
   entry: {
     popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.tsx'),
     content: path.join(__dirname, 'src', 'pages', 'Content', 'index.tsx'),
-    newtab: path.join(__dirname, 'src', 'pages', 'Newtab', 'index.tsx'),
+    options: path.join(__dirname, 'src', 'pages', 'Options', 'index.tsx'),
     background: path.join(__dirname, 'src', 'pages', 'Background', 'index.ts'),
   },
   output: {
@@ -151,9 +151,9 @@ module.exports = {
       cache: false,
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'pages', 'Newtab', 'index.html'),
-      filename: 'newtab.html',
-      chunks: ['newtab'],
+      template: path.join(__dirname, 'src', 'pages', 'Options', 'index.html'),
+      filename: 'options.html',
+      chunks: ['options'],
       cache: false,
     }),
   ],

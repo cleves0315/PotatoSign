@@ -38,7 +38,7 @@ interface Menu {
   value: string;
 }
 
-const Newtab: React.FC<Props> = () => {
+const Options: React.FC<Props> = () => {
   let isSignDropMenus = false;
   const CREATE = 'create';
   const RELODAD = 'reload';
@@ -198,13 +198,8 @@ const Newtab: React.FC<Props> = () => {
 
   const onSignItemClick = (data: TabsData) => {
     const { url } = data;
-    const chromeUrl = new RegExp('^(chrome://)+');
 
-    if (chromeUrl.test(url)) {
-      chrome.tabs.create({ url });
-    } else {
-      window.open(url);
-    }
+    chrome.tabs.update({ url });
   };
 
   const handleOnDelSign = (e: any, signId: string, folderId: string) => {
@@ -576,4 +571,4 @@ const Newtab: React.FC<Props> = () => {
   );
 };
 
-export default Newtab;
+export default Options;
