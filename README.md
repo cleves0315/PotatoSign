@@ -15,3 +15,5 @@
 ![image.png](https://s2.loli.net/2022/04/01/gsqClamHk5IzLN4.jpg)
 
 ## 安装
+
+在 Chrome 拓展程序应用商店搜索 **PotatoTag**
