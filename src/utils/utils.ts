@@ -1,5 +1,5 @@
 import { storage } from './storage';
-import { defaultSign } from './mixin';
+import { defaultSign } from '../constant';
 import { Sign, TabsData } from '../types/sign';
 
 /**

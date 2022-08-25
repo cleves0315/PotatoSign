@@ -1,3 +1,4 @@
+// @ts-nocheck
 const apis = [
   'alarms',
   'bookmarks',
@@ -22,8 +23,8 @@ const apis = [
   'windows',
 ];
 
-function Extension(this: any) {
-  const _this = this;
+function Extension(t) {
+  const _this = t;
 
   apis.forEach(function (api) {
     _this[api] = null;

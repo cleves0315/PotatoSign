@@ -90,6 +90,7 @@ const Options: React.FC<Props> = () => {
   const getSign = async () => {
     const { sign }: { sign: Sign[] } = await getStorageAsync(['sign']);
     console.log('sign: ', sign);
+    console.log('sign to json: ', JSON.stringify(sign));
 
     if (!sign) {
       await initSign();

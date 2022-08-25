@@ -9,7 +9,7 @@ interface TabsData {
   audible: boolean;
   autoDiscardable: boolean;
   discarded: boolean;
-  description: string;
+  description?: string;
   favIconUrl: string;
   groupId: number;
   height: number;
@@ -17,6 +17,7 @@ interface TabsData {
   id: string;
   incognito: boolean;
   index: number;
+  openerTabId?: number;
   mutedInfo: { muted: boolean };
   pinned: boolean;
   selected: boolean;
