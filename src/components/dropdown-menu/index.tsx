@@ -14,7 +14,7 @@ interface Props {
   onHide?: () => void;
 }
 
-const DropdownMenu: React.FC<Props> = ({
+export const DropdownMenu: React.FC<Props> = ({
   children,
   menuList,
   delValue,
@@ -103,5 +103,3 @@ const DropdownMenu: React.FC<Props> = ({
     </div>
   );
 };
-
-export default DropdownMenu;

@@ -5,9 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { Sign, TabsData } from '../../types/sign';
-import DropdownMenu from '../../components/DropdownMenu';
-import InputModal from '../../components/InputModal';
-import SelectModal from '../../components/SelectModal';
+import { InputModal, SelectModal, DropdownMenu } from '../../components';
 import CommandPalette from './components/CommandPalette';
 import {
   MOVETOFOLDER,

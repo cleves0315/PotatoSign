@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Input, Form } from 'antd';
+import { Modal, Form, Select } from 'antd';
 
-import Button from '../Button';
+import { Button } from '..';
 import './index.scss';
+
+interface Options {
+  label: string;
+  value: string;
+}
 
 interface Props {
   visible: boolean;
   title?: string;
+  options?: Options[];
   initialValue?: string;
   okText?: string;
   okType?: string;
@@ -14,9 +20,10 @@ interface Props {
   onFinish?: ({ value }: { value: string }) => void;
 }
 
-const InputModal: React.FC<Props> = ({
+export const SelectModal: React.FC<Props> = ({
   visible,
   title = '标题',
+  options,
   initialValue = '',
   okText = '确定',
   okType = 'primary',
@@ -24,22 +31,21 @@ const InputModal: React.FC<Props> = ({
   onFinish,
 }: Props) => {
   const [form] = Form.useForm();
-  const [disabled, setDisabled] = useState(true);
+  const [inptValue, setInptValue] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (!visible && form) form.resetFields();
 
     if (visible) {
-      setDisabled(!initialValue);
       setTimeout(() => {
-        const modalInput: any = document.querySelector('#modalInput');
-        modalInput && modalInput.select();
-      });
+        setIsOpen(true);
+      }, 180);
     }
-  }, [visible, form, initialValue]);
+  }, [visible, form]);
 
   const onValuesChange = ({ value }: { value: string }) => {
-    setDisabled(!value.trim());
+    setInptValue(value);
   };
 
   return (
@@ -56,7 +62,7 @@ const InputModal: React.FC<Props> = ({
             key="submit"
             type={okType}
             size="small"
-            disabled={disabled}
+            // disabled={!inptValue}
             onClick={() => form.submit()}
           >
             {okText}
@@ -73,11 +79,14 @@ const InputModal: React.FC<Props> = ({
         onFinish={onFinish}
       >
         <Form.Item name="value" noStyle>
-          <Input id="modalInput" />
+          <Select
+            className="select"
+            // open={isOpen}
+            size="large"
+            options={options}
+          />
         </Form.Item>
       </Form>
     </Modal>
   );
 };
-
-export default InputModal;

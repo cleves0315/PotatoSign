@@ -13,7 +13,7 @@ interface Props {
   onClick?: (e: any) => void;
 }
 
-const DropdownMenu: React.FC<Props> = ({
+export const Button: React.FC<Props> = ({
   children,
   type = 'default',
   size = 'small',
@@ -38,5 +38,3 @@ const DropdownMenu: React.FC<Props> = ({
     </button>
   );
 };
-
-export default DropdownMenu;
