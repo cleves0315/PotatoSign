@@ -1,4 +1,4 @@
-import { Sign, TabsData } from '../types/sign';
+import { Folder, TabsData } from '@/types/common';
 
 export const defaultTabs: TabsData[] = [
   {
@@ -134,7 +134,7 @@ export const defaultTabs: TabsData[] = [
   },
 ];
 
-export const defaultSign: Sign[] = [
+export const defaultSign: Folder[] = [
   {
     id: '001',
     name: '默认书签',

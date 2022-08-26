@@ -1,4 +1,4 @@
-export interface Sign {
+export interface Folder {
   id: string;
   name: string;
   list: TabsData[];

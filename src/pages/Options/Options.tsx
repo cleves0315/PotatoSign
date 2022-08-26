@@ -4,7 +4,7 @@ import { Collapse, Input, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-import { Sign, TabsData } from '@/types/sign';
+import { Folder, TabsData } from '@/types/common';
 import { InputModal, SelectModal, DropdownMenu } from '@/components';
 import CommandPalette from './components/CommandPalette';
 import {
@@ -61,7 +61,7 @@ const Options: React.FC<Props> = () => {
     { text: '刷新页面', value: RELODAD },
   ];
 
-  const [sign, setSign] = useState<Sign[]>([]);
+  const [sign, setSign] = useState<Folder[]>([]);
   const [editSignId, setEditSignId] = useState('');
   const [dropMenus, setDropMenus] = useState<Menu[]>([]);
   const [selectData, setSelectData] = useState<TabsData | any>({});
@@ -86,7 +86,7 @@ const Options: React.FC<Props> = () => {
   }, []);
 
   const getSign = async () => {
-    const { sign }: { sign: Sign[] } = await getStorageAsync(['sign']);
+    const { sign }: { sign: Folder[] } = await getStorageAsync(['sign']);
     console.log('sign: ', sign);
     console.log('sign to json: ', JSON.stringify(sign));
 
@@ -99,7 +99,7 @@ const Options: React.FC<Props> = () => {
     }
   };
 
-  const onSignItemContextMenu = (data: TabsData, sign: Sign) => {
+  const onSignItemContextMenu = (data: TabsData, sign: Folder) => {
     console.log('onSignItemContextMenu: ', data, sign);
     isSignDropMenus = true;
     setDropMenus(signDropMenus);
@@ -301,7 +301,7 @@ const Options: React.FC<Props> = () => {
   };
 
   const onCreateFolder = (name: string) => {
-    const folder: Sign = {
+    const folder: Folder = {
       id: uuidv4(),
       list: [],
       name,
@@ -419,7 +419,7 @@ const Options: React.FC<Props> = () => {
               //   />
               // )}
             >
-              {sign.map((s: Sign, i) => (
+              {sign.map((s: Folder, i) => (
                 <Panel
                   showArrow={false}
                   header={

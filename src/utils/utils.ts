@@ -1,6 +1,6 @@
 import { storage } from './storage';
-import { defaultSign } from '../constant';
-import { Sign, TabsData } from '../types/sign';
+import { defaultSign } from '@/constant';
+import { Folder, TabsData } from '@/types/common';
 
 /**
  * @param {string} json
@@ -15,9 +15,9 @@ function JSONToStringify(json: any) {
 }
 
 async function initSign() {
-  const { sign } = (await getSignAndMapSync()) as any;
+  const { folder } = (await getSignAndMapSync()) as any;
 
-  if (!sign || (Array.isArray(sign) && sign.length === 0)) {
+  if (!folder || (Array.isArray(folder) && folder.length === 0)) {
     await setSignSync(defaultSign);
   }
 }
@@ -58,37 +58,33 @@ async function setStorageSync(params: any) {
   });
 }
 
-async function getSignSync(): Promise<Sign[]> {
+async function getSignSync(): Promise<Folder[]> {
   return new Promise(resolve => {
-    storage.get('sign', function (result) {
-      const { sign: signJson } = result;
-      const sign = JSONToParse(signJson) || [];
+    storage.get('folder', function (result) {
+      const { folder: signJson } = result;
+      const folder = JSONToParse(signJson) || [];
 
-      resolve(sign);
+      resolve(folder);
     });
   });
 }
 
-/**
- *
- * @returns {object} { sign }
- */
-async function getSignAndMapSync() {
+const getSignAndMapSync: Promise<Folder[]> = () => {
   return new Promise(resolve => {
-    storage.get(['sign'], function (result) {
+    storage.get(['sign'], result => {
       const { sign: signJson } = result;
-      const sign = JSONToParse(signJson) || [];
+      const sign = (JSONToParse(signJson) as Folder[]) || [];
 
       resolve({ sign });
     });
   });
-}
+};
 
 /**
  *
  * @param {array} sign
  */
-async function setSignSync(sign: Sign[]) {
+async function setSignSync(sign: Folder[]) {
   return new Promise<void>(resolve => {
     storage.set({ sign: JSONToStringify(sign) }, resolve);
   });
@@ -124,8 +120,8 @@ async function setFIdAsync(folderId: string) {
  * @param sign
  * @returns
  */
-async function folderToFindTagId(tagId: string, sign?: Sign[]) {
-  let signs: Sign[];
+async function folderToFindTagId(tagId: string, sign?: Folder[]) {
+  let signs: Folder[];
   let folderId = '';
 
   if (!sign) {

@@ -3,7 +3,7 @@ import { SettingOutlined, CaretDownOutlined } from '@ant-design/icons';
 import React, { useEffect, useReducer, useState } from 'react';
 
 import { Button } from '@/components';
-import { Sign, TabsData } from '@/types/sign';
+import { Folder, TabsData } from '@/types/common';
 import { initSign, setSignSync, getSignSync } from '@/utils/utils';
 import './index.scss';
 
@@ -21,7 +21,7 @@ const Options: React.FC<Props> = Props => {
   const errorMsg = '抱歉，保存时出错了 ╥﹏╥';
   const failMsg = '抱歉，无法提取该页面的url';
   const [data, setData] = useState<TabsData>();
-  const [sign, setSign] = useState<Sign[]>([]);
+  const [sign, setSign] = useState<Folder[]>([]);
   const [signNameMap, setSignNameMap] = useState<MapSign>({});
   const [choiceFolder, setChoiceFolder] = useState('');
   const [showFolderList, setShowFolderList] = useState(false);
@@ -105,7 +105,7 @@ const Options: React.FC<Props> = Props => {
     }
   };
 
-  const folderToFindTag = (sign: Sign[]) => {
+  const folderToFindTag = (sign: Folder[]) => {
     if (data) {
       let find;
       for (let i = 0; i < sign.length; i++) {
@@ -125,7 +125,7 @@ const Options: React.FC<Props> = Props => {
     }
   };
 
-  const mapSignIdToName = (sign: Sign[]) => {
+  const mapSignIdToName = (sign: Folder[]) => {
     const obj: MapSign = {};
     sign.forEach(s => {
       obj[s.id] = s.name;

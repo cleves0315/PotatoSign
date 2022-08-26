@@ -4,7 +4,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { FolderOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { getStorageAsync } from '@/utils/utils';
-import { Sign, TabsData } from '@/types/sign';
+import { Folder, TabsData } from '@/types/common';
 import { MOVETOFOLDER, MOVETOSIGN, GOOGLING } from './constanst';
 
 import './index.scss';
@@ -40,10 +40,10 @@ const CommandPalette: React.FC<Props> = ({
   onOk,
 }: Props) => {
   const [commandText, setCommandText] = useState('');
-  const [localSign, setLocalSign] = useState<Sign[]>([]);
-  const [topResultFolder, setTopResultFolder] = useState<Sign | null>(null);
+  const [localSign, setLocalSign] = useState<Folder[]>([]);
+  const [topResultFolder, setTopResultFolder] = useState<Folder | null>(null);
   const [topResultTag, setTopResultTag] = useState<SignSearResult | null>(null);
-  const [folSearResult, setFolSearResult] = useState<Sign[]>([]);
+  const [folSearResult, setFolSearResult] = useState<Folder[]>([]);
   const [signSearResult, setSignSearResult] = useState<SignSearResult[]>([]);
 
   useHotkeys('esc', (e: any) => {
@@ -130,7 +130,7 @@ const CommandPalette: React.FC<Props> = ({
       const reg = new RegExp(`(${command})+`, 'i');
       const topReg = new RegExp(`^(${command})+$`, 'i');
       const topResult = localSign.find(s => topReg.test(s.name)) || null;
-      const result: Sign[] = localSign.filter(s => reg.test(s.name));
+      const result: Folder[] = localSign.filter(s => reg.test(s.name));
 
       setTopResultFolder(topResult);
       setFolSearResult(result);
