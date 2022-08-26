@@ -1,10 +1,10 @@
-interface Sign {
+export interface Sign {
   id: string;
   name: string;
   list: TabsData[];
   // type: string;
 }
-interface TabsData {
+export interface TabsData {
   active: boolean;
   audible: boolean;
   autoDiscardable: boolean;
@@ -27,5 +27,3 @@ interface TabsData {
   width: number;
   windowId: number;
 }
-
-export { Sign, TabsData };

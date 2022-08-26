@@ -2,9 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { SettingOutlined, CaretDownOutlined } from '@ant-design/icons';
 import React, { useEffect, useReducer, useState } from 'react';
 
-import { Button } from '../../components';
-import { Sign, TabsData } from '../../types/sign';
-import { initSign, setSignSync, getSignSync } from '../../utils/utils';
+import { Button } from '@/components';
+import { Sign, TabsData } from '@/types/sign';
+import { initSign, setSignSync, getSignSync } from '@/utils/utils';
 import './index.scss';
 
 interface MapSign {

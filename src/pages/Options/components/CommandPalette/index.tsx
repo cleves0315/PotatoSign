@@ -3,8 +3,8 @@ import { Input } from 'antd';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { FolderOutlined, SearchOutlined } from '@ant-design/icons';
 
-import { getStorageAsync } from '../../../../utils/utils';
-import { Sign, TabsData } from '../../../../types/sign';
+import { getStorageAsync } from '@/utils/utils';
+import { Sign, TabsData } from '@/types/sign';
 import { MOVETOFOLDER, MOVETOSIGN, GOOGLING } from './constanst';
 
 import './index.scss';

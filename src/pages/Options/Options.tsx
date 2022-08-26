@@ -4,8 +4,8 @@ import { Collapse, Input, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-import { Sign, TabsData } from '../../types/sign';
-import { InputModal, SelectModal, DropdownMenu } from '../../components';
+import { Sign, TabsData } from '@/types/sign';
+import { InputModal, SelectModal, DropdownMenu } from '@/components';
 import CommandPalette from './components/CommandPalette';
 import {
   MOVETOFOLDER,
@@ -17,7 +17,7 @@ import {
   setSignSync,
   getStorageAsync,
   folderToFindTagId,
-} from '../../utils/utils';
+} from '@/utils/utils';
 
 import './index.scss';
 
