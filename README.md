@@ -17,3 +17,13 @@
 ## 安装
 
 在 Chrome 拓展程序应用商店搜索 **PotatoTag**
+
+### 计划
+
+- switch 组件
+- 项目优化
+  - 移除 ant-design
+  - popup 页面，移除 react
+- options 页面，切换主题（更换背景图）
+- 接入 chrome 标签数据（支持导入）
+- 登录

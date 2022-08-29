@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { Folder, TabsData } from '@/types/common';
-import { InputModal, SelectModal, DropdownMenu } from '@/components';
+import { InputModal, SelectModal, DropdownMenu, Switch } from '@/components';
 import CommandPalette, {
   MOVE_MARK,
   OkParams,
@@ -397,6 +397,7 @@ const Options: React.FC<Props> = () => {
         <div className="header" onContextMenu={clearContextMenu}>
           <div className="header-logo"></div>
           <h1>Potato Tag</h1>
+          <Switch></Switch>
         </div>
 
         <section className="content" onContextMenu={onBackContextMenu}>
