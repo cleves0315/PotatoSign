@@ -69,9 +69,9 @@ async function getSignSync(): Promise<Folder[]> {
   });
 }
 
-const getSignAndMapSync: Promise<Folder[]> = () => {
+const getSignAndMapSync = (): Promise<{ sign: Folder[] }> => {
   return new Promise(resolve => {
-    storage.get(['sign'], result => {
+    storage.get(['folder'], result => {
       const { sign: signJson } = result;
       const sign = (JSONToParse(signJson) as Folder[]) || [];
 
@@ -86,7 +86,7 @@ const getSignAndMapSync: Promise<Folder[]> = () => {
  */
 async function setSignSync(sign: Folder[]) {
   return new Promise<void>(resolve => {
-    storage.set({ sign: JSONToStringify(sign) }, resolve);
+    storage.set({ folder: JSONToStringify(sign) }, resolve);
   });
 }
 

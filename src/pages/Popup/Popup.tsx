@@ -54,6 +54,8 @@ const Options: React.FC<Props> = Props => {
       currentWindow: true,
     })) as any[];
 
+    console.log('activeTab: ', activeTab);
+
     let findTab = null;
     for (let i = 0; i < sign.length; i++) {
       const folder = sign[i];
@@ -183,9 +185,10 @@ const Options: React.FC<Props> = Props => {
       <div className="header">
         <div className="left">
           <div className="logo-wrap">
-            <img src="./icon-64.png" alt="logo" />
+            {/* <img src="./icon-64.png" alt="logo" /> */}
+            <div className={`logo-icon ${data ? 'success' : 'error'}`}></div>
           </div>
-          已加入书签
+          {data ? '已加入书签' : '加入书签失败'}
         </div>
         <div className="right">
           <SettingOutlined className="setting-icon" onClick={gotoOptions} />
