@@ -1,5 +1,6 @@
 import { storage } from './storage';
-import { defaultSign } from '@/constant';
+import { STOG_FOLDER } from '@/constant/common';
+import { defaultSign } from '@/constant/default-tabs';
 import { Folder, TabsData } from '@/types/common';
 
 /**
@@ -60,7 +61,7 @@ async function setStorageSync(params: any) {
 
 async function getSignSync(): Promise<Folder[]> {
   return new Promise(resolve => {
-    storage.get('folder', function (result) {
+    storage.get(STOG_FOLDER, function (result) {
       const { folder: signJson } = result;
       const folder = JSONToParse(signJson) || [];
 
@@ -71,7 +72,7 @@ async function getSignSync(): Promise<Folder[]> {
 
 const getSignAndMapSync = (): Promise<{ sign: Folder[] }> => {
   return new Promise(resolve => {
-    storage.get(['folder'], result => {
+    storage.get([STOG_FOLDER], result => {
       const { sign: signJson } = result;
       const sign = (JSONToParse(signJson) as Folder[]) || [];
 
