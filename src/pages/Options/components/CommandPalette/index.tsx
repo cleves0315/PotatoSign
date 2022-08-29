@@ -3,24 +3,26 @@ import { Input } from 'antd';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { FolderOutlined, SearchOutlined } from '@ant-design/icons';
 
-import { getStorageAsync } from '@/utils/utils';
+import { getFolderListSync } from '@/utils/utils';
 import { Folder, TabsData } from '@/types/common';
-import { MOVETOFOLDER, MOVETOSIGN, GOOGLING } from './constanst';
+import { MOVETOFOLDER, MOVETOTABS, GOOGLING } from './constanst';
 
 import './index.scss';
 
-interface TargetElement extends Element {
+export const MOVE_MARK = 'data-move-mark';
+
+export interface TargetElement extends Element {
   offsetTop: number;
   parentElement: HTMLElement;
 }
 
-interface OkParams {
+export interface OkParams {
   action: string;
-  sign: string;
+  data: string;
   commandText?: string;
 }
 
-interface Props {
+export interface Props {
   visible: boolean;
   maskClosable?: boolean; // 点击遮罩是否关闭
   escCancel?: boolean; // 是否支持键盘 esc 关闭
@@ -28,7 +30,7 @@ interface Props {
   onOk?: (params: OkParams) => void;
 }
 
-interface SignSearResult extends TabsData {
+export interface SearchTabsResult extends TabsData {
   folderName: string;
 }
 
@@ -40,11 +42,14 @@ const CommandPalette: React.FC<Props> = ({
   onOk,
 }: Props) => {
   const [commandText, setCommandText] = useState('');
-  const [localSign, setLocalSign] = useState<Folder[]>([]);
   const [topResultFolder, setTopResultFolder] = useState<Folder | null>(null);
-  const [topResultTag, setTopResultTag] = useState<SignSearResult | null>(null);
+  const [topResultTag, setTopResultTag] = useState<SearchTabsResult | null>(
+    null
+  );
   const [folSearResult, setFolSearResult] = useState<Folder[]>([]);
-  const [signSearResult, setSignSearResult] = useState<SignSearResult[]>([]);
+  const [searchTabsResult, setSearchTabsResult] = useState<SearchTabsResult[]>(
+    []
+  );
 
   useHotkeys('esc', (e: any) => {
     e.preventDefault();
@@ -53,7 +58,6 @@ const CommandPalette: React.FC<Props> = ({
 
   useEffect(() => {
     if (visible) {
-      getSign();
       const commandInput: any = document.querySelector('#commandInput');
       commandInput && commandInput.select();
     } else {
@@ -66,18 +70,13 @@ const CommandPalette: React.FC<Props> = ({
     setTopResultFolder(null);
     setTopResultTag(null);
     setFolSearResult([]);
-    setSignSearResult([]);
+    setSearchTabsResult([]);
   };
 
   const onClickMask = () => {
     if (maskClosable) {
       onCancel && onCancel();
     }
-  };
-
-  const getSign = async () => {
-    const { sign } = await getStorageAsync(['sign']);
-    setLocalSign(sign);
   };
 
   const onKeyDownCommand = (e: any) => {
@@ -93,7 +92,7 @@ const CommandPalette: React.FC<Props> = ({
 
     setCommandText(command);
     searchFolder(command);
-    searchSign(command);
+    searchTabs(command);
   };
 
   const onPressEnter = () => {
@@ -107,7 +106,7 @@ const CommandPalette: React.FC<Props> = ({
       return;
     }
     if (topResultTag) {
-      handleMoveToSign(topResultTag.id);
+      handleMoveToTabs(topResultTag.id);
       return;
     }
 
@@ -116,8 +115,8 @@ const CommandPalette: React.FC<Props> = ({
       handelMoveToFolder(folSearResult[0].id);
       return;
     }
-    if (signSearResult.length) {
-      handleMoveToSign(signSearResult[0].id);
+    if (searchTabsResult.length) {
+      handleMoveToTabs(searchTabsResult[0].id);
       return;
     }
 
@@ -125,12 +124,13 @@ const CommandPalette: React.FC<Props> = ({
     handleJumpToUrl();
   };
 
-  const searchFolder = (command: string) => {
+  const searchFolder = async (command: string) => {
     if (command) {
+      const data = await getFolderListSync();
       const reg = new RegExp(`(${command})+`, 'i');
       const topReg = new RegExp(`^(${command})+$`, 'i');
-      const topResult = localSign.find(s => topReg.test(s.name)) || null;
-      const result: Folder[] = localSign.filter(s => reg.test(s.name));
+      const topResult = data.find(s => topReg.test(s.name)) || null;
+      const result: Folder[] = data.filter(s => reg.test(s.name));
 
       setTopResultFolder(topResult);
       setFolSearResult(result);
@@ -140,25 +140,26 @@ const CommandPalette: React.FC<Props> = ({
     }
   };
 
-  const searchSign = (command: string) => {
+  const searchTabs = async (command: string) => {
     if (command) {
-      let topResult: SignSearResult | null = null;
-      const searched: SignSearResult[] = [];
+      let topResult: SearchTabsResult | null = null;
+      const data = await getFolderListSync();
+      const searched: SearchTabsResult[] = [];
       const reg = new RegExp(`(${command})+`, 'i');
       const topReg = new RegExp(`^(${command})+$`, 'i');
 
-      localSign.forEach(folder => {
-        folder.list.forEach(sign => {
-          if (!topResult && topReg.test(sign.title)) {
+      data.forEach(folder => {
+        folder.list.forEach(tabs => {
+          if (!topResult && topReg.test(tabs.title)) {
             topResult = {
-              ...sign,
+              ...tabs,
               folderName: folder.name,
             };
           }
 
-          if (reg.test(sign.title)) {
+          if (reg.test(tabs.title)) {
             searched.push({
-              ...sign,
+              ...tabs,
               folderName: folder.name,
             });
           }
@@ -166,10 +167,10 @@ const CommandPalette: React.FC<Props> = ({
       });
 
       setTopResultTag(topResult);
-      setSignSearResult(searched);
+      setSearchTabsResult(searched);
     } else {
       setTopResultTag(null);
-      setSignSearResult([]);
+      setSearchTabsResult([]);
     }
   };
 
@@ -184,8 +185,8 @@ const CommandPalette: React.FC<Props> = ({
       case MOVETOFOLDER:
         handelMoveToFolder(id);
         break;
-      case MOVETOSIGN:
-        handleMoveToSign(id);
+      case MOVETOTABS:
+        handleMoveToTabs(id);
         break;
       case GOOGLING:
         handleJumpToUrl();
@@ -204,25 +205,25 @@ const CommandPalette: React.FC<Props> = ({
     if (targetElement) {
       scrollTo(targetElement);
       folderToSeeAnimation(folderId);
-      onOk && onOk({ action: MOVETOFOLDER, sign: folderId, commandText });
+      onOk && onOk({ action: MOVETOFOLDER, data: folderId, commandText });
     }
   };
 
-  const handleMoveToSign = (signId: string) => {
+  const handleMoveToTabs = (tabsId: string) => {
     const targetElement: TargetElement | null = document.querySelector(
-      `[data-signid="${signId}"]`
+      `[${MOVE_MARK}="${tabsId}"]`
     );
 
     if (targetElement) {
       scrollTo(targetElement);
-      tagToSeeAnimation(signId);
-      onOk && onOk({ action: MOVETOSIGN, sign: signId, commandText });
+      tabsToSeeAnimation(tabsId);
+      onOk && onOk({ action: MOVETOTABS, data: tabsId, commandText });
     }
   };
 
   const handleJumpToUrl = () => {
     const url = `http://www.baidu.com/s?wd=${commandText}`;
-    onOk && onOk({ action: GOOGLING, sign: url, commandText });
+    onOk && onOk({ action: GOOGLING, data: url, commandText });
     chrome.tabs.update({ url });
   };
 
@@ -258,9 +259,9 @@ const CommandPalette: React.FC<Props> = ({
     }
   };
 
-  const tagToSeeAnimation = (signId: string) => {
+  const tabsToSeeAnimation = (tabsId: string) => {
     const targetElement: TargetElement | null = document.querySelector(
-      `[data-signid="${signId}"]`
+      `[${MOVE_MARK}="${tabsId}"]`
     );
 
     if (targetElement) {
@@ -332,13 +333,13 @@ const CommandPalette: React.FC<Props> = ({
                     <div
                       className="command-palette-item"
                       key={topResultTag.id}
-                      data-action={MOVETOSIGN}
+                      data-action={MOVETOTABS}
                       data-id={topResultTag.id}
                     >
                       <FolderOutlined className="folder-icon" />
                       <div
                         className="result-content"
-                        data-action={MOVETOSIGN}
+                        data-action={MOVETOTABS}
                         data-id={topResultTag.id}
                       >
                         {topResultTag.folderName} / {topResultTag.title}
@@ -370,20 +371,20 @@ const CommandPalette: React.FC<Props> = ({
                   </div>
                 )}
 
-                {!!signSearResult.length && (
+                {!!searchTabsResult.length && (
                   <div className="command-palette-group">
                     <div className="command-palette-header">标签</div>
-                    {signSearResult.map(m => (
+                    {searchTabsResult.map(m => (
                       <div
                         className="command-palette-item"
                         key={m.id}
-                        data-action={MOVETOSIGN}
+                        data-action={MOVETOTABS}
                         data-id={m.id}
                       >
                         <FolderOutlined className="folder-icon" />
                         <div
                           className="result-content"
-                          data-action={MOVETOSIGN}
+                          data-action={MOVETOTABS}
                           data-id={m.id}
                         >
                           {m.folderName} / {m.title}

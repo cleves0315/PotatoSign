@@ -160,7 +160,7 @@
     flex-wrap: wrap;
     padding-left: 30px;
 
-    .sign-item-link {
+    .tabs-item-link {
       margin-right: 30px;
       margin-bottom: 20px;
       border-radius: 10px;
@@ -170,7 +170,7 @@
 
       &:hover {
         transform: translateY(-8px);
-        background: var(--sign_card_back_color);
+        background: var(--tabs_card_back_color);
 
         .del-wrap {
           opacity: 1;
@@ -185,7 +185,7 @@
       }
     }
 
-    .sign-item {
+    .tabs-item {
       position: relative;
       display: flex;
       flex-direction: column;

@@ -6,28 +6,25 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { Folder, TabsData } from '@/types/common';
 import { InputModal, SelectModal, DropdownMenu } from '@/components';
-import CommandPalette from './components/CommandPalette';
+import CommandPalette, {
+  MOVE_MARK,
+  OkParams,
+} from './components/CommandPalette';
 import {
   MOVETOFOLDER,
-  MOVETOSIGN,
+  MOVETOTABS,
   GOOGLING,
 } from './components/CommandPalette/constanst';
 import {
-  initSign,
-  setSignSync,
-  getStorageAsync,
+  initData,
+  setFolderListSync,
   folderToFindTagId,
+  getFolderListSync,
 } from '@/utils/utils';
 
 import './index.scss';
 
 const { Panel } = Collapse;
-
-interface OkParams {
-  action: string;
-  sign: string;
-  commandText?: string;
-}
 
 interface Props {}
 
@@ -37,7 +34,7 @@ interface Menu {
 }
 
 const Options: React.FC<Props> = () => {
-  let isSignDropMenus = false;
+  let isTabsDropMenus = false;
   const CREATE = 'create';
   const RELODAD = 'reload';
   const RENAME = 'rename';
@@ -46,7 +43,7 @@ const Options: React.FC<Props> = () => {
   const COMMAND = 'command';
   const defaltAddFoldValue = '新建文件夹';
   const defaltRemoveFoldValue = '001';
-  const signDropMenus = [
+  const tabsDropMenus = [
     { text: '重命名', value: RENAME },
     { text: '移动', value: MOVETO },
     { text: '删除', value: DELETE },
@@ -61,8 +58,8 @@ const Options: React.FC<Props> = () => {
     { text: '刷新页面', value: RELODAD },
   ];
 
-  const [sign, setSign] = useState<Folder[]>([]);
-  const [editSignId, setEditSignId] = useState('');
+  const [folderList, setFolderList] = useState<Folder[]>([]);
+  const [editTabsId, setEditTabsId] = useState('');
   const [dropMenus, setDropMenus] = useState<Menu[]>([]);
   const [selectData, setSelectData] = useState<TabsData | any>({});
   const [selectFolder, setSelectFolder] = useState<string>('');
@@ -70,7 +67,7 @@ const Options: React.FC<Props> = () => {
   const [seltModalVisible, setSeltModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [isOpenEditFolder, setIsOpenEditFolder] = useState('');
-  const [confirmDelSign, setConfirmDelSign] = useState('');
+  const [confirmDelTabs, setConfirmDelTabs] = useState('');
   const [confirmDelFolder, setConfirmDelFolder] = useState('');
   const [commandVisible, setCommandVisible] = useState(false);
   const [showCurrentFolder, setShowCurrentFolder] = useState<string[]>([]);
@@ -81,37 +78,37 @@ const Options: React.FC<Props> = () => {
   });
 
   useEffect(() => {
-    getSign();
+    fetchData();
     // chrome.storage.local.clear();
   }, []);
 
-  const getSign = async () => {
-    const { sign }: { sign: Folder[] } = await getStorageAsync(['sign']);
-    console.log('sign: ', sign);
-    console.log('sign to json: ', JSON.stringify(sign));
+  const fetchData = async () => {
+    const data = await getFolderListSync();
+    console.log('folderList: ', data);
+    console.log('folderList to json: ', JSON.stringify(data));
 
-    if (!sign) {
-      await initSign();
-      getSign();
+    if (!data) {
+      await initData();
+      fetchData();
     } else {
-      setSign(sign);
-      setShowCurrentFolder(sign.map(m => m.id));
+      setFolderList(data);
+      setShowCurrentFolder(data.map(m => m.id));
     }
   };
 
-  const onSignItemContextMenu = (data: TabsData, sign: Folder) => {
-    console.log('onSignItemContextMenu: ', data, sign);
-    isSignDropMenus = true;
-    setDropMenus(signDropMenus);
+  const onTabsItemContextMenu = (data: TabsData, folders: Folder) => {
+    console.log('onTabsItemContextMenu: ', data, folders);
+    isTabsDropMenus = true;
+    setDropMenus(tabsDropMenus);
     setSelectData(data);
-    setSelectFolder(sign.id);
+    setSelectFolder(folders.id);
   };
 
   const onBackContextMenu = () => {
-    if (!isSignDropMenus) {
+    if (!isTabsDropMenus) {
       setDropMenus(backDropMenus);
     } else {
-      isSignDropMenus = false;
+      isTabsDropMenus = false;
     }
   };
 
@@ -130,16 +127,16 @@ const Options: React.FC<Props> = () => {
   const onDropMenuClick = (val: string) => {
     switch (val) {
       case RENAME:
-        if (selectData) setEditSignId(selectData.id);
+        if (selectData) setEditTabsId(selectData.id);
         break;
       case DELETE:
-        if (selectData) toDelSign(selectData.id, selectFolder);
+        if (selectData) toDelTabs(selectData.id, selectFolder);
         break;
       case CREATE:
         showCreateFolderModal();
         break;
       case MOVETO:
-        showMoveSignModal();
+        showMoveTabsModal();
         break;
       case RELODAD:
         window.location.reload();
@@ -166,15 +163,15 @@ const Options: React.FC<Props> = () => {
   const onCancelEditFoldName = (e: any) => {
     const value = e.target.value.trim();
     if (value) {
-      for (let i = 0; i < sign.length; i++) {
-        const folder = sign[i];
+      for (let i = 0; i < folderList.length; i++) {
+        const folder = folderList[i];
         if (folder.id === isOpenEditFolder) {
           folder.name = value;
           break;
         }
       }
-      setSign(sign);
-      setSignSync(sign);
+      setFolderList(folderList);
+      setFolderListSync(folderList);
     }
 
     setIsOpenEditFolder('');
@@ -195,36 +192,36 @@ const Options: React.FC<Props> = () => {
     setDropMenus([]);
   };
 
-  const onSignItemClick = (data: TabsData) => {
+  const onTabsItemClick = (data: TabsData) => {
     const { url } = data;
 
     chrome.tabs.update({ url });
   };
 
-  const handleOnDelSign = (e: any, signId: string, folderId: string) => {
+  const handleOnDelTabs = (e: any, tabsId: string, folderId: string) => {
     e.stopPropagation();
 
-    if (confirmDelSign === signId) {
-      toDelSign(signId, folderId);
+    if (confirmDelTabs === tabsId) {
+      toDelTabs(tabsId, folderId);
     } else {
-      setConfirmDelSign(signId);
+      setConfirmDelTabs(tabsId);
     }
   };
 
-  const onSignTitleClick = (e: any, signId: string, folderId: string) => {
+  const onTabsTitleClick = (e: any, tabsId: string, folderId: string) => {
     e.stopPropagation();
     setSelectFolder(folderId);
-    setEditSignId(signId);
+    setEditTabsId(tabsId);
   };
 
   const toDelFolder = (folderId: string) => {
-    const index = sign.findIndex(s => s.id === folderId);
-    const cloneSign = JSON.parse(JSON.stringify(sign));
-    const delData = cloneSign.splice(index, 1);
+    const index = folderList.findIndex(f => f.id === folderId);
+    const cloneTabs = JSON.parse(JSON.stringify(folderList));
+    const delData = cloneTabs.splice(index, 1);
 
-    setSign([...cloneSign]);
+    setFolderList([...cloneTabs]);
     setConfirmDelFolder('');
-    setSignSync(cloneSign);
+    setFolderListSync(cloneTabs);
 
     const msgKey = Date.now();
     message.success({
@@ -235,10 +232,10 @@ const Options: React.FC<Props> = () => {
           <div
             className="handle-wrapper"
             onClick={async () => {
-              const { sign } = await getStorageAsync(['sign']);
-              sign.push(...delData);
-              setSign(sign);
-              setSignSync(sign);
+              const data = await getFolderListSync();
+              data.push(...delData);
+              setFolderList(data);
+              setFolderListSync(data);
               message.destroy(msgKey);
               delData.splice(0, 1);
             }}
@@ -250,17 +247,17 @@ const Options: React.FC<Props> = () => {
     });
   };
 
-  const toDelSign = async (id: string, folderId: string) => {
+  const toDelTabs = async (id: string, folderId: string) => {
     try {
-      const index = sign.findIndex(s => s.id === folderId);
-      const signList = sign[index].list;
-      const findIndex = signList.findIndex((m: TabsData) => m.id === id);
+      const index = folderList.findIndex(f => f.id === folderId);
+      const tabsList = folderList[index].list;
+      const findIndex = tabsList.findIndex((m: TabsData) => m.id === id);
 
-      const delData = signList.splice(findIndex, 1);
+      const delData = tabsList.splice(findIndex, 1);
 
-      setSign([...sign]);
-      setConfirmDelSign('');
-      await setSignSync(sign);
+      setFolderList([...folderList]);
+      setConfirmDelTabs('');
+      await setFolderListSync(folderList);
 
       const msgKey = Date.now();
       message.success({
@@ -271,10 +268,10 @@ const Options: React.FC<Props> = () => {
             <div
               className="handle-wrapper"
               onClick={async () => {
-                const { sign } = await getStorageAsync(['sign']);
-                sign[index].list.push(...delData);
-                setSign(sign);
-                setSignSync(sign);
+                const data = await getFolderListSync();
+                data[index].list.push(...delData);
+                setFolderList(data);
+                setFolderListSync(data);
                 message.destroy(msgKey);
                 delData.splice(0, 1);
               }}
@@ -285,7 +282,7 @@ const Options: React.FC<Props> = () => {
         ),
       });
     } catch (error) {
-      console.error('handleOnDelSign: \n', error);
+      console.error('handleOnDelTabs: \n', error);
     }
   };
 
@@ -295,7 +292,7 @@ const Options: React.FC<Props> = () => {
     setModalTitle('新建收藏夹');
   };
 
-  const showMoveSignModal = () => {
+  const showMoveTabsModal = () => {
     // 生成弹窗
     setSeltModalVisible(true);
   };
@@ -307,40 +304,42 @@ const Options: React.FC<Props> = () => {
       name,
     };
 
-    sign.push(folder);
-    setSign(sign);
-    setSignSync(sign);
+    folderList.push(folder);
+    setFolderList(folderList);
+    setFolderListSync(folderList);
     setShowCurrentFolder([...showCurrentFolder, folder.id]);
     message.success({ content: '创建成功' });
   };
 
-  const onMoveSignToFolder = (toFoldId: string) => {
-    const index = sign.findIndex(s => s.id === selectFolder);
-    const toIndex = sign.findIndex(s => s.id === toFoldId);
-    const findIndex = sign[index].list.findIndex(m => m.id === selectData.id);
-    const [data] = sign[index].list.splice(findIndex, 1);
-    sign[toIndex].list.push(data);
+  const handleMoveTabsToFolder = (toFoldId: string) => {
+    const index = folderList.findIndex(f => f.id === selectFolder);
+    const toIndex = folderList.findIndex(f => f.id === toFoldId);
+    const findIndex = folderList[index].list.findIndex(
+      m => m.id === selectData.id
+    );
+    const [data] = folderList[index].list.splice(findIndex, 1);
+    folderList[toIndex].list.push(data);
 
-    setSign(sign);
-    setSignSync(sign);
+    setFolderList(folderList);
+    setFolderListSync(folderList);
   };
 
   const handleToCancelEdit = async (e: any) => {
     const value = e.target.value.trim();
 
-    const index = sign.findIndex(s => s.id === selectFolder);
-    const { list } = sign[index];
+    const index = folderList.findIndex(f => f.id === selectFolder);
+    const { list } = folderList[index];
 
     if (value) {
       list.forEach((m: TabsData) => {
-        if (m.id === editSignId) {
+        if (m.id === editTabsId) {
           m.title = value;
         }
       });
     }
 
-    setEditSignId('');
-    setSignSync(sign);
+    setEditTabsId('');
+    setFolderListSync(folderList);
   };
 
   const onModalFormFinish = ({ value }: { value: string }) => {
@@ -350,7 +349,7 @@ const Options: React.FC<Props> = () => {
   };
 
   const onSeltModalFormFinish = ({ value }: { value: string }) => {
-    onMoveSignToFolder(value);
+    handleMoveTabsToFolder(value);
     message.success({ content: '移动成功' });
     handleSeltModalCancel();
   };
@@ -362,11 +361,11 @@ const Options: React.FC<Props> = () => {
     setSeltModalVisible(false);
   };
 
-  const onCommandOk = async ({ action, sign: sg }: OkParams) => {
+  const onCommandOk = async ({ action, data: sg }: OkParams) => {
     switch (action) {
       case MOVETOFOLDER:
         break;
-      case MOVETOSIGN:
+      case MOVETOTABS:
         // 如果文件夹折叠，则打开
         const folderId = await folderToFindTagId(sg);
         const isFolderShow = showCurrentFolder.includes(folderId);
@@ -401,7 +400,7 @@ const Options: React.FC<Props> = () => {
         </div>
 
         <section className="content" onContextMenu={onBackContextMenu}>
-          {sign.length > 0 && (
+          {folderList.length > 0 && (
             <Collapse
               className="option-container"
               ghost
@@ -409,7 +408,7 @@ const Options: React.FC<Props> = () => {
               activeKey={
                 showCurrentFolder.length
                   ? showCurrentFolder
-                  : sign.map(m => m.id)
+                  : folderList.map(m => m.id)
               }
               onChange={onChangeCollapse}
               // expandIcon={({ isActive }) => (
@@ -419,34 +418,34 @@ const Options: React.FC<Props> = () => {
               //   />
               // )}
             >
-              {sign.map((s: Folder, i) => (
+              {folderList.map((folder: Folder, i) => (
                 <Panel
                   showArrow={false}
                   header={
                     <div
                       className="option-title-container unit whole center-on-mobiles"
-                      data-folderid={s.id}
+                      data-folderid={folder.id}
                     >
-                      {isOpenEditFolder !== s.id ? (
+                      {isOpenEditFolder !== folder.id ? (
                         <>
-                          <div className="option-title">{s.name}</div>
+                          <div className="option-title">{folder.name}</div>
                           <div
                             className="del-wrap"
-                            data-confirm={confirmDelFolder === s.id}
-                            onClick={e => handleClickDelFolder(e, s.id)}
+                            data-confirm={confirmDelFolder === folder.id}
+                            onClick={e => handleClickDelFolder(e, folder.id)}
                           >
                             <DeleteOutlined className="del-btn" />
                           </div>
                         </>
                       ) : (
                         <Input
-                          id={`titleInput${s.id}`}
+                          id={`titleInput${folder.id}`}
                           autoFocus
                           className="option-title-input"
-                          defaultValue={s.name}
+                          defaultValue={folder.name}
                           maxLength={24}
                           onFocus={() =>
-                            onFocusInptOptnTitle(`titleInput${s.id}`)
+                            onFocusInptOptnTitle(`titleInput${folder.id}`)
                           }
                           onPressEnter={onCancelEditFoldName}
                           onBlur={onCancelEditFoldName}
@@ -455,36 +454,36 @@ const Options: React.FC<Props> = () => {
                       )}
                     </div>
                   }
-                  key={s.id}
+                  key={folder.id}
                   extra={
                     <div>
                       <EditOutlined
                         className="option-title-icon edit-icon"
-                        onClick={e => handleOpenEditFolder(e, s.id)}
+                        onClick={e => handleOpenEditFolder(e, folder.id)}
                       />
                     </div>
                   }
                 >
                   <div className="option-wrap">
-                    {s.list.map((data: TabsData) => (
+                    {folder.list.map((data: TabsData) => (
                       <div
                         key={data.id}
-                        className="sign-item-link"
+                        className="tabs-item-link"
                         title={data.title}
-                        onClick={() => onSignItemClick(data)}
-                        onContextMenu={() => onSignItemContextMenu(data, s)}
+                        onClick={() => onTabsItemClick(data)}
+                        onContextMenu={() =>
+                          onTabsItemContextMenu(data, folder)
+                        }
                       >
                         <div
-                          className="sign-item"
-                          data-signid={data.id}
-                          data-url={data.url}
-                          data-dropdown-type="sign"
+                          className="tabs-item"
+                          {...{ [MOVE_MARK]: data.id }}
                         >
                           <div
                             className="del-wrap"
-                            data-confirm={confirmDelSign === data.id}
+                            data-confirm={confirmDelTabs === data.id}
                             onClick={(e: any) =>
-                              handleOnDelSign(e, data.id, s.id)
+                              handleOnDelTabs(e, data.id, folder.id)
                             }
                           >
                             {/* <div className="del-btn" data-id={data.id}></div> */}
@@ -500,7 +499,7 @@ const Options: React.FC<Props> = () => {
                             ></div>
                           </div>
                           {/* 编辑·标题 */}
-                          {editSignId === data.id ? (
+                          {editTabsId === data.id ? (
                             <div className="title" data-type="input">
                               <Input
                                 id={`titleInput${data.id}`}
@@ -520,7 +519,7 @@ const Options: React.FC<Props> = () => {
                               className="title"
                               data-type="text"
                               onClick={(e: any) =>
-                                onSignTitleClick(e, data.id, s.id)
+                                onTabsTitleClick(e, data.id, folder.id)
                               }
                             >
                               <p>{data.title}</p>
@@ -555,7 +554,11 @@ const Options: React.FC<Props> = () => {
         <SelectModal
           visible={seltModalVisible}
           initialValue={defaltRemoveFoldValue}
-          options={sign ? sign.map(m => ({ label: m.name, value: m.id })) : []}
+          options={
+            folderList
+              ? folderList.map(m => ({ label: m.name, value: m.id }))
+              : []
+          }
           onCancel={handleSeltModalCancel}
           onFinish={onSeltModalFormFinish}
         />

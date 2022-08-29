@@ -1,37 +1,33 @@
 import { storage } from './storage';
 import { STOG_FOLDER } from '@/constant/common';
-import { defaultSign } from '@/constant/default-tabs';
+import { defaultData } from '@/constant/default-tabs';
 import { Folder, TabsData } from '@/types/common';
 
 /**
  * @param {string} json
  * @returns
  */
-function JSONToParse(json: string) {
+export function JSONToParse(json: string) {
   return typeof json === 'string' ? JSON.parse(json) : json;
 }
 
-function JSONToStringify(json: any) {
+export function JSONToStringify(json: any) {
   return JSON.stringify(json);
 }
 
-async function initSign() {
-  const { folder } = (await getSignAndMapSync()) as any;
+export async function initData() {
+  const folder = await getFolderListSync();
 
   if (!folder || (Array.isArray(folder) && folder.length === 0)) {
-    await setSignSync(defaultSign);
+    await setFolderListSync(defaultData);
   }
 }
 
-/**
- *
- * @param {string | string[]} params
- */
-async function getStorageAsync(params: any): Promise<any> {
+export async function getStorageAsync(keys: string | string[]): Promise<any> {
   return new Promise(resolve => {
-    storage.get(params, function (result) {
+    storage.get(keys, function (result) {
       const resultData: any = {};
-      const payload = typeof params === 'string' ? [params] : params;
+      const payload = typeof keys === 'string' ? [keys] : keys;
 
       payload.forEach((key: any) => {
         resultData[key] = JSONToParse(result[key]);
@@ -42,11 +38,7 @@ async function getStorageAsync(params: any): Promise<any> {
   });
 }
 
-/**
- *
- * @param {object} params
- */
-async function setStorageSync(params: any) {
+export async function setStorageSync(params: any) {
   return new Promise<void>(resolve => {
     const payload: any = {};
     const keys = Object.getOwnPropertyNames(params);
@@ -59,80 +51,38 @@ async function setStorageSync(params: any) {
   });
 }
 
-async function getSignSync(): Promise<Folder[]> {
+export async function getFolderListSync(): Promise<Folder[]> {
   return new Promise(resolve => {
     storage.get(STOG_FOLDER, function (result) {
-      const { folder: signJson } = result;
-      const folder = JSONToParse(signJson) || [];
+      const { folder: dataJson } = result;
+      const folder = JSONToParse(dataJson) || [];
 
       resolve(folder);
     });
   });
 }
 
-const getSignAndMapSync = (): Promise<{ sign: Folder[] }> => {
-  return new Promise(resolve => {
-    storage.get([STOG_FOLDER], result => {
-      const { sign: signJson } = result;
-      const sign = (JSONToParse(signJson) as Folder[]) || [];
-
-      resolve({ sign });
-    });
-  });
-};
-
-/**
- *
- * @param {array} sign
- */
-async function setSignSync(sign: Folder[]) {
+export async function setFolderListSync(data: Folder[]) {
   return new Promise<void>(resolve => {
-    storage.set({ folder: JSONToStringify(sign) }, resolve);
-  });
-}
-
-/**
- *
- * @returns {string} folderId
- */
-async function getFIdAsync() {
-  return new Promise(resolve => {
-    storage.get('folderId', function (result) {
-      const { folderId } = result;
-
-      resolve(folderId);
-    });
-  });
-}
-
-/**
- *
- * @param {string} folderId
- */
-async function setFIdAsync(folderId: string) {
-  return new Promise<void>(resolve => {
-    storage.set({ folderId }, resolve);
+    storage.set({ [STOG_FOLDER]: JSONToStringify(data) }, resolve);
   });
 }
 
 /**
  * 查找出传入的标签id所在的文件夹id
- * @param tagId
- * @param sign
- * @returns
  */
-async function folderToFindTagId(tagId: string, sign?: Folder[]) {
-  let signs: Folder[];
+export async function folderToFindTagId(tagId: string, folders?: Folder[]) {
+  let folderList: Folder[];
   let folderId = '';
 
-  if (!sign) {
-    signs = await getSignSync();
+  if (!folders) {
+    folderList = await getFolderListSync();
   } else {
-    signs = sign;
+    folderList = folders;
   }
 
-  for (let i = 0; i < signs.length; i++) {
-    const folder = signs[i];
+  for (let i = 0; i < folderList.length; i++) {
+    const folder = folderList[i];
     const find = folder.list.find(m => m.id === tagId);
 
     if (find) {
@@ -143,17 +93,3 @@ async function folderToFindTagId(tagId: string, sign?: Folder[]) {
 
   return folderId;
 }
-
-export {
-  JSONToParse,
-  JSONToStringify,
-  initSign,
-  getStorageAsync,
-  setStorageSync,
-  getSignSync,
-  getSignAndMapSync,
-  setSignSync,
-  getFIdAsync,
-  folderToFindTagId,
-  // setFIdAsync,
-};

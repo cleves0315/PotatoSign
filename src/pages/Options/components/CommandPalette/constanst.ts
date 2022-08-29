@@ -1,3 +1,3 @@
 export const MOVETOFOLDER = 'moveToFolder';
-export const MOVETOSIGN = 'moveToSign';
+export const MOVETOTABS = 'moveToTabs';
 export const GOOGLING = 'googling';

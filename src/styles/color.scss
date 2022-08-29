@@ -1,6 +1,6 @@
 :root {
   color-scheme: light dark;
-  --sign_card_back_color: rgba(37, 38, 43, 0.05);
+  --tabs_card_back_color: rgba(37, 38, 43, 0.05);
   --basic_white: rgb(255, 255, 255);
   --basic_white_secondary: rgba(255, 255, 255, 0.72);
   --basic_white_tertiary: rgba(255, 255, 255, 0.36);
@@ -84,7 +84,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --sign_card_back_color: rgba(37, 38, 43, 0.5);
+    --tabs_card_back_color: rgba(37, 38, 43, 0.5);
     --basic_white: rgb(255, 255, 255);
     --basic_white_secondary: rgba(255, 255, 255, 0.72);
     --basic_white_tertiary: rgba(255, 255, 255, 0.36);

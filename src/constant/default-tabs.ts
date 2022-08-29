@@ -134,7 +134,7 @@ export const defaultTabs: TabsData[] = [
   },
 ];
 
-export const defaultSign: Folder[] = [
+export const defaultData: Folder[] = [
   {
     id: '001',
     name: '默认书签',
