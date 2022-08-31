@@ -3,9 +3,13 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { Collapse, Input, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-
 import { Folder, TabsData } from '@/types/common';
-import { InputModal, SelectModal, DropdownMenu, Switch } from '@/components';
+import {
+  InputModal,
+  SelectModal,
+  DropdownMenu,
+  ThemeSwitch,
+} from '@/components';
 import CommandPalette, {
   MOVE_MARK,
   OkParams,
@@ -397,7 +401,7 @@ const Options: React.FC<Props> = () => {
         <div className="header" onContextMenu={clearContextMenu}>
           <div className="header-logo"></div>
           <h1>Potato Tag</h1>
-          <Switch></Switch>
+          <ThemeSwitch />
         </div>
 
         <section className="content" onContextMenu={onBackContextMenu}>

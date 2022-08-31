@@ -21,11 +21,12 @@
   "homepage": "https://github.com/cleves0315/potato-tag#readme",
   "dependencies": {
     "antd": "^4.18.5",
+    "classnames": "^2.3.1",
+    "rc-switch": "~3.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hotkeys-hook": "^3.4.4",
-    "uuid": "^8.3.2",
-    "rc-switch": "~3.2.0"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
