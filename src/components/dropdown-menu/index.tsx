@@ -1,4 +1,5 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import classNames from 'classnames';
+import React, { ReactElement, useState } from 'react';
 import './index.scss';
 
 interface Menu {
@@ -25,9 +26,9 @@ export const DropdownMenu: React.FC<Props> = ({
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);
 
-  const hide = () => {
+  const handleHide = () => {
     setIsShow(false);
-    onHide && onHide();
+    onHide?.();
   };
 
   const onContextMenu = (e: any) => {
@@ -60,44 +61,39 @@ export const DropdownMenu: React.FC<Props> = ({
   return (
     <div
       className="dropdown-menu-container"
-      onClick={hide}
+      onClick={handleHide}
       onContextMenu={onContextMenu}
     >
       {children}
-      <div style={{ position: 'absolute', top: '0', left: '0', width: '100%' }}>
-        <div>
-          <div
-            id="dropdownMenu"
-            className="dropdown-menu"
-            style={{
-              top,
-              left,
-              display: isShow && menuList.length ? 'block' : 'none',
-            }}
-          >
-            <ul className="dropdown-menu-root" onClick={onMenuClick}>
-              {menuList &&
-                menuList.map(m => (
-                  <div key={m.value}>
-                    {m.value !== delValue ? (
-                      <li className="dropdown-menu-item" data-value={m.value}>
-                        {m.text}
-                      </li>
-                    ) : (
-                      <>
-                        <li className="dropdown-menu-divider"></li>
-                        <li
-                          className="dropdown-menu-item dropdown-menu-danger"
-                          data-value={m.value}
-                        >
-                          {m.text}
-                        </li>
-                      </>
-                    )}
-                  </div>
-                ))}
-            </ul>
-          </div>
+      <div className="dropdown-menu-wrap">
+        <div
+          id="dropdownMenu"
+          className={classNames('dropdown-menu', {
+            hide: !isShow || !menuList.length,
+          })}
+          style={{ top, left }}
+        >
+          <ul className="dropdown-menu-root" onClick={onMenuClick}>
+            {menuList.map(menu => (
+              <div key={menu.value}>
+                {menu.value !== delValue ? (
+                  <li className="dropdown-menu-item" data-value={menu.value}>
+                    {menu.text}
+                  </li>
+                ) : (
+                  <>
+                    <li className="dropdown-menu-divider"></li>
+                    <li
+                      className="dropdown-menu-item dropdown-menu-danger"
+                      data-value={menu.value}
+                    >
+                      {menu.text}
+                    </li>
+                  </>
+                )}
+              </div>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

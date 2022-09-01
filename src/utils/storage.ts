@@ -1,6 +1,4 @@
 // import ext from './ext';
 
-const storage = chrome.storage.local;
-const storageLive = chrome.storage.sync;
-
-export { storage, storageLive };
+export const storage = chrome.storage.local;
+export const storageLive = chrome.storage.sync;

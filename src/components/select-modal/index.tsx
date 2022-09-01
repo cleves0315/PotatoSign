@@ -5,8 +5,14 @@ import { Button } from '..';
 import './index.scss';
 
 interface Options {
-  label: string;
-  value: string;
+  disabled?: boolean;
+  [name: string]: any;
+}
+
+interface FieldNames {
+  value?: string;
+  label?: string;
+  options?: string;
 }
 
 interface Props {
@@ -14,6 +20,7 @@ interface Props {
   title?: string;
   options?: Options[];
   initialValue?: string;
+  fieldNames?: FieldNames;
   okText?: string;
   okType?: string;
   onCancel?: () => void;
@@ -24,6 +31,7 @@ export const SelectModal: React.FC<Props> = ({
   visible,
   title = '标题',
   options,
+  fieldNames,
   initialValue = '',
   okText = '确定',
   okType = 'primary',
@@ -83,6 +91,7 @@ export const SelectModal: React.FC<Props> = ({
             className="select"
             // open={isOpen}
             size="large"
+            fieldNames={fieldNames}
             options={options}
           />
         </Form.Item>

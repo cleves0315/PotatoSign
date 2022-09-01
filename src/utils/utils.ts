@@ -16,11 +16,13 @@ export function JSONToStringify(json: any) {
 }
 
 export async function initData() {
-  const folder = await getFolderListSync();
+  let folder = await getFolderListSync();
 
   if (!folder || (Array.isArray(folder) && folder.length === 0)) {
     await setFolderListSync(defaultData);
+    folder = defaultData;
   }
+  return folder;
 }
 
 export async function getStorageAsync(keys: string | string[]): Promise<any> {

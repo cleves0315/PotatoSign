@@ -34,7 +34,7 @@ export interface SearchTabsResult extends TabsData {
   folderName: string;
 }
 
-const CommandPalette: React.FC<Props> = ({
+export const CommandPalette: React.FC<Props> = ({
   visible = false,
   maskClosable = true,
   escCancel = true,
@@ -413,5 +413,3 @@ const CommandPalette: React.FC<Props> = ({
     </div>
   );
 };
-
-export default CommandPalette;

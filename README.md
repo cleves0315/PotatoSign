@@ -20,10 +20,11 @@
 
 ### 计划
 
-- switch 组件
+- switch 组件 done
+- Options code review
+- options 页面，切换主题（更换背景图）
 - 项目优化
   - 移除 ant-design
   - popup 页面，移除 react
-- options 页面，切换主题（更换背景图）
 - 接入 chrome 标签数据（支持导入）
 - 登录
