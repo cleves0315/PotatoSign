@@ -4,6 +4,7 @@ import { message } from 'antd';
 import React, { createContext, useEffect, useState } from 'react';
 import { Folder, TabsData } from '@/types/common';
 import {
+  Header,
   Footer,
   CommandPalette,
   MOVE_MARK,
@@ -278,11 +279,12 @@ const Options: React.FC<Props> = () => {
         onHide={onDropMenuHide}
       >
         <div className="app-container">
-          <div className="header" onContextMenu={clearContextMenu}>
+          {/* <div className="header" onContextMenu={clearContextMenu}>
             <div className="header-logo"></div>
             <h1>Potato Tag</h1>
             <ThemeSwitch />
-          </div>
+          </div> */}
+          <Header />
 
           <section className="content" onContextMenu={onBackContextMenu}>
             {!!folderList.length && <TabsList folderList={folderList} />}
