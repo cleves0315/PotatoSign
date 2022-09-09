@@ -15,7 +15,7 @@ interface InputDom {
 
 interface Props {}
 
-const Options: React.FC<Props> = Props => {
+const Popup = () => {
   const successMsg = '书签已成功保存 (•̀∀•́)';
   const errorMsg = '抱歉，保存时出错了 ╥﹏╥';
   const failMsg = '抱歉，无法提取该页面的url';
@@ -277,4 +277,4 @@ const Options: React.FC<Props> = Props => {
   );
 };
 
-export default Options;
+export default Popup;

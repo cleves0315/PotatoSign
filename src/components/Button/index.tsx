@@ -3,7 +3,8 @@ import './index.scss';
 
 type type = 'default' | 'primary' | string;
 type size = 'small' | 'large';
-interface Props {
+
+export interface ButtonProps {
   type?: type;
   size?: size;
   className?: string;
@@ -13,7 +14,7 @@ interface Props {
   onClick?: (e: any) => void;
 }
 
-export const Button: React.FC<Props> = ({
+export const Button = ({
   children,
   type = 'default',
   size = 'small',
@@ -21,7 +22,7 @@ export const Button: React.FC<Props> = ({
   disabled,
   style = {},
   onClick,
-}: Props) => {
+}: ButtonProps) => {
   const handleOnClick = (e: any) => {
     onClick && !disabled && onClick(e);
   };

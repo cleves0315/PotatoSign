@@ -17,9 +17,10 @@ const { Panel } = Collapse;
 
 export interface TabsListProps {
   folderList: Folder[];
+  onContextMenu?: () => void;
 }
 
-export const TabsList = ({ folderList }: TabsListProps) => {
+export const TabsList = ({ folderList, onContextMenu }: TabsListProps) => {
   const [editTabsId, setEditTabsId] = useState('');
   const [confirmDelFolder, setConfirmDelFolder] = useState('');
   const [isOpenEditFolder, setIsOpenEditFolder] = useState('');
@@ -164,125 +165,131 @@ export const TabsList = ({ folderList }: TabsListProps) => {
   };
 
   return (
-    <Collapse
-      className="option-container"
-      ghost
-      expandIconPosition="right"
-      activeKey={
-        currentShowPanel.length ? currentShowPanel : folderList.map(m => m.id)
-      }
-      onChange={onChangeCollapse}
-      // expandIcon={({ isActive }) => (
-      //   <CaretRightOutlined
-      //     className="option-title-icon"
-      //     rotate={isActive ? 90 : 0}
-      //   />
-      // )}
-    >
-      {folderList.map(folder => (
-        <Panel
-          showArrow={false}
-          header={
-            <div
-              className="option-title-container unit whole center-on-mobiles"
-              data-folderid={folder.id}
-            >
-              {isOpenEditFolder !== folder.id ? (
-                <>
-                  <div className="option-title">{folder.name}</div>
-                  <div
-                    className="del-wrap"
-                    data-confirm={confirmDelFolder === folder.id}
-                    onClick={e => handleClickDelFolder(e, folder.id)}
-                  >
-                    <DeleteOutlined className="del-btn" />
-                  </div>
-                </>
-              ) : (
-                <Input
-                  id={`titleInput${folder.id}`}
-                  autoFocus
-                  className="option-title-input"
-                  defaultValue={folder.name}
-                  maxLength={24}
-                  onFocus={() => onFocusInptOptnTitle(`titleInput${folder.id}`)}
-                  onPressEnter={onCancelEditFoldName}
-                  onBlur={onCancelEditFoldName}
-                  onClick={e => e.stopPropagation()}
-                />
-              )}
-            </div>
-          }
-          key={folder.id}
-          extra={
-            <div>
-              <EditOutlined
-                className="option-title-icon edit-icon"
-                onClick={e => handleOpenEditFolder(e, folder.id)}
-              />
-            </div>
-          }
-        >
-          <div className="option-wrap">
-            {folder.list.map((data: TabsData) => (
+    <div className="content" onContextMenu={onContextMenu}>
+      <Collapse
+        className="option-container"
+        ghost
+        expandIconPosition="right"
+        activeKey={
+          currentShowPanel.length ? currentShowPanel : folderList.map(m => m.id)
+        }
+        onChange={onChangeCollapse}
+        // expandIcon={({ isActive }) => (
+        //   <CaretRightOutlined
+        //     className="option-title-icon"
+        //     rotate={isActive ? 90 : 0}
+        //   />
+        // )}
+      >
+        {folderList.map(folder => (
+          <Panel
+            showArrow={false}
+            header={
               <div
-                key={data.id}
-                className="tabs-item-link"
-                title={data.title}
-                onClick={() => onTabsItemClick(data)}
-                onContextMenu={() => onTabsItemContextMenu(data, folder)}
+                className="option-title-container unit whole center-on-mobiles"
+                data-folderid={folder.id}
               >
-                <div className="tabs-item" {...{ [MOVE_MARK]: data.id }}>
-                  <div
-                    className="del-wrap"
-                    data-confirm={confirmDelTabs === data.id}
-                    onClick={(e: any) => handleOnDelTabs(e, data.id, folder.id)}
-                  >
-                    {/* <div className="del-btn" data-id={data.id}></div> */}
-                    <DeleteOutlined className="del-btn" />
-                  </div>
-                  <div className="icon">
+                {isOpenEditFolder !== folder.id ? (
+                  <>
+                    <div className="option-title">{folder.name}</div>
                     <div
-                      className="img"
-                      style={{
-                        backgroundImage:
-                          data.favIconUrl && `url(${data.favIconUrl})`,
-                      }}
-                    ></div>
-                  </div>
-                  {/* 编辑·标题 */}
-                  {editTabsId === data.id ? (
-                    <div className="title" data-type="input">
-                      <Input
-                        id={`titleInput${data.id}`}
-                        defaultValue={data.title}
-                        autoFocus
-                        maxLength={60}
-                        onClick={e => e.stopPropagation()}
-                        onBlur={handleToCancelEdit}
-                        onPressEnter={handleToCancelEdit}
-                        onFocus={() =>
-                          onFocusInptOptnTitle(`titleInput${data.id}`)
-                        }
-                      />
+                      className="del-wrap"
+                      data-confirm={confirmDelFolder === folder.id}
+                      onClick={e => handleClickDelFolder(e, folder.id)}
+                    >
+                      <DeleteOutlined className="del-btn" />
                     </div>
-                  ) : (
+                  </>
+                ) : (
+                  <Input
+                    id={`titleInput${folder.id}`}
+                    autoFocus
+                    className="option-title-input"
+                    defaultValue={folder.name}
+                    maxLength={24}
+                    onFocus={() =>
+                      onFocusInptOptnTitle(`titleInput${folder.id}`)
+                    }
+                    onPressEnter={onCancelEditFoldName}
+                    onBlur={onCancelEditFoldName}
+                    onClick={e => e.stopPropagation()}
+                  />
+                )}
+              </div>
+            }
+            key={folder.id}
+            extra={
+              <div>
+                <EditOutlined
+                  className="option-title-icon edit-icon"
+                  onClick={e => handleOpenEditFolder(e, folder.id)}
+                />
+              </div>
+            }
+          >
+            <div className="option-wrap">
+              {folder.list.map((data: TabsData) => (
+                <div
+                  key={data.id}
+                  className="tabs-item-link"
+                  title={data.title}
+                  onClick={() => onTabsItemClick(data)}
+                  onContextMenu={() => onTabsItemContextMenu(data, folder)}
+                >
+                  <div className="tabs-item" {...{ [MOVE_MARK]: data.id }}>
                     <div
-                      className="title"
-                      data-type="text"
+                      className="del-wrap"
+                      data-confirm={confirmDelTabs === data.id}
                       onClick={(e: any) =>
-                        onTabsTitleClick(e, data.id, folder.id)
+                        handleOnDelTabs(e, data.id, folder.id)
                       }
                     >
-                      <p>{data.title}</p>
+                      {/* <div className="del-btn" data-id={data.id}></div> */}
+                      <DeleteOutlined className="del-btn" />
                     </div>
-                  )}
+                    <div className="icon">
+                      <div
+                        className="img"
+                        style={{
+                          backgroundImage:
+                            data.favIconUrl && `url(${data.favIconUrl})`,
+                        }}
+                      ></div>
+                    </div>
+                    {/* 编辑·标题 */}
+                    {editTabsId === data.id ? (
+                      <div className="title" data-type="input">
+                        <Input
+                          id={`titleInput${data.id}`}
+                          defaultValue={data.title}
+                          autoFocus
+                          maxLength={60}
+                          onClick={e => e.stopPropagation()}
+                          onBlur={handleToCancelEdit}
+                          onPressEnter={handleToCancelEdit}
+                          onFocus={() =>
+                            onFocusInptOptnTitle(`titleInput${data.id}`)
+                          }
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="title"
+                        data-type="text"
+                        onClick={(e: any) =>
+                          onTabsTitleClick(e, data.id, folder.id)
+                        }
+                      >
+                        <p>{data.title}</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </Panel>
-      ))}
-    </Collapse>
+              ))}
+            </div>
+          </Panel>
+        ))}
+      </Collapse>
+    </div>
   );
 };

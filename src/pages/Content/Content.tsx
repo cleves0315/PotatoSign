@@ -4,8 +4,8 @@ interface Props {
   title: string;
 }
 
-const Options: React.FC<Props> = ({ title }: Props) => {
+const Content = ({ title }: Props) => {
   return <div className="ContentContainer">{title} Page</div>;
 };
 
-export default Options;
+export default Content;

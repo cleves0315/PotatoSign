@@ -4,7 +4,7 @@ import { Modal, Input, Form } from 'antd';
 import { Button } from '..';
 import './index.scss';
 
-interface Props {
+export interface InputModalProps {
   visible: boolean;
   title?: string;
   initialValue?: string;
@@ -14,7 +14,7 @@ interface Props {
   onFinish?: ({ value }: { value: string }) => void;
 }
 
-export const InputModal: React.FC<Props> = ({
+export const InputModal = ({
   visible,
   title = '标题',
   initialValue = '',
@@ -22,7 +22,7 @@ export const InputModal: React.FC<Props> = ({
   okType = 'primary',
   onCancel,
   onFinish,
-}: Props) => {
+}: InputModalProps) => {
   const [form] = Form.useForm();
   const [disabled, setDisabled] = useState(true);
 

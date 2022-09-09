@@ -5,11 +5,13 @@ import { FolderOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { getFolderListSync } from '@/utils/utils';
 import { Folder, TabsData } from '@/types/common';
-import { MOVETOFOLDER, MOVETOTABS, GOOGLING } from './constanst';
 
 import './index.scss';
 
 export const MOVE_MARK = 'data-move-mark';
+export const MOVETOFOLDER = 'moveToFolder';
+export const MOVETOTABS = 'moveToTabs';
+export const GOOGLING = 'googling';
 
 export interface TargetElement extends Element {
   offsetTop: number;
@@ -22,7 +24,7 @@ export interface OkParams {
   commandText?: string;
 }
 
-export interface Props {
+export interface CommandPaletteProps {
   visible: boolean;
   maskClosable?: boolean; // 点击遮罩是否关闭
   escCancel?: boolean; // 是否支持键盘 esc 关闭
@@ -34,13 +36,13 @@ export interface SearchTabsResult extends TabsData {
   folderName: string;
 }
 
-export const CommandPalette: React.FC<Props> = ({
+export const CommandPalette = ({
   visible = false,
   maskClosable = true,
   escCancel = true,
   onCancel,
   onOk,
-}: Props) => {
+}: CommandPaletteProps) => {
   const [commandText, setCommandText] = useState('');
   const [topResultFolder, setTopResultFolder] = useState<Folder | null>(null);
   const [topResultTag, setTopResultTag] = useState<SearchTabsResult | null>(

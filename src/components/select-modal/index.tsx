@@ -15,7 +15,7 @@ interface FieldNames {
   options?: string;
 }
 
-interface Props {
+export interface SelectModalProps {
   visible: boolean;
   title?: string;
   options?: Options[];
@@ -27,7 +27,7 @@ interface Props {
   onFinish?: ({ value }: { value: string }) => void;
 }
 
-export const SelectModal: React.FC<Props> = ({
+export const SelectModal = ({
   visible,
   title = '标题',
   options,
@@ -37,7 +37,7 @@ export const SelectModal: React.FC<Props> = ({
   okType = 'primary',
   onCancel,
   onFinish,
-}: Props) => {
+}: SelectModalProps) => {
   const [form] = Form.useForm();
   const [inptValue, setInptValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);

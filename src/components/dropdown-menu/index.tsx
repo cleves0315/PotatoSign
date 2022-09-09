@@ -7,7 +7,7 @@ interface Menu {
   value: string;
 }
 
-interface Props {
+export interface DropdownMenuProps {
   children: ReactElement<any, any>;
   menuList: Menu[];
   delValue: string;
@@ -15,13 +15,13 @@ interface Props {
   onHide?: () => void;
 }
 
-export const DropdownMenu: React.FC<Props> = ({
+export const DropdownMenu = ({
   children,
   menuList,
   delValue,
   onClick,
   onHide,
-}: Props) => {
+}: DropdownMenuProps) => {
   const [isShow, setIsShow] = useState(false);
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);

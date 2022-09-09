@@ -8,20 +8,13 @@ import {
   Footer,
   CommandPalette,
   MOVE_MARK,
-  OkParams,
-  TabsList,
-} from './components';
-import {
-  InputModal,
-  SelectModal,
-  DropdownMenu,
-  ThemeSwitch,
-} from '@/components';
-import {
   MOVETOFOLDER,
   MOVETOTABS,
   GOOGLING,
-} from './components/CommandPalette/constanst';
+  OkParams,
+  TabsList,
+} from './components';
+import { InputModal, SelectModal, DropdownMenu } from '@/components';
 import {
   initData,
   setFolderListSync,
@@ -30,7 +23,6 @@ import {
 } from '@/utils/utils';
 
 import './index.scss';
-import { storage } from '@/utils/storage';
 
 interface Props {}
 
@@ -68,7 +60,7 @@ export const backDropMenus = [
 
 export const OptContext = createContext({});
 
-const Options: React.FC<Props> = () => {
+const Options = () => {
   let isTabsDropMenus = false;
 
   const [folderList, setFolderList] = useState<Folder[]>([]);
@@ -279,17 +271,8 @@ const Options: React.FC<Props> = () => {
         onHide={onDropMenuHide}
       >
         <div className="app-container">
-          {/* <div className="header" onContextMenu={clearContextMenu}>
-            <div className="header-logo"></div>
-            <h1>Potato Tag</h1>
-            <ThemeSwitch />
-          </div> */}
-          <Header />
-
-          <section className="content" onContextMenu={onBackContextMenu}>
-            {!!folderList.length && <TabsList folderList={folderList} />}
-          </section>
-
+          <Header onContextMenu={clearContextMenu} />
+          <TabsList folderList={folderList} />
           <Footer />
 
           <InputModal

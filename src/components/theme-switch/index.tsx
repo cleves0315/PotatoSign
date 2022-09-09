@@ -3,17 +3,17 @@ import React, { useState } from 'react';
 
 import './index.scss';
 
-interface Props {
+export interface ThemeSwitchProps {
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
 }
 
-export const ThemeSwitch: React.FC<Props> = ({
+export const ThemeSwitch = ({
   className,
   disabled,
   onClick,
-}: Props) => {
+}: ThemeSwitchProps) => {
   const [checked, setChecked] = useState(false);
 
   const handleChange = () => {
