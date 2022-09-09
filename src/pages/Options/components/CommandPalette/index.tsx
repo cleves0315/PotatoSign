@@ -36,22 +36,18 @@ export interface SearchTabsResult extends TabsData {
   folderName: string;
 }
 
-export const CommandPalette = ({
+export const CommandPalette: React.FC<CommandPaletteProps> = ({
   visible = false,
   maskClosable = true,
   escCancel = true,
   onCancel,
   onOk,
-}: CommandPaletteProps) => {
+}) => {
   const [commandText, setCommandText] = useState('');
   const [topResultFolder, setTopResultFolder] = useState<Folder | null>(null);
-  const [topResultTag, setTopResultTag] = useState<SearchTabsResult | null>(
-    null
-  );
+  const [topResultTag, setTopResultTag] = useState<SearchTabsResult | null>(null);
   const [folSearResult, setFolSearResult] = useState<Folder[]>([]);
-  const [searchTabsResult, setSearchTabsResult] = useState<SearchTabsResult[]>(
-    []
-  );
+  const [searchTabsResult, setSearchTabsResult] = useState<SearchTabsResult[]>([]);
 
   useHotkeys('esc', (e: any) => {
     e.preventDefault();
@@ -200,9 +196,7 @@ export const CommandPalette = ({
   };
 
   const handelMoveToFolder = (folderId: string) => {
-    let targetElement: TargetElement | null = document.querySelector(
-      `[data-folderid="${folderId}"]`
-    );
+    let targetElement: TargetElement | null = document.querySelector(`[data-folderid="${folderId}"]`);
 
     if (targetElement) {
       scrollTo(targetElement);
@@ -212,9 +206,7 @@ export const CommandPalette = ({
   };
 
   const handleMoveToTabs = (tabsId: string) => {
-    const targetElement: TargetElement | null = document.querySelector(
-      `[${MOVE_MARK}="${tabsId}"]`
-    );
+    const targetElement: TargetElement | null = document.querySelector(`[${MOVE_MARK}="${tabsId}"]`);
 
     if (targetElement) {
       scrollTo(targetElement);
@@ -249,9 +241,7 @@ export const CommandPalette = ({
   };
 
   const folderToSeeAnimation = (folderId: string) => {
-    const targetElement: TargetElement | null = document.querySelector(
-      `[data-folderid="${folderId}"]`
-    );
+    const targetElement: TargetElement | null = document.querySelector(`[data-folderid="${folderId}"]`);
 
     if (targetElement) {
       targetElement.classList.add('checking');
@@ -262,9 +252,7 @@ export const CommandPalette = ({
   };
 
   const tabsToSeeAnimation = (tabsId: string) => {
-    const targetElement: TargetElement | null = document.querySelector(
-      `[${MOVE_MARK}="${tabsId}"]`
-    );
+    const targetElement: TargetElement | null = document.querySelector(`[${MOVE_MARK}="${tabsId}"]`);
 
     if (targetElement) {
       targetElement.parentElement.classList.add('checking');
@@ -281,10 +269,7 @@ export const CommandPalette = ({
           <div className="command-palette-mask"></div>
 
           <div className="command-palette-wrap" onClick={onClickMask}>
-            <div
-              className="command-palette-container"
-              onClick={e => e.stopPropagation()}
-            >
+            <div className="command-palette-container" onClick={e => e.stopPropagation()}>
               <div className="command-palette-input-container">
                 <Input
                   id="commandInput"
@@ -302,9 +287,7 @@ export const CommandPalette = ({
               <div className="command-palette-stack" onClick={onClickStack}>
                 {!commandText && (
                   <div className="command-palette-group">
-                    <div className="command-palette-header">
-                      提示：输入文件名
-                    </div>
+                    <div className="command-palette-header">提示：输入文件名</div>
                   </div>
                 )}
 
@@ -318,11 +301,7 @@ export const CommandPalette = ({
                       data-id={topResultFolder.id}
                     >
                       <FolderOutlined className="folder-icon" />
-                      <div
-                        className="result-content"
-                        data-action={MOVETOFOLDER}
-                        data-id={topResultFolder.id}
-                      >
+                      <div className="result-content" data-action={MOVETOFOLDER} data-id={topResultFolder.id}>
                         {topResultFolder.name}
                       </div>
                     </div>
@@ -339,11 +318,7 @@ export const CommandPalette = ({
                       data-id={topResultTag.id}
                     >
                       <FolderOutlined className="folder-icon" />
-                      <div
-                        className="result-content"
-                        data-action={MOVETOTABS}
-                        data-id={topResultTag.id}
-                      >
+                      <div className="result-content" data-action={MOVETOTABS} data-id={topResultTag.id}>
                         {topResultTag.folderName} / {topResultTag.title}
                       </div>
                     </div>
@@ -354,18 +329,9 @@ export const CommandPalette = ({
                   <div className="command-palette-group">
                     <div className="command-palette-header">文件夹</div>
                     {folSearResult.map(m => (
-                      <div
-                        className="command-palette-item"
-                        key={m.id}
-                        data-action={MOVETOFOLDER}
-                        data-id={m.id}
-                      >
+                      <div className="command-palette-item" key={m.id} data-action={MOVETOFOLDER} data-id={m.id}>
                         <FolderOutlined className="folder-icon" />
-                        <div
-                          className="result-content"
-                          data-action={MOVETOFOLDER}
-                          data-id={m.id}
-                        >
+                        <div className="result-content" data-action={MOVETOFOLDER} data-id={m.id}>
                           {m.name}
                         </div>
                       </div>
@@ -377,18 +343,9 @@ export const CommandPalette = ({
                   <div className="command-palette-group">
                     <div className="command-palette-header">标签</div>
                     {searchTabsResult.map(m => (
-                      <div
-                        className="command-palette-item"
-                        key={m.id}
-                        data-action={MOVETOTABS}
-                        data-id={m.id}
-                      >
+                      <div className="command-palette-item" key={m.id} data-action={MOVETOTABS} data-id={m.id}>
                         <FolderOutlined className="folder-icon" />
-                        <div
-                          className="result-content"
-                          data-action={MOVETOTABS}
-                          data-id={m.id}
-                        >
+                        <div className="result-content" data-action={MOVETOTABS} data-id={m.id}>
                           {m.folderName} / {m.title}
                         </div>
                       </div>
@@ -398,10 +355,7 @@ export const CommandPalette = ({
 
                 {commandText && (
                   <div className="command-palette-group">
-                    <div
-                      className="command-palette-item"
-                      data-action={GOOGLING}
-                    >
+                    <div className="command-palette-item" data-action={GOOGLING}>
                       <SearchOutlined className="search-icon" />
                       在百度搜索中搜索
                     </div>

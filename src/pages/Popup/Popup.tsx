@@ -15,7 +15,7 @@ interface InputDom {
 
 interface Props {}
 
-const Popup = () => {
+const Popup: React.FC<Props> = () => {
   const successMsg = '书签已成功保存 (•̀∀•́)';
   const errorMsg = '抱歉，保存时出错了 ╥﹏╥';
   const failMsg = '抱歉，无法提取该页面的url';
@@ -128,9 +128,7 @@ const Popup = () => {
     if (currentTabs) {
       if (folderList.length > 0) {
         const findFolder = folderList.find(s => s.id === id) || folderList[0];
-        const findIndex = findFolder.list.findIndex(
-          m => m.url === currentTabs.url
-        );
+        const findIndex = findFolder.list.findIndex(m => m.url === currentTabs.url);
 
         if (findIndex === -1) {
           currentTabs.id = uuidv4();
@@ -145,9 +143,7 @@ const Popup = () => {
 
   const removeTabs = (folderId: string) => {
     const findFolder = folderList.find(m => m.id === folderId) || folderList[0];
-    const findIndex = findFolder.list.findIndex(
-      m => m.url === currentTabs?.url
-    );
+    const findIndex = findFolder.list.findIndex(m => m.url === currentTabs?.url);
 
     if (findIndex > -1) {
       findFolder.list.splice(findIndex, 1);
@@ -174,18 +170,12 @@ const Popup = () => {
         <div className="left">
           <div className="logo-wrap">
             {/* <img src="./icon-64.png" alt="logo" /> */}
-            <div
-              className={`logo-icon ${currentTabs ? 'success' : 'error'}`}
-            ></div>
+            <div className={`logo-icon ${currentTabs ? 'success' : 'error'}`}></div>
           </div>
           {currentTabs ? '已加入书签' : '加入书签失败'}
         </div>
         <a className="setting-icon" href="/options.html" target="_blank">
-          <svg
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M510.37806 337.803609c-98.010221 0-177.748287 78.842673-177.748287 175.75284 0 96.91426 79.738066 175.763073 177.748287 175.763073 9.537214 0 19.620873-0.978281 31.797194-3.088338 18.196431-3.281743 30.290887-20.538779 26.963095-38.471197-2.924609-15.732309-16.693194-27.152407-32.747845-27.152407-2.071172 0-4.15974 0.196475-6.123464 0.563842-7.937786 1.402953-14.233166 2.056845-19.807115 2.056845-61.159942 0-110.915136-49.201585-110.915136-109.671819 0-60.467163 49.679469-109.661585 110.747313-109.661585 61.116963 0 110.832248 49.194422 110.832248 109.661585 0 5.892197-0.656963 12.0832-2.088568 19.531845-3.327792 17.928325 8.769734 35.189454 26.959002 38.464033 2.006703 0.360204 4.045129 0.546446 6.070252 0.546446 16.204054 0 30.019711-11.43033 32.832779-27.116591 2.13871-11.45182 3.13848-21.435195 3.13848-31.41857 0.042979-46.873564-18.435884-90.990341-52.033074-124.223233C602.407056 356.106464 557.790906 337.803609 510.37806 337.803609z"
               p-id="23590"
@@ -202,12 +192,7 @@ const Popup = () => {
         {currentTabs ? (
           <div className="content-wrap">
             <div className="content">
-              <input
-                className="input"
-                defaultValue={currentTabs.title}
-                onBlur={onInputBlur}
-                onKeyDown={onKeyDown}
-              />
+              <input className="input" defaultValue={currentTabs.title} onBlur={onInputBlur} onKeyDown={onKeyDown} />
               <div
                 className="folder-list-wrap"
                 style={{
@@ -220,9 +205,7 @@ const Popup = () => {
                     setShowFolderList(!showFolderList);
                   }}
                 >
-                  <div className="folder-name">
-                    {fsIdMapName[choiceFolder] || ''}
-                  </div>
+                  <div className="folder-name">{fsIdMapName[choiceFolder] || ''}</div>
                   <svg
                     className="down-icon"
                     viewBox="0 0 1024 1024"
@@ -230,25 +213,13 @@ const Popup = () => {
                     xmlns="http://www.w3.org/2000/svg"
                     p-id="24544"
                   >
-                    <path
-                      d="M232 392L512 672l280-280z"
-                      fill="#252525"
-                      p-id="24545"
-                    ></path>
+                    <path d="M232 392L512 672l280-280z" fill="#252525" p-id="24545"></path>
                   </svg>
                 </div>
 
-                <div
-                  className="folder-select-list-wrap"
-                  hidden={!showFolderList}
-                  onClick={onChoiceFolder}
-                >
+                <div className="folder-select-list-wrap" hidden={!showFolderList} onClick={onChoiceFolder}>
                   {folderList?.map((m, i) => (
-                    <div
-                      className="folder-select-list-item"
-                      key={`${m.id}`}
-                      data-id={m.id}
-                    >
+                    <div className="folder-select-list-item" key={`${m.id}`} data-id={m.id}>
                       {m.name}
                     </div>
                   ))}
@@ -257,11 +228,7 @@ const Popup = () => {
             </div>
 
             <div className="btns-wrap">
-              <Button
-                className="finish-btn"
-                type="primary"
-                onClick={() => window.close()}
-              >
+              <Button className="finish-btn" type="primary" onClick={() => window.close()}>
                 完成
               </Button>
               <Button className="remove-btn" onClick={onDelete}>

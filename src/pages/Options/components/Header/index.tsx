@@ -6,7 +6,7 @@ interface HeaderProps {
   onContextMenu?: () => void;
 }
 
-export const Header = ({ onContextMenu }: HeaderProps) => {
+export const Header: React.FC<HeaderProps> = ({ onContextMenu }) => {
   return (
     <div className="header" onContextMenu={onContextMenu}>
       <div className="header-logo"></div>

@@ -46,8 +46,6 @@ export const backDropMenus = [
 export const OptContext = createContext({});
 
 const Options = () => {
-  let isTabsDropMenus = false;
-
   const [folderList, setFolderList] = useState<Folder[]>([]);
   const [editTabsId, setEditTabsId] = useState('');
   const [dropMenus, setDropMenus] = useState<Menu[]>([]);
@@ -79,14 +77,6 @@ const Options = () => {
     }
     setFolderList(data);
     setCurrentShowPanel(data.map(m => m.id));
-  };
-
-  const onBackContextMenu = () => {
-    if (!isTabsDropMenus) {
-      setDropMenus(backDropMenus);
-    } else {
-      isTabsDropMenus = false;
-    }
   };
 
   const clearContextMenu = () => {
@@ -237,6 +227,7 @@ const Options = () => {
   return (
     <OptContext.Provider
       value={{
+        folderList,
         setFolderList,
         selectFolder,
         setSelectFolder,
@@ -255,7 +246,7 @@ const Options = () => {
       >
         <div className="app-container">
           <Header onContextMenu={clearContextMenu} />
-          <TabsList folderList={folderList} onContextMenu={onBackContextMenu} />
+          <TabsList />
           <Footer />
 
           <InputModal
