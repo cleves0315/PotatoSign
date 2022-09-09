@@ -1,12 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Collapse, Input, message } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import {
-  initData,
-  setFolderListSync,
-  folderToFindTagId,
-  getFolderListSync,
-} from '@/utils/utils';
+import { initData, setFolderListSync, folderToFindTagId, getFolderListSync } from '@/utils/utils';
 
 import { MOVE_MARK } from '..';
 import { OptContext, tabsDropMenus } from '../../Options';
@@ -170,9 +165,7 @@ export const TabsList = ({ folderList, onContextMenu }: TabsListProps) => {
         className="option-container"
         ghost
         expandIconPosition="right"
-        activeKey={
-          currentShowPanel.length ? currentShowPanel : folderList.map(m => m.id)
-        }
+        activeKey={currentShowPanel.length ? currentShowPanel : folderList.map(m => m.id)}
         onChange={onChangeCollapse}
         // expandIcon={({ isActive }) => (
         //   <CaretRightOutlined
@@ -185,10 +178,7 @@ export const TabsList = ({ folderList, onContextMenu }: TabsListProps) => {
           <Panel
             showArrow={false}
             header={
-              <div
-                className="option-title-container unit whole center-on-mobiles"
-                data-folderid={folder.id}
-              >
+              <div className="option-title-container" data-folderid={folder.id}>
                 {isOpenEditFolder !== folder.id ? (
                   <>
                     <div className="option-title">{folder.name}</div>
@@ -207,9 +197,7 @@ export const TabsList = ({ folderList, onContextMenu }: TabsListProps) => {
                     className="option-title-input"
                     defaultValue={folder.name}
                     maxLength={24}
-                    onFocus={() =>
-                      onFocusInptOptnTitle(`titleInput${folder.id}`)
-                    }
+                    onFocus={() => onFocusInptOptnTitle(`titleInput${folder.id}`)}
                     onPressEnter={onCancelEditFoldName}
                     onBlur={onCancelEditFoldName}
                     onClick={e => e.stopPropagation()}
@@ -240,9 +228,7 @@ export const TabsList = ({ folderList, onContextMenu }: TabsListProps) => {
                     <div
                       className="del-wrap"
                       data-confirm={confirmDelTabs === data.id}
-                      onClick={(e: any) =>
-                        handleOnDelTabs(e, data.id, folder.id)
-                      }
+                      onClick={(e: any) => handleOnDelTabs(e, data.id, folder.id)}
                     >
                       {/* <div className="del-btn" data-id={data.id}></div> */}
                       <DeleteOutlined className="del-btn" />
@@ -251,8 +237,7 @@ export const TabsList = ({ folderList, onContextMenu }: TabsListProps) => {
                       <div
                         className="img"
                         style={{
-                          backgroundImage:
-                            data.favIconUrl && `url(${data.favIconUrl})`,
+                          backgroundImage: data.favIconUrl && `url(${data.favIconUrl})`,
                         }}
                       ></div>
                     </div>
@@ -267,18 +252,14 @@ export const TabsList = ({ folderList, onContextMenu }: TabsListProps) => {
                           onClick={e => e.stopPropagation()}
                           onBlur={handleToCancelEdit}
                           onPressEnter={handleToCancelEdit}
-                          onFocus={() =>
-                            onFocusInptOptnTitle(`titleInput${data.id}`)
-                          }
+                          onFocus={() => onFocusInptOptnTitle(`titleInput${data.id}`)}
                         />
                       </div>
                     ) : (
                       <div
                         className="title"
                         data-type="text"
-                        onClick={(e: any) =>
-                          onTabsTitleClick(e, data.id, folder.id)
-                        }
+                        onClick={(e: any) => onTabsTitleClick(e, data.id, folder.id)}
                       >
                         <p>{data.title}</p>
                       </div>

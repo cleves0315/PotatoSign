@@ -1,26 +1,11 @@
+import { message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { message } from 'antd';
 import React, { createContext, useEffect, useState } from 'react';
 import { Folder, TabsData } from '@/types/common';
-import {
-  Header,
-  Footer,
-  CommandPalette,
-  MOVE_MARK,
-  MOVETOFOLDER,
-  MOVETOTABS,
-  GOOGLING,
-  OkParams,
-  TabsList,
-} from './components';
 import { InputModal, SelectModal, DropdownMenu } from '@/components';
-import {
-  initData,
-  setFolderListSync,
-  folderToFindTagId,
-  getFolderListSync,
-} from '@/utils/utils';
+import { initData, setFolderListSync, folderToFindTagId, getFolderListSync } from '@/utils/utils';
+import { Header, Footer, CommandPalette, MOVETOFOLDER, MOVETOTABS, GOOGLING, OkParams, TabsList } from './components';
 
 import './index.scss';
 
@@ -204,9 +189,7 @@ const Options = () => {
   const handleMoveTabsToFolder = (toFoldId: string) => {
     const index = folderList.findIndex(f => f.id === selectFolder);
     const toIndex = folderList.findIndex(f => f.id === toFoldId);
-    const findIndex = folderList[index].list.findIndex(
-      m => m.id === selectData.id
-    );
+    const findIndex = folderList[index].list.findIndex(m => m.id === selectData.id);
     const [data] = folderList[index].list.splice(findIndex, 1);
     folderList[toIndex].list.push(data);
 
@@ -272,7 +255,7 @@ const Options = () => {
       >
         <div className="app-container">
           <Header onContextMenu={clearContextMenu} />
-          <TabsList folderList={folderList} />
+          <TabsList folderList={folderList} onContextMenu={onBackContextMenu} />
           <Footer />
 
           <InputModal
@@ -300,11 +283,7 @@ const Options = () => {
             onFinish={onSeltModalFormFinish}
           />
 
-          <CommandPalette
-            visible={commandVisible}
-            onOk={onCommandOk}
-            onCancel={onCommandCancel}
-          />
+          <CommandPalette visible={commandVisible} onOk={onCommandOk} onCancel={onCommandCancel} />
         </div>
       </DropdownMenu>
     </OptContext.Provider>

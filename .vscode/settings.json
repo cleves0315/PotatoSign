@@ -3,7 +3,6 @@
   "eslint.alwaysShowStatus": true,
   "eslint.codeActionsOnSave.mode": "problems",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "prettier.printWidth": 110,
   "[css]": {
     "editor.defaultFormatter": "MikeBovenlander.formate"
   },
