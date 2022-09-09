@@ -22,6 +22,8 @@
 
 - switch 组件 done
 - Options code review
+  - bug: 新增一个文件，再点击移动标签 选择移动文件列表不会展示该项。
+  - bug: 右键重命名标签，操作不对。
 - options 页面，切换主题（更换背景图）
 - 项目优化
   - 移除 ant-design
