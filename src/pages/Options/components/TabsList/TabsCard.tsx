@@ -1,11 +1,12 @@
 import { Folder, TabsData } from '@/types/common';
 import React, { useContext, useState } from 'react';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 
-import { OptContext, tabsDropMenus } from '../../Options';
+import { OptContext, OptContextType } from './index';
 import { MOVE_MARK } from '../CommandPalette';
 import { Input } from 'antd';
 import { setFolderListSync } from '@/utils/utils';
+import { tabsDropMenus } from '@/constant/enum-list';
 
 export interface TabsCardProps {
   folder: Folder;
@@ -15,19 +16,12 @@ export interface TabsCardProps {
 const TabsCard: React.FC<TabsCardProps> = ({ data, folder }) => {
   const [editTabsId, setEditTabsId] = useState('');
   const [confirmDelTabs, setConfirmDelTabs] = useState('');
-
-  const {
-    folderList,
-    selectFolder,
-    setSelectFolder,
-    toDelTabs,
-    setDropMenus,
-    setSelectData,
-  }: { folderList: Folder[]; [name: string]: any } = useContext(OptContext) as any;
+  const { folderList, selectFolder, setSelectFolder, toDelTabs, setDropMenus, setSelectData } = useContext(
+    OptContext
+  ) as OptContextType;
 
   const onTabsItemContextMenu = async (e: any, data: TabsData, folders: Folder) => {
     console.log('onTabsItemContextMenu: ', data, folders);
-    // isTabsDropMenus = true;
     await Promise.resolve();
     setDropMenus(tabsDropMenus);
     setSelectData(data);

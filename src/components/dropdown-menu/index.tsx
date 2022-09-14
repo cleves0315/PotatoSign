@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { ReactElement, useState } from 'react';
+import React, { useState } from 'react';
 import './index.scss';
 
 interface Menu {
@@ -8,20 +8,14 @@ interface Menu {
 }
 
 export interface DropdownMenuProps {
-  children: ReactElement<any, any>;
+  children: React.ReactNode;
   menuList: Menu[];
   delValue: string;
   onClick: (value: string) => void;
   onHide?: () => void;
 }
 
-export const DropdownMenu = ({
-  children,
-  menuList,
-  delValue,
-  onClick,
-  onHide,
-}: DropdownMenuProps) => {
+export const DropdownMenu = ({ children, menuList, delValue, onClick, onHide }: DropdownMenuProps) => {
   const [isShow, setIsShow] = useState(false);
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);
@@ -59,11 +53,7 @@ export const DropdownMenu = ({
   };
 
   return (
-    <div
-      className="dropdown-menu-container"
-      onClick={handleHide}
-      onContextMenu={onContextMenu}
-    >
+    <div className="dropdown-menu-container" onClick={handleHide} onContextMenu={onContextMenu}>
       {children}
       <div className="dropdown-menu-wrap">
         <div
@@ -83,10 +73,7 @@ export const DropdownMenu = ({
                 ) : (
                   <>
                     <li className="dropdown-menu-divider"></li>
-                    <li
-                      className="dropdown-menu-item dropdown-menu-danger"
-                      data-value={menu.value}
-                    >
+                    <li className="dropdown-menu-item dropdown-menu-danger" data-value={menu.value}>
                       {menu.text}
                     </li>
                   </>
