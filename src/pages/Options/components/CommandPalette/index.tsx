@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Input } from 'antd';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { FolderOutlined, SearchOutlined } from '@ant-design/icons';
@@ -49,9 +49,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [folSearResult, setFolSearResult] = useState<Folder[]>([]);
   const [searchTabsResult, setSearchTabsResult] = useState<SearchTabsResult[]>([]);
 
+  console.log('visible: ', visible);
+
   useHotkeys('esc', (e: any) => {
     e.preventDefault();
-    onCancel && onCancel();
+    onCancel?.();
   });
 
   useEffect(() => {
@@ -73,15 +75,27 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   const onClickMask = () => {
     if (maskClosable) {
-      onCancel && onCancel();
+      onCancel?.();
     }
   };
 
-  const onKeyDownCommand = (e: any) => {
+  const paletteDoms = useRef([]);
+  const [curPalette, setCurPalette] = useState(-1);
+
+  const handleInputKeyDown = (e: any) => {
     const key = e.key;
+    console.log('key: ', key);
     if (key === 'Escape') {
-      onCancel && onCancel();
+      onCancel?.();
     }
+
+    // if (key === 'ArrowUp') {
+    // }
+
+    // if (key === 'ArrowDown') {
+    //   const palette = document.querySelectorAll('.command-palette-item');
+    //   console.log('palette: ', palette);
+    // }
   };
 
   const onChangeCommand = (e: any) => {
@@ -96,7 +110,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const onPressEnter = () => {
     if (!commandText) return;
 
-    onCancel && onCancel();
+    onCancel?.();
 
     // 执行进准查询结果
     if (topResultFolder) {
@@ -177,7 +191,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
     if (!action) return;
 
-    onCancel && onCancel();
+    onCancel?.();
 
     switch (action) {
       case MOVETOFOLDER:
@@ -278,7 +292,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   className="command-input"
                   prefix={<SearchOutlined className="search-icon" />}
                   allowClear
-                  onKeyDown={onKeyDownCommand}
+                  onKeyDown={handleInputKeyDown}
                   onChange={onChangeCommand}
                   onPressEnter={onPressEnter}
                 />

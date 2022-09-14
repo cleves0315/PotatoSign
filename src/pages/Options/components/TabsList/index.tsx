@@ -1,19 +1,16 @@
 import { v4 as uuidv4 } from 'uuid';
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Collapse, Input, message } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import React, { createContext, useEffect, useState } from 'react';
+import { message } from 'antd';
 import { setFolderListSync, getFolderListSync, folderToFindTagId, initData } from '@/utils/utils';
 
 import { MOVE_MARK, OkParams, MOVETOFOLDER, MOVETOTABS, GOOGLING, CommandPalette } from '..';
 import { Folder, TabsData } from '@/types/common';
 import './index.scss';
-import TabsCard from './TabsCard';
 import { backDropMenus } from '@/constant/enum-list';
 import { DropdownMenu, InputModal, SelectModal } from '@/components';
 import { DropMenusEnum } from '@/constant/enum';
 import { useHotkeys } from 'react-hotkeys-hook';
-
-const { Panel } = Collapse;
+import TabsPanel from '../TabsPanel';
 
 interface Menu {
   text: string;
@@ -33,8 +30,6 @@ export const TabsList: React.FC<TabsListProps> = () => {
   const [dropMenus, setDropMenus] = useState<Menu[]>([]);
   const [editTabsId, setEditTabsId] = useState('');
   const [selectData, setSelectData] = useState<TabsData | any>({});
-  const [confirmDelFolder, setConfirmDelFolder] = useState('');
-  const [isOpenEditFolder, setIsOpenEditFolder] = useState('');
   const [folderList, setFolderList] = useState<Folder[]>([]);
   const [selectFolder, setSelectFolder] = useState<string>('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -63,6 +58,19 @@ export const TabsList: React.FC<TabsListProps> = () => {
     }
     setFolderList(data);
     setCurrentShowPanel(data.map(m => m.id));
+  };
+
+  const handleChangeCollapse = (folderId: string) => {
+    setCurrentShowPanel(state => {
+      const index = state.findIndex(m => m === folderId);
+
+      if (index === -1) {
+        state.push(folderId);
+      } else {
+        state.splice(index, 1);
+      }
+      return state;
+    });
   };
 
   const onDropMenuClick = (val: string) => {
@@ -97,85 +105,6 @@ export const TabsList: React.FC<TabsListProps> = () => {
 
   const onFolderContextMenu = () => {
     setDropMenus(backDropMenus);
-  };
-
-  const onChangeCollapse = (keys: string | string[]) => {
-    if (Array.isArray(keys)) {
-      setCurrentShowPanel(keys);
-    } else {
-      setCurrentShowPanel([keys]);
-    }
-  };
-
-  const onCancelEditFoldName = (e: any) => {
-    const value = e.target.value.trim();
-    if (value) {
-      for (let i = 0; i < folderList.length; i++) {
-        const folder = folderList[i];
-        if (folder.id === isOpenEditFolder) {
-          folder.name = value;
-          break;
-        }
-      }
-      setFolderList(folderList);
-      setFolderListSync(folderList);
-    }
-
-    setIsOpenEditFolder('');
-  };
-
-  const onFocusInptOptnTitle = (queryId: string) => {
-    const curtFoldInput = document.querySelector(`#${queryId}`) as any;
-    curtFoldInput && curtFoldInput.select();
-  };
-
-  const handleOpenEditFolder = (e: any, folderId: string) => {
-    e.stopPropagation();
-    setIsOpenEditFolder(folderId);
-  };
-
-  const handleClickDelFolder = (e: any, folderId: string) => {
-    e.stopPropagation();
-
-    if (confirmDelFolder === folderId) {
-      // delete folder
-      toDelFolder(folderId);
-    } else {
-      setConfirmDelFolder(folderId);
-    }
-  };
-
-  const toDelFolder = (folderId: string) => {
-    const index = folderList.findIndex(f => f.id === folderId);
-    const cloneTabs = JSON.parse(JSON.stringify(folderList));
-    const delData = cloneTabs.splice(index, 1);
-
-    setFolderList([...cloneTabs]);
-    setConfirmDelFolder('');
-    setFolderListSync(cloneTabs);
-
-    const msgKey = Date.now();
-    message.success({
-      key: msgKey,
-      content: (
-        <div className="message-content-wrap">
-          删除成功
-          <div
-            className="handle-wrapper"
-            onClick={async () => {
-              const data = await getFolderListSync();
-              data.push(...delData);
-              setFolderList(data);
-              setFolderListSync(data);
-              message.destroy(msgKey);
-              delData.splice(0, 1);
-            }}
-          >
-            撤回
-          </div>
-        </div>
-      ),
-    });
   };
 
   const toDelTabs = async (folderId: string, tabsId: string) => {
@@ -284,43 +213,10 @@ export const TabsList: React.FC<TabsListProps> = () => {
   };
 
   const onCommandCancel = () => {
+    console.log('onCommandCancel: ');
+
     setCommandVisible(false);
   };
-
-  const renderPanelHeader = (folder: Folder) => (
-    <div className="option-title-container" data-folderid={folder.id}>
-      {isOpenEditFolder !== folder.id ? (
-        <>
-          <div className="option-title">{folder.name}</div>
-          <div
-            className="del-wrap"
-            data-confirm={confirmDelFolder === folder.id}
-            onClick={e => handleClickDelFolder(e, folder.id)}
-          >
-            <DeleteOutlined className="del-btn" />
-          </div>
-        </>
-      ) : (
-        <Input
-          id={`titleInput${folder.id}`}
-          autoFocus
-          className="option-title-input"
-          defaultValue={folder.name}
-          maxLength={24}
-          onFocus={() => onFocusInptOptnTitle(`titleInput${folder.id}`)}
-          onPressEnter={onCancelEditFoldName}
-          onBlur={onCancelEditFoldName}
-          onClick={e => e.stopPropagation()}
-        />
-      )}
-    </div>
-  );
-
-  const renderExtra = (folder: Folder) => (
-    <div>
-      <EditOutlined className="option-title-icon edit-icon" onClick={e => handleOpenEditFolder(e, folder.id)} />
-    </div>
-  );
 
   return (
     <DropdownMenu
@@ -340,34 +236,18 @@ export const TabsList: React.FC<TabsListProps> = () => {
             setDropMenus,
             setSelectData,
             setCurrentShowPanel,
-            currentShowPanel,
           } as OptContextType
         }
       >
         <div className="tabs-list" onContextMenu={onFolderContextMenu}>
-          <Collapse
-            className="option-container"
-            ghost
-            expandIconPosition="right"
-            activeKey={currentShowPanel.length ? currentShowPanel : folderList.map(m => m.id)}
-            onChange={onChangeCollapse}
-            // expandIcon={({ isActive }) => (
-            //   <CaretRightOutlined
-            //     className="option-title-icon"
-            //     rotate={isActive ? 90 : 0}
-            //   />
-            // )}
-          >
-            {folderList.map(folder => (
-              <Panel showArrow={false} header={renderPanelHeader(folder)} key={folder.id} extra={renderExtra(folder)}>
-                <div className="option-wrap">
-                  {folder?.list.map((data: TabsData) => (
-                    <TabsCard key={data.id} folder={folder} data={data} />
-                  ))}
-                </div>
-              </Panel>
-            ))}
-          </Collapse>
+          {folderList.map(folder => (
+            <TabsPanel
+              key={folder.id}
+              activeKey={currentShowPanel}
+              folder={folder}
+              onChangeCollapse={handleChangeCollapse}
+            />
+          ))}
         </div>
       </OptContext.Provider>
 

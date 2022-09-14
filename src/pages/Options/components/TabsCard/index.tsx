@@ -2,11 +2,12 @@ import { Folder, TabsData } from '@/types/common';
 import React, { useContext, useState } from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
 
-import { OptContext, OptContextType } from './index';
+import { OptContext, OptContextType } from '../TabsList';
 import { MOVE_MARK } from '../CommandPalette';
 import { Input } from 'antd';
 import { setFolderListSync } from '@/utils/utils';
 import { tabsDropMenus } from '@/constant/enum-list';
+import './index.scss';
 
 export interface TabsCardProps {
   folder: Folder;
@@ -20,12 +21,11 @@ const TabsCard: React.FC<TabsCardProps> = ({ data, folder }) => {
     OptContext
   ) as OptContextType;
 
-  const onTabsItemContextMenu = async (e: any, data: TabsData, folders: Folder) => {
-    console.log('onTabsItemContextMenu: ', data, folders);
+  const onTabsItemContextMenu = async () => {
     await Promise.resolve();
     setDropMenus(tabsDropMenus);
     setSelectData(data);
-    setSelectFolder(folders.id);
+    setSelectFolder(folder.id);
   };
 
   const onFocusInptOptnTitle = (queryId: string) => {
@@ -33,27 +33,23 @@ const TabsCard: React.FC<TabsCardProps> = ({ data, folder }) => {
     curtFoldInput && curtFoldInput.select();
   };
 
-  const onTabsItemClick = (data: TabsData) => {
-    const { url } = data;
-
-    chrome.tabs.update({ url });
-  };
-
-  const handleOnDelTabs = (e: any, tabsId: string, folderId: string) => {
+  const handleOnDelTabs = (e: any) => {
     e.stopPropagation();
+    e.preventDefault();
 
-    if (confirmDelTabs === tabsId) {
+    if (confirmDelTabs === data.id) {
       setConfirmDelTabs('');
-      toDelTabs(folderId, tabsId);
+      toDelTabs(folder.id, data.id);
     } else {
-      setConfirmDelTabs(tabsId);
+      setConfirmDelTabs(data.id);
     }
   };
 
-  const onTabsTitleClick = (e: any, tabsId: string, folderId: string) => {
+  const onTabsTitleClick = (e: any) => {
     e.stopPropagation();
-    setSelectFolder(folderId);
-    setEditTabsId(tabsId);
+    e.preventDefault();
+    setSelectFolder(folder.id);
+    setEditTabsId(data.id);
   };
 
   const handleToCancelEdit = async (e: any) => {
@@ -75,29 +71,24 @@ const TabsCard: React.FC<TabsCardProps> = ({ data, folder }) => {
   };
 
   return (
-    <div
+    <a
       key={data.id}
+      href={data.url}
       className="tabs-item-link"
       title={data.title}
-      onClick={() => onTabsItemClick(data)}
-      onContextMenu={e => onTabsItemContextMenu(e, data, folder)}
+      onContextMenu={onTabsItemContextMenu}
     >
       <div className="tabs-item" {...{ [MOVE_MARK]: data.id }}>
-        <div
-          className="del-wrap"
-          data-confirm={confirmDelTabs === data.id}
-          onClick={(e: any) => handleOnDelTabs(e, data.id, folder.id)}
-        >
+        <div className="del-wrap" data-confirm={confirmDelTabs === data.id} onClick={handleOnDelTabs}>
           {/* <div className="del-btn" data-id={data.id}></div> */}
           <DeleteOutlined className="del-btn" />
         </div>
         <div className="icon">
-          <div
-            className="img"
-            style={{
-              backgroundImage: data.favIconUrl && `url(${data.favIconUrl})`,
-            }}
-          ></div>
+          {data.favIconUrl ? (
+            <img className="tabs-icon" src={data.favIconUrl} alt="" />
+          ) : (
+            <div className="default-icon"></div>
+          )}
         </div>
         {/* * 编辑·标题 * */}
         {editTabsId === data.id ? (
@@ -107,19 +98,19 @@ const TabsCard: React.FC<TabsCardProps> = ({ data, folder }) => {
               defaultValue={data.title}
               autoFocus
               maxLength={60}
-              onClick={e => e.stopPropagation()}
+              onClick={e => e.preventDefault()}
               onBlur={handleToCancelEdit}
               onPressEnter={handleToCancelEdit}
               onFocus={() => onFocusInptOptnTitle(`titleInput${data.id}`)}
             />
           </div>
         ) : (
-          <div className="title" data-type="text" onClick={(e: any) => onTabsTitleClick(e, data.id, folder.id)}>
+          <div className="title" data-type="text" onClick={onTabsTitleClick}>
             <p>{data.title}</p>
           </div>
         )}
       </div>
-    </div>
+    </a>
   );
 };
 

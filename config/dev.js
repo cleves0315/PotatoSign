@@ -5,7 +5,7 @@ process.env.BABEL_ENV = 'development';
 const path = require('path');
 const Webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const webpackConfig = require('../webpack.config.js');
+const webpackConfig = require('../webpack.config');
 
 const devServerOptions = {
   https: false,
@@ -38,9 +38,7 @@ for (var entryName in webpackConfig.entry) {
   }
 }
 
-webpackConfig.plugins = [new Webpack.HotModuleReplacementPlugin()].concat(
-  webpackConfig.plugins || []
-);
+webpackConfig.plugins = [new Webpack.HotModuleReplacementPlugin()].concat(webpackConfig.plugins || []);
 
 delete webpackConfig.chromeExtensionBoilerplate;
 

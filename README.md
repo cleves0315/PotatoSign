@@ -20,9 +20,10 @@
 
 ### 计划
 
-- switch 组件 done
+- switch 组件 [done]
 - 项目热更新后会生成新的 hash 文件（优化）
-- Options code review
+- Command 添加上下键进行切换选项
+- Options code review [done]
   - bug: 新增一个文件，再点击移动标签 选择移动文件列表不会展示该项。
   - bug: 右键重命名标签，操作不对。
 - options 页面，切换主题（更换背景图）
