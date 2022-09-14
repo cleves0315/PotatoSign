@@ -1,22 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const WebpackBar = require('webpackbar');
 
 const ASSET_PATH = process.env.ASSET_PATH || '/';
 
-const fileExtensions = [
-  'jpg',
-  'jpeg',
-  'png',
-  'gif',
-  'eot',
-  'otf',
-  'svg',
-  'ttf',
-  'woff',
-  'woff2',
-];
+const fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'eot', 'otf', 'svg', 'ttf', 'woff', 'woff2'];
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
@@ -78,11 +68,10 @@ module.exports = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
-    extensions: fileExtensions
-      .map(extension => '.' + extension)
-      .concat(['.js', '.ts', '.tsx']),
+    extensions: fileExtensions.map(extension => '.' + extension).concat(['.js', '.ts', '.tsx']),
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new WebpackBar(),
     new CopyWebpackPlugin({
       patterns: [
@@ -97,15 +86,6 @@ module.exports = {
       patterns: [
         {
           from: path.join(__dirname, 'src', 'assets', 'img', 'icon-16.png'),
-          to: path.join(__dirname, 'dist'),
-          force: true,
-        },
-      ],
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: path.join(__dirname, 'src', 'assets', 'img', 'icon-19.png'),
           to: path.join(__dirname, 'dist'),
           force: true,
         },
