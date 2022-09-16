@@ -22,13 +22,13 @@
 
 - switch 组件 [done]
 - 项目热更新后会生成新的 hash 文件（优化）
-- Command 添加上下键进行切换选项
+- 接入 chrome 标签数据（支持导入）
 - Options code review [done]
-  - bug: 新增一个文件，再点击移动标签 选择移动文件列表不会展示该项。
-  - bug: 右键重命名标签，操作不对。
+  - bug: 新增一个文件，再点击移动标签 选择移动文件列表不会展示该项。[done]
+  - bug: 右键重命名标签，操作不对。[暂时取消这种方案]
 - options 页面，切换主题（更换背景图）
 - 项目优化
   - 移除 ant-design
   - popup 页面，移除 react
-- 接入 chrome 标签数据（支持导入）
+- Command 添加上下键进行切换选项
 - 登录
