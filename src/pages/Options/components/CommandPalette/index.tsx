@@ -79,9 +79,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     }
   };
 
-  const paletteDoms = useRef([]);
-  const [curPalette, setCurPalette] = useState(-1);
-
   const handleInputKeyDown = (e: any) => {
     const key = e.key;
     console.log('key: ', key);

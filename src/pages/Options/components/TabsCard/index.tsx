@@ -22,10 +22,10 @@ const TabsCard: React.FC<TabsCardProps> = ({ data, folder }) => {
   ) as OptContextType;
 
   const onTabsItemContextMenu = async () => {
-    await Promise.resolve();
-    setDropMenus(tabsDropMenus);
     setSelectData(data);
     setSelectFolder(folder.id);
+    await Promise.resolve();
+    setDropMenus(tabsDropMenus);
   };
 
   const onFocusInptOptnTitle = (queryId: string) => {

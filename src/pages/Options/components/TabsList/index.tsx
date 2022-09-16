@@ -162,9 +162,10 @@ export const TabsList: React.FC<TabsListProps> = () => {
     };
 
     folderList.push(folder);
-    setFolderList(folderList);
+    // setFolderList(folderList);
     setFolderListSync(folderList);
-    setCurrentShowPanel([...currentShowPanel, folder.id]);
+    fetchData();
+    // setCurrentShowPanel([...currentShowPanel, folder.id]);
     message.success({ content: '创建成功' });
   };
 
@@ -267,11 +268,7 @@ export const TabsList: React.FC<TabsListProps> = () => {
           value: 'id',
         }}
         options={folderList}
-        // options={
-        //   folderList
-        //     ? folderList.map(m => ({ label: m.name, value: m.id }))
-        //     : []
-        // }
+        // options={folderList ? folderList.map(m => ({ name: m.name, id: m.id })) : []}
         onCancel={() => setSeltModalVisible(false)}
         onFinish={onSeltModalFormFinish}
       />

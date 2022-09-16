@@ -1,7 +1,7 @@
 import { DropMenusEnum } from './enum';
 
 export const tabsDropMenus = [
-  { text: '重命名', value: DropMenusEnum.rename },
+  // { text: '重命名', value: DropMenusEnum.rename },
   { text: '移动', value: DropMenusEnum.moveto },
   { text: '删除', value: DropMenusEnum.delete },
 ];
