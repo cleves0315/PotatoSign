@@ -12,12 +12,21 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "permissions": ["bookmarks"],
+  "permissions": ["bookmarks", "commands"],
   "content_scripts": [
     {
-      "matches": ["*://*/*"],
+      "matches": ["http://*/*", "https://*/*"],
       "css": ["content-script/main.css", "content-script/styles.css"],
       "js": ["content-script/jq.js", "content-script/index.js"]
     }
-  ]
+  ],
+  "commands": {
+    "open-panel": {
+      "suggested_key": {
+        "default": "Ctrl+E",
+        "mac": "MacCtrl+E"
+      },
+      "description": "Open query panel"
+    }
+  }
 }

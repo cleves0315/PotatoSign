@@ -1,5 +1,13 @@
 console.log("background");
 
+chrome.commands.getAll((commands) => {
+  console.log("getAllcommands: ", commands);
+});
+
+chrome.commands.onCommand.addListener((command) => {
+  console.log(`Command "${command}" triggered`);
+});
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log("background-onMessage: ", message);
   if (message.type === "pageInit") {
