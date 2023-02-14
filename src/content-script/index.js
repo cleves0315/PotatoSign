@@ -1,8 +1,8 @@
 import $ from "jquery";
-import "./main.scss";
-import "./styles.scss";
 
-console.log("content-script", a);
+import "./styles";
+
+console.log("content-script", $);
 // document.body.style.backgroundColor = "orange";
 
 const template = `<div class="command-palette-root">

@@ -4,18 +4,18 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   devtool: "inline-source-map",
-
   entry: {
     background: "./src/background/index.js",
     "content-script": "./src/content-script/index.js",
   },
-
   output: {
     filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
     clean: true,
   },
-
+  resolve: {
+    extensions: [".js", ".scss"],
+  },
   module: {
     rules: [
       // {
@@ -37,7 +37,6 @@ module.exports = {
       },
     ],
   },
-
   plugins: [
     new MiniCssExtractPlugin(),
     new CopyPlugin({
