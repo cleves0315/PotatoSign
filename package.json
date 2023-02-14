@@ -1,0 +1,31 @@
+{
+  "name": "potato-tag",
+  "version": "1.0.0",
+  "description": "- 框架：自动热更新 -",
+  "main": "webpack.config.js",
+  "scripts": {
+    "dev": "webpack --watch --progress",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cleves0315/potato-tag.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cleves0315/potato-tag/issues"
+  },
+  "homepage": "https://github.com/cleves0315/potato-tag#readme",
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "dependencies": {
+    "jquery": "^3.6.3"
+  }
+}

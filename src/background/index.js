@@ -1,7 +1,7 @@
 console.log("background");
 
 chrome.commands.getAll((commands) => {
-  console.log("getAllcommands: ", commands);
+  console.log("-getAllcommands: ", commands);
 });
 
 chrome.commands.onCommand.addListener((command) => {

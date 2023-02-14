@@ -1,3 +1,7 @@
+import $ from "jquery";
+import "./main.css";
+import "./styles.css";
+
 console.log("content-script", $);
 // document.body.style.backgroundColor = "orange";
 
