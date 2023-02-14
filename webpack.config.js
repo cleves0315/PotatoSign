@@ -1,9 +1,9 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  // production | development
-  mode: "production",
+  devtool: "inline-source-map",
 
   entry: {
     background: "./src/background/index.js",
@@ -23,15 +23,28 @@ module.exports = {
       //   type: "asset/resource",
       // },
       {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        test: /\.s[ac]ss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              implementation: require("sass"),
+            },
+          },
+        ],
       },
     ],
   },
 
   plugins: [
+    new MiniCssExtractPlugin(),
     new CopyPlugin({
-      patterns: [{ from: path.resolve(__dirname, "src/assets") }],
+      patterns: [
+        path.resolve(__dirname, "src/manifest.json"),
+        path.resolve(__dirname, "src/assets"),
+      ],
     }),
   ],
 };
