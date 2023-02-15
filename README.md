@@ -10,6 +10,7 @@
 - [chrome. bookmarks](https://developer.chrome.com/docs/extensions/reference/bookmarks/#event-onChanged)
 - [chrome. scripting](https://developer.chrome.com/docs/extensions/reference/scripting/#method-executeScript)
 - [chrome.runtime](https://developer.chrome.com/docs/extensions/reference/)
+- [chrome.commands](https://developer.chrome.com/docs/extensions/reference/commands/)
 
 ```
 扩展快捷键设置中心

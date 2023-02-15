@@ -1,47 +1,41 @@
 console.log("background");
 
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("onInstalled: ", process.env.NODE_ENV);
-});
-
+// debug -> reload extension
 chrome.action.onClicked.addListener(() => {
-  console.log("action-onclicked");
   chrome.runtime.reload();
 });
 
-chrome.commands.getAll((commands) => {
-  console.log("-getAllcommands: ", commands);
-});
+chrome.commands.onCommand.addListener((command, tabs) => {
+  console.log(`Command "${command}" triggered: `, tabs);
+  // open -> panel
+  if (command === "open-panel") {
+    chrome.tabs.sendMessage(tabs?.id, {
+      type: "open-panel",
+    });
+  }
 
-chrome.commands.onCommand.addListener((command) => {
-  console.log(`Command "${command}" triggered`);
+  // debug -> reload extension
+  if (command === "debug-reload") {
+    chrome.runtime.reload();
+  }
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("background-onMessage: ", message);
-  if (message.type === "pageInit") {
-    sendResponse({ message: "background: init-ok" });
-  }
-
   if (
     message.type === "query" &&
     message.data &&
     typeof message.data === "string"
   ) {
     sendTree(sender.tab.id, message.data);
-    chrome.bookmarks.search(message.data, (results) => {
-      sendResponse(results);
-    });
   }
 });
 
-const sendTree = (tabId, query) => {
-  console.log("background-sendTree");
+const sendTree = (tabId: number, query: string) => {
   // chrome.bookmarks.search("https://github.com/hunshcn/gh-proxy", (results) => {
   chrome.bookmarks.search(query, (results) => {
     console.log("search-results: ", results);
     chrome.tabs.sendMessage(tabId, {
-      type: "background: query",
+      type: "query",
       data: results,
     });
   });

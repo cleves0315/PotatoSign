@@ -26,7 +26,7 @@
         "default": "Ctrl+E",
         "mac": "MacCtrl+E"
       },
-      "description": "Open query panel"
+      "description": "Open panel"
     },
     "debug-reload": {
       "suggested_key": {
