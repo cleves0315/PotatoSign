@@ -24,6 +24,10 @@ module.exports = {
       //   type: "asset/resource",
       // },
       {
+        test: /\.html$/i,
+        loader: "html-loader",
+      },
+      {
         test: /\.s[ac]ss$/i,
         use: [
           MiniCssExtractPlugin.loader,
