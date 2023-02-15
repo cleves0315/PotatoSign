@@ -20,7 +20,6 @@
       "js": ["content-script.js"]
     }
   ],
-  "permissions": ["bookmarks", "commands"],
   "commands": {
     "open-panel": {
       "suggested_key": {
@@ -28,6 +27,14 @@
         "mac": "MacCtrl+E"
       },
       "description": "Open query panel"
+    },
+    "debug-reload": {
+      "suggested_key": {
+        "default": "Ctrl+R",
+        "mac": "MacCtrl+R"
+      },
+      "description": "Reload extension"
     }
-  }
+  },
+  "permissions": ["bookmarks", "commands"]
 }

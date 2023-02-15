@@ -6,8 +6,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   mode: "production",
   entry: {
-    background: "./src/background/index.js",
-    "content-script": "./src/content-script/index.js",
+    background: "./src/background/index.ts",
+    "content-script": "./src/content-script/index.ts",
   },
   output: {
     filename: "[name].js",
@@ -15,7 +15,7 @@ module.exports = {
     clean: true,
   },
   resolve: {
-    extensions: [".js", ".scss"],
+    extensions: [".js", ".ts", ".scss"],
   },
   module: {
     rules: [
@@ -26,6 +26,11 @@ module.exports = {
       {
         test: /\.html$/i,
         loader: "html-loader",
+      },
+      {
+        test: /\.ts$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
       },
       {
         test: /\.s[ac]ss$/i,
