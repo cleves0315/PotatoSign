@@ -4,8 +4,8 @@
   "description": "- 框架：自动热更新 -",
   "main": "webpack.config.js",
   "scripts": {
-    "dev": "NODE_ENV=development webpack --watch --progress",
-    "build": "NODE_ENV=production webpack"
+    "dev": "webpack -d inline-source-map --stats errors-only -w --progress",
+    "build": "webpack --progress"
   },
   "repository": {
     "type": "git",

@@ -1,9 +1,10 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  devtool: "inline-source-map",
+  mode: "production",
   entry: {
     background: "./src/background/index.js",
     "content-script": "./src/content-script/index.js",
@@ -46,4 +47,8 @@ module.exports = {
       ],
     }),
   ],
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin({ extractComments: false })],
+  },
 };

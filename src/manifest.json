@@ -8,6 +8,7 @@
     "48": "icon-48.png",
     "128": "icon-128.png"
   },
+  "action": {},
   "background": {
     "service_worker": "background.js",
     "type": "module"

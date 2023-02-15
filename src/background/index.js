@@ -1,5 +1,14 @@
 console.log("background");
 
+chrome.runtime.onInstalled.addListener(() => {
+  console.log("onInstalled: ", process.env.NODE_ENV);
+});
+
+chrome.action.onClicked.addListener(() => {
+  console.log("action-onclicked");
+  chrome.runtime.reload();
+});
+
 chrome.commands.getAll((commands) => {
   console.log("-getAllcommands: ", commands);
 });
