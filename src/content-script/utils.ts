@@ -6,25 +6,27 @@ export const onOpenPanel = () => {
 };
 
 export const onQueriedBookMarks = (
-  data: chrome.bookmarks.BookmarkTreeNode[]
+  result: chrome.bookmarks.BookmarkTreeNode[]
 ) => {
-  const bookmarkTreeNode = data;
+  console.log("onQueriedBookMarks: ", result);
 
-  $(".result").html(
-    bookmarkTreeNode
-      .map((item) => {
-        // 文件夹
-        if (item.dateGroupModified) {
+  const template = `
+    <div class="command-palette-group">
+      <div class="command-palette-header">group header</div>
+      ${result
+        .map((item) => {
           return `
-            <div class="result-item">文件夹: ${item.title}</div>
-          `;
-        }
-
-        // 书签
-        return `
-          <div class="result-item" data-jump="${item.url}">${item.title}  ${item.url}</div>
+          <div class="command-palette-item" ${
+            item.url ? 'data-jump="' + item.url + '"' : ""
+          }>
+            <span class="icon"></span>
+            <div class="result-content">${item.title}</div>
+          </div>
         `;
-      })
-      .join("")
-  );
+        })
+        .join("")}
+    </div>
+  `;
+
+  $("#commandStack").html(template);
 };

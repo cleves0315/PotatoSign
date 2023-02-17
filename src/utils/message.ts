@@ -21,7 +21,6 @@ export const onMessage = (
   ) => void
 ) => {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log("content-onMessage: ", message, queue);
     if (queue.includes(message.type)) {
       callback(message, sender, sendResponse);
     }

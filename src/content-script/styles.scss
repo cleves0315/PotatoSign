@@ -136,6 +136,10 @@
     border-radius: 6px;
     cursor: pointer;
 
+    * {
+      pointer-events: none;
+    }
+
     .icon {
       width: 16px;
       height: 16px;

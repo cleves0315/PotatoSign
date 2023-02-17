@@ -1,4 +1,6 @@
 import $ from "jquery";
+import { MessageTypeEnum } from "../constants";
+import { sendMessage } from "../utils/message";
 
 export const handle = () => {
   $(".command-palette-mask").on("click", () => {
@@ -9,14 +11,13 @@ export const handle = () => {
 
   $("#commandInput").on("input", (e: any) => {
     const value = e.target.value;
-
     clearTimeout(timer);
     timer = setTimeout(() => {
-      chrome.runtime.sendMessage({ type: "query", data: value });
+      sendMessage({ type: MessageTypeEnum.queryBookMarks, data: value });
     }, 800);
   });
 
-  $(".result").on("click", (e) => {
+  $("#commandStack").on("click", (e) => {
     console.log("click: ", e.target.dataset);
     const { jump } = e.target?.dataset || {};
     jump && window.open(jump);
