@@ -1,44 +1,31 @@
 import $ from "jquery";
 import template from "./template.html";
-
+import { onMessage } from "./message";
+import { MessageTypeEnum } from "../constants";
+import { onOpenPanel, onQueriedBookMarks } from "./utils";
+import { handle } from "./handle";
 import "./styles";
 
-const sendMessage = (type: string) => {
-  chrome.runtime.sendMessage({ type: "query" }, (response) => {
-    console.log("sendMessageResponse: ", response);
-  });
-};
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("content-onMessage: ", message);
-  const { type, data } = message;
-
-  if (type === "open-panel") {
-    $(".command-palette-root").toggleClass("show");
-    $("#commandInput").focus();
-  } else if (type === "query") {
-    $(".result").text(
-      data.map((item: any) => {
-        return `${item.title}    ${item.url}\n`;
-      })
-    );
-  }
-});
-
-// ========================
-
 $("body").append(template);
-$(".command-palette-mask,.command-palette-wrap").on("click", () => {
-  // $(".command-palette-root").removeClass("show");
-});
 
-let timer: NodeJS.Timeout = null;
+onMessage(
+  [MessageTypeEnum.openPanel, MessageTypeEnum.queryBookMarks],
+  (message) => {
+    const { type, data } = message;
 
-$("#commandInput").on("input", (e: any) => {
-  const value = e.target.value;
+    switch (type) {
+      case MessageTypeEnum.openPanel:
+        onOpenPanel();
+        return;
 
-  clearTimeout(timer);
-  timer = setTimeout(() => {
-    chrome.runtime.sendMessage({ type: "query", data: value });
-  }, 800);
-});
+      case MessageTypeEnum.queryBookMarks:
+        onQueriedBookMarks(data);
+        return;
+
+      default:
+        break;
+    }
+  }
+);
+
+handle();
