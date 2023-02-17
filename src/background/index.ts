@@ -1,5 +1,5 @@
 import { MessageTypeEnum } from "../constants";
-import { onMessage } from "../content-script/message";
+import { onMessage } from "../utils/message";
 import { openPanel, queryBookMarks } from "./utils";
 
 // debug -> reload extension

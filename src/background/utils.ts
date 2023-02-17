@@ -1,5 +1,5 @@
 import { MessageTypeEnum } from "../constants";
-import { sendTabMessage } from "../content-script/message";
+import { sendTabMessage } from "../utils/message";
 
 export const openPanel = (tabId: number) => {
   sendTabMessage(tabId, { type: MessageTypeEnum.openPanel });

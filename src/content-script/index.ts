@@ -1,6 +1,6 @@
 import $ from "jquery";
 import template from "./template.html";
-import { onMessage } from "./message";
+import { onMessage } from "../utils/message";
 import { MessageTypeEnum } from "../constants";
 import { onOpenPanel, onQueriedBookMarks } from "./utils";
 import { handle } from "./handle";
