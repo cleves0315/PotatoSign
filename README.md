@@ -2,6 +2,8 @@
 
 - 框架：自动热更新（插件自动加载）
 - 去掉 .LICENSE.txt 文件
+- webpack 配置不输出 ts 错误信息
+- [test]打开面板时默认展示(历史搜索)
 
 ### 文档
 
@@ -9,7 +11,7 @@
 - [Content scripts](https://developer.chrome.com/docs/extensions/mv3/content_scripts/#static-declarative)
 - [chrome. bookmarks](https://developer.chrome.com/docs/extensions/reference/bookmarks/#event-onChanged)
 - [chrome. scripting](https://developer.chrome.com/docs/extensions/reference/scripting/#method-executeScript)
-- [chrome.runtime](https://developer.chrome.com/docs/extensions/reference/)
+- [chrome.runtime](https://developer.chrome.com/docs/extensions/reference/runtime)
 - [chrome.commands](https://developer.chrome.com/docs/extensions/reference/commands/)
 
 ```

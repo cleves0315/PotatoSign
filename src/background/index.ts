@@ -18,6 +18,8 @@ chrome.commands.onCommand.addListener((command, tabs) => {
 });
 
 onMessage([MessageTypeEnum.queryBookMarks], (message, sender) => {
+  console.log("onMessage: ", message);
+
   if (
     message.type === MessageTypeEnum.queryBookMarks &&
     message.data &&

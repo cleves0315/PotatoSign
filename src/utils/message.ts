@@ -1,14 +1,11 @@
 import { MessageTypeEnum } from "../constants";
 import { Message } from "../types";
 
-export const sendTabMessage = <M = any, R = any>(
-  tabId: number,
-  message: M
-): Promise<R> => {
+export const sendTabMessage = (tabId: number, message: Message) => {
   return chrome.tabs.sendMessage(tabId, message);
 };
 
-export const sendMessage = <M = any, R = any>(message: M): Promise<R> => {
+export const sendMessage = (message: Message) => {
   return chrome.runtime.sendMessage(message);
 };
 

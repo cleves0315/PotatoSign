@@ -1,10 +1,13 @@
 import $ from "jquery";
 import { MessageTypeEnum } from "../constants";
 import { sendMessage } from "../utils/message";
+import { closeRoot } from "./utils";
 
 export const handle = () => {
+  console.log("handle");
+
   $(".command-palette-mask").on("click", () => {
-    $(".command-palette-root").removeClass("show");
+    closeRoot();
   });
 
   let timer: NodeJS.Timeout = null;
@@ -19,7 +22,20 @@ export const handle = () => {
 
   $("#commandStack").on("click", (e) => {
     console.log("click: ", e.target.dataset);
-    const { jump } = e.target?.dataset || {};
-    jump && window.open(jump);
+    const { jumpUrl } = e.target?.dataset || {};
+
+    if (jumpUrl) {
+      closeRoot();
+      window.open(jumpUrl);
+    }
+  });
+
+  $(".command-palette-root").on("keydown", (e) => {
+    if (e.key === "ArrowUp") {
+      console.log("ArrowUp");
+    }
+    if (e.key === "ArrowDown") {
+      console.log("ArrowDown");
+    }
   });
 };
