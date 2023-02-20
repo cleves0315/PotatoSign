@@ -21,18 +21,12 @@
     left: 0;
     right: 0;
     width: 860px;
-    max-height: 460px;
     margin: 0 auto;
     z-index: 10002;
     border-radius: 8px;
-    overflow-y: auto;
     border: 1px solid #d0d7de;
     background-color: #fff;
     box-shadow: 0 1px 0 rgb(27 31 36 / 4%);
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
   }
 
   // input
@@ -122,6 +116,14 @@
     padding-left: 16px;
     padding-right: 16px;
   }
+  .command-palette-stack {
+    max-height: 410px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
   .command-palette-item {
     display: flex;
     align-items: center;
@@ -133,6 +135,7 @@
     border-radius: 6px;
     cursor: pointer;
 
+    &.command-palette-selected,
     &:hover {
       background-color: rgba(132, 133, 141, 0.08);
     }
@@ -144,13 +147,36 @@
     .icon {
       width: 16px;
       height: 16px;
-      margin-right: 6px;
+      margin-right: 20px;
     }
   }
   .result-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
     font-size: 16px;
     overflow: hidden;
-    white-space: nowrap;
+    text-align: left;
+  }
+  .websize-title {
+    overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .websize-url {
+    flex: 1;
+    display: none;
+    min-width: 230px;
+    color: rgba(0, 0, 0, 0.54);
+    margin-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .command-palette-selected,
+  .command-palette-item:hover {
+    .websize-url {
+      display: block;
+    }
   }
 }

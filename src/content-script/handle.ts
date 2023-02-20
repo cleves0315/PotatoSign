@@ -1,7 +1,7 @@
 import $ from "jquery";
 import { MessageTypeEnum } from "../constants";
 import { sendMessage } from "../utils/message";
-import { closeRoot } from "./utils";
+import { switchTagUpDown, closeRoot, selectedTag } from "./utils";
 
 export const handle = () => {
   console.log("handle");
@@ -15,27 +15,45 @@ export const handle = () => {
   $("#commandInput").on("input", (e: any) => {
     const value = e.target.value;
     clearTimeout(timer);
-    timer = setTimeout(() => {
-      sendMessage({ type: MessageTypeEnum.queryBookMarks, data: value });
-    }, 800);
+
+    if (value) {
+      timer = setTimeout(() => {
+        sendMessage({ type: MessageTypeEnum.queryBookMarks, data: value });
+      }, 500);
+    } else {
+      $("#commandStack").html("");
+    }
   });
 
   $("#commandStack").on("click", (e) => {
     console.log("click: ", e.target.dataset);
     const { jumpUrl } = e.target?.dataset || {};
-
     if (jumpUrl) {
       closeRoot();
       window.open(jumpUrl);
     }
   });
 
-  $(".command-palette-root").on("keydown", (e) => {
+  $("#commandInput").on("keydown", (e) => {
     if (e.key === "ArrowUp") {
+      e.stopPropagation();
       console.log("ArrowUp");
+      switchTagUpDown("up");
+      return false;
     }
     if (e.key === "ArrowDown") {
+      e.stopPropagation();
+      switchTagUpDown("down");
       console.log("ArrowDown");
+      return false;
+    }
+    if (e.key === "Enter") {
+      const jumpUrl = $(`.${selectedTag}`).eq(0).attr("data-jump-url");
+      if (jumpUrl) {
+        closeRoot();
+        window.open(jumpUrl);
+      }
+      return;
     }
   });
 };
