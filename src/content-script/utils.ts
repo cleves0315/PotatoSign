@@ -1,5 +1,4 @@
 import $ from "jquery";
-import { folderIcon } from "../constants";
 
 export const selectedTag = "command-palette-selected";
 
@@ -27,7 +26,7 @@ export const onQueriedBookMarks = (
     if (item.url) {
       return `<img src="${faviconURL(item.url)}" alt="" />`;
     }
-    return folderIcon;
+    return `<i class="iconfont icon-folder"></i>`;
   };
 
   const template = `
@@ -61,7 +60,7 @@ export const closeRoot = () => {
 export const faviconURL = (u: string, s?: string) => {
   const url = new URL(chrome.runtime.getURL("/_favicon/"));
   url.searchParams.set("pageUrl", u);
-  url.searchParams.set("size", s || "16");
+  url.searchParams.set("size", s || "32");
   return url.toString();
 };
 

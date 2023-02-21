@@ -1,0 +1,27 @@
+$prefix: "chrome-extension://__MSG_@@extension_id__";
+
+@font-face {
+  font-family: "potato_iconfont"; /* Project id 3901342 */
+  src: url($prefix + "/font_3901342_t8jlr8kfxxa.woff2?t=1676866451767")
+      format("woff2"),
+    url($prefix + "/font_3901342_t8jlr8kfxxa.woff?t=1676866451767")
+      format("woff"),
+    url($prefix + "/font_3901342_t8jlr8kfxxa.ttf?t=1676866451767")
+      format("truetype");
+}
+
+.iconfont {
+  font-family: "potato_iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-folder:before {
+  content: "\e60c";
+}
+
+.icon-search:before {
+  content: "\e610";
+}

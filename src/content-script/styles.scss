@@ -1,3 +1,5 @@
+@import "./icon.scss";
+
 .command-palette-root {
   display: none;
 
@@ -86,7 +88,7 @@
     display: inline-block;
     width: 100%;
     min-width: 0;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5715;
     background-image: none;
     border-radius: 2px;
@@ -148,6 +150,13 @@
       width: 16px;
       height: 16px;
       margin-right: 20px;
+      color: #24262b;
+
+      i,
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
   .result-content {
@@ -159,6 +168,7 @@
     text-align: left;
   }
   .websize-title {
+    color: #212121;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

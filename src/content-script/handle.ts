@@ -4,8 +4,6 @@ import { sendMessage } from "../utils/message";
 import { switchTagUpDown, closeRoot, selectedTag } from "./utils";
 
 export const handle = () => {
-  console.log("handle");
-
   $(".command-palette-mask").on("click", () => {
     closeRoot();
   });
