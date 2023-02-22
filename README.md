@@ -1,11 +1,16 @@
 ### todo
 
+- 上下切换选中状态元素在容器外部看不见时，滚动条自动定位到可见区域
+- css 类名哈希，防止样式冲突
 - 框架：自动热更新（插件自动加载）
-- 去掉 .LICENSE.txt 文件
-- webpack 配置不输出 ts 错误信息
+- background 接收消息后处理异常捕获
 - [test]打开面板时默认展示(历史搜索)
+- [test]搜索优先查找当前打开的 tab，如果匹配到已打开的 tab 直接定位打开这个 tab 页面
+- ~~ icon 更换 chrome.runtime.getURL 请求资源 ~~
+- ~~ 去掉 .LICENSE.txt 文件 ~~
+- ~~ webpack 配置不输出 ts 错误信息 ~~
 
-### 文档
+### docs
 
 - [chrome.tabs](https://developer.chrome.com/docs/extensions/reference/tabs/#type-Tab)
 - [Content scripts](https://developer.chrome.com/docs/extensions/mv3/content_scripts/#static-declarative)
@@ -47,32 +52,5 @@ function checkCommandShortcuts() {
     }
   });
 }
-
-```
-
-```
-// chrome.bookmarks.getTree((results) => {
-//   console.log("getTree-results: ", results);
-// });
-
-// chrome.bookmarks.getSubTree("226", (results) => {
-//   console.log("getSubTree-results: ", results);
-// });
-
-// chrome.bookmarks.search("https://github.com/hunshcn/gh-proxy", (results) => {
-//   console.log("search-results: ", results);
-// });
-
-// const url = "https://github.com/hunshcn/gh-proxy";
-// const websiteIcon = `chrome://favicon2/?size=16&scaleFactor=1x&pageUrl=${url}&allowGoogleServerFallback=0`;
-
-// chrome://favicon2/?size=16&scaleFactor=1x&pageUrl=https%3A%2F%2Fgithub.com%2Fhunshcn%2Fgh-proxy&allowGoogleServerFallback=0
-// chrome://favicon2/?size=16&scaleFactor=1x&pageUrl=https%3A%2F%2Ffonts.google.com%2F&allowGoogleServerFallback=0
-
-// https://github.com/hunshcn/gh-proxy&allowGoogleServerFallback=0
-// https://fonts.google.com/&allowGoogleServerFallback=0
-
-// chrome://favicon2/?size=16&scaleFactor=1x&pageUrl=
-// https://exmail.qq.com/cgi-bin/frame_html?sid=YHt2cFcoK5QfKgZm,7&sign_type=&r=8378968a8cf396c320ed609ef7e8a0ff
 
 ```
