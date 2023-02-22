@@ -8,7 +8,6 @@
     "moduleResolution": "node",
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "esModuleInterop": true,
-    "types": ["chrome"]
+    "esModuleInterop": true
   }
 }

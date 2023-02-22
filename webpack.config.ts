@@ -2,8 +2,9 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+import { Configuration } from "webpack";
 
-module.exports = {
+const config: Configuration = {
   mode: "production",
   entry: {
     background: "./src/background/index.ts",
@@ -66,3 +67,5 @@ module.exports = {
     minimizer: [new TerserPlugin({ extractComments: false })],
   },
 };
+
+module.exports = config;
