@@ -16,8 +16,7 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "css": ["content-script.css"],
-      "js": ["content-script.js"]
+      "js": ["content-script/template.js"]
     }
   ],
   "commands": {
@@ -39,7 +38,7 @@
   "permissions": ["bookmarks", "commands", "favicon"],
   "web_accessible_resources": [
     {
-      "resources": ["_favicon/*", "*.woff", "*.woff2", "*.ttf"],
+      "resources": ["_favicon/*", "*.woff", "*.woff2", "*.ttf", "*.html"],
       "matches": ["<all_urls>"],
       "extension_ids": ["*"]
     }

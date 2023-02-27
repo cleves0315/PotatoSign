@@ -112,6 +112,7 @@
   .command-palette-header {
     display: flex;
     align-items: center;
+    color: #212121;
     height: 34px;
     font-size: 12px;
     font-weight: 600;
@@ -147,15 +148,15 @@
     }
 
     .icon {
-      width: 16px;
-      height: 16px;
+      $size: 16px;
+
+      font-size: $size;
       margin-right: 20px;
       color: #24262b;
 
-      i,
       img {
-        width: 100%;
-        height: 100%;
+        width: $size;
+        height: $size;
       }
     }
   }

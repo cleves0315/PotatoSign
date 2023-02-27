@@ -2,9 +2,9 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-import { Configuration } from "webpack";
+// import { Configuration } from "webpack";
 
-const config: Configuration = {
+module.exports = {
   mode: "production",
   entry: {
     background: "./src/background/index.ts",
@@ -43,6 +43,14 @@ const config: Configuration = {
         use: [
           MiniCssExtractPlugin.loader,
           "css-loader",
+          // {
+          //   loader: "css-loader",
+          //   options: {
+          //     modules: {
+          //       localIdentHashSalt: "hash",
+          //     },
+          //   },
+          // },
           {
             loader: "sass-loader",
             options: {
@@ -68,4 +76,4 @@ const config: Configuration = {
   },
 };
 
-module.exports = config;
+// module.exports = config;

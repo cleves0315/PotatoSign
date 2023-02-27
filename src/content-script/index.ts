@@ -1,12 +1,17 @@
 import $ from "jquery";
-import template from "./template.html";
+// import { template } from "./template";
 import { onMessage } from "../utils/message";
 import { MessageTypeEnum } from "../constants";
 import { onOpenPanel, onQueriedBookMarks } from "./utils";
 import { handle } from "./handle";
-import "./styles";
+import "./styles/index.scss";
 
-$("body").append(template);
+// console.log("template: ", template);
+
+// $("body").append(template);
+// $("body").append(
+//   `<iframe id="potato-tag-iframe" src="chrome-extension://piolmgkcmbpnckniidjclpkecikbgcdh/template.html"></iframe>`
+// );
 
 onMessage(
   [MessageTypeEnum.openPanel, MessageTypeEnum.queryBookMarks],

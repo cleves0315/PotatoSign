@@ -1,4 +1,7 @@
 import $ from "jquery";
+// import style from "./styles/index.scss";
+
+// console.log("content-style: ", style);
 
 export const selectedTag = "command-palette-selected";
 
@@ -26,7 +29,7 @@ export const onQueriedBookMarks = (
     if (item.url) {
       return `<img src="${faviconURL(item.url)}" alt="" />`;
     }
-    return `<i class="iconfont icon-folder"></i>`;
+    return `<i class="iconfont" icon-folder"></i>`;
   };
 
   const template = `

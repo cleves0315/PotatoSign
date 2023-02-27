@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="content-script.css" />
+    <title>potato-tag-search-bar</title>
+  </head>
+  <body>
+    <potato-tag class="command-palette-root">
+      <div id="commandPaletteMask" class="command-palette-mask"></div>
+
+      <div class="command-palette-container">
+        <div class="command-palette-input-container">
+          <span class="command-input-affix-wrapper">
+            <span class="command-input-prefix">
+              <i class="iconfont icon-search"></i>
+            </span>
+            <input
+              id="commandInput"
+              class="command-input"
+              autocomplete="off"
+              placeholder=""
+            />
+          </span>
+        </div>
+
+        <div id="commandStack" class="command-palette-stack">
+          <!-- <div class="command-palette-group">
+          <div class="command-palette-header">标签</div>
+          <div class="command-palette-item command-palette-selected" data-jump-url="">
+            <span class="icon"><img src="" alt="" /></span>
+            <div class="result-content">
+              <div class="websize-title"></div>
+              <div class="websize-url"></div>
+            </div>
+          </div>
+        </div> -->
+        </div>
+      </div>
+    </potato-tag>
+
+    <script src="content-script.js"></script>
+  </body>
+</html>
