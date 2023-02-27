@@ -2,6 +2,8 @@ import { MessageTypeEnum } from "../constants";
 import { onMessage } from "../utils/message";
 import { openPanel, queryBookMarks } from "./utils";
 
+console.log("background-8");
+
 // debug -> reload extension
 chrome.action.onClicked.addListener(() => {
   chrome.runtime.reload();
